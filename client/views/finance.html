@@ -1,0 +1,57 @@
+
+<!-- How to alter css programatically -->
+<!-- var cssRuleCode = document.all ? 'rules' : 'cssRules'; //account for IE and FF
+var rule = document.styleSheets[styleIndex][cssRuleCode][ruleIndex];
+var selector = rule.selectorText;  //maybe '#tId'
+var value = rule.value;            //both selectorText and value are settable. -->
+
+<!DOCTYPE html>
+<html>
+<head>
+	<title>finance app</title>
+
+	<!-- Get styles -->
+    <link rel="stylesheet" href="/css/styles.css" media="screen">
+
+    <!-- Styles for date picker -->
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+
+    <!-- get jQuery -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
+
+    <!-- Load local packages -->
+    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular.js"></script>
+
+    <!-- high charts!!! -->
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="https://code.highcharts.com/modules/exporting.js"></script>
+
+    <script src="js/finance.controller.js"></script>
+    <script src="js/constants.service.js"></script>
+    <script src="js/chart.service.js"></script>
+
+    <!-- load database files -->
+    <script src="js/dataBases/pettyCashDb.service.js"></script>
+    <script src="js/dataBases/cashDb.service.js"></script>
+    <script src="js/dataBases/stockDb.service.js"></script>
+    <script src="js/dataBases/four01kDb.service.js"></script>
+    <script src="js/dataBases/emergencyFund.service.js"></script>
+    <script src="js/dataBases/homeDownPayment.service.js"></script>
+
+    <script src="js/dataBase.service.js"></script>
+    <script src="js/dataGeneration.service.js"></script>
+    <script src="js/utilities.service.js"></script>
+    <script src="js/table.service.js"></script>
+    <script src="js/rules.service.js"></script>
+    <script src="js/mainTable.directive.js"></script>
+</head>
+
+<body ng-app="app">
+	<div class="container" ng-controller="FinanceTable">
+    <finance-view> </finance-view>
+    <br>
+    <br>
+    <div id="container"></div>
+</body>
+</html>

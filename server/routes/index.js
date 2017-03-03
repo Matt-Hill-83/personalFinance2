@@ -3,8 +3,13 @@ var router = express.Router();
 var models = require('../models/index');
 
 
-router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Express' });
+// router.get('/', function(req, res, next) {
+//   res.render('index', { title: 'Express' });
+// });
+const path = require('path');
+
+router.get('/', (req, res, next) => {
+  res.sendFile(path.join(__dirname, '..', '..', 'client', 'views', 'finance.html'));
 });
 
 router.post('/users', function(req, res) {
