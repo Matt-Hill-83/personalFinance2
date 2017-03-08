@@ -53,28 +53,31 @@ function createSeedData(db, block, parent) {
 
   // create payment
   .then(function(parent) {
-    seedDataId = parent.id;
-    
-    var date;
-    if (block.seedData.initialPayment.date) {
-      date = new Date(block.seedData.initialPayment.date);
-    }
+  	// Only create a payment if one is defined.
+		if (block.seedData.initialPayment) {
+	    seedDataId = parent.id;
+	    
+	    var date;
+	    if (block.seedData.initialPayment.date) {
+	      date = new Date(block.seedData.initialPayment.date);
+	    }
 
-    return db.seedPayments.create({
-      id    : null,
-      amount: block.seedData.initialPayment.amount,
-      date  : date,
-    })
+	    return db.seedPayments.create({
+	      id    : null,
+	      amount: block.seedData.initialPayment.amount,
+	      date  : date,
+	    })
 
-    // create seedDataJoinPayment
-    .then(function(parent) {
-      seedPaymentId = parent.id;
-      return db.seedDataJoinPayments.create({
-        id           : null,
-        seedDataId   : parseInt(seedDataId),
-        seedPaymentId: parseInt(seedPaymentId),
-      });
-    });
+	    // create seedDataJoinPayment
+	    .then(function(parent) {
+	      seedPaymentId = parent.id;
+	      return db.seedDataJoinPayments.create({
+	        id           : null,
+	        seedDataId   : parseInt(seedDataId),
+	        seedPaymentId: parseInt(seedPaymentId),
+	      });
+	    });
+		}
   });
 }
 

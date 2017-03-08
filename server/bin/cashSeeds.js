@@ -41,7 +41,7 @@
 
     return [
       net,
-      // externalSeeds.getPettyCashSeeds(),
+      externalSeeds.getPettyCashSeeds(),
       // EmergencyFund.blocks,
       // HomeDownPayment.blocks,
       // Four01kDb.blocks[0],

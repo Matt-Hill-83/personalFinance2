@@ -45,16 +45,16 @@ db.seedDataJoinPayments.belongsTo(db.seedPayments);
 db.seedPayments        .hasOne   (db.seedDataJoinPayments);
 
 db.seedDataJoinPayments.belongsTo(db.seedDatas);
-db.seedDatas       .hasOne   (db.seedDataJoinPayments);
+db.seedDatas           .hasOne   (db.seedDataJoinPayments);
 
 db.seedDatas.belongsTo(db.blocks);
 db.blocks   .hasOne   (db.seedDatas);
 
 db.getBlockSeeds = require('../bin/cashSeeds.js');
-db.addSeeds = require('../bin/addSeedsToDataBase.js');
+db.addSeeds      = require('../bin/addSeedsToDataBase.js');
 
-var dropDataBase = true;
-// var dropDataBase = false;
+// var dropDataBase = true;
+var dropDataBase = false;
 
 var seedDataBase = true;
 // var seedDataBase = false;
