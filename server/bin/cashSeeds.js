@@ -1,38 +1,9 @@
-"use strict"
-angular.module('app').factory('CashDb',
-  [
-    '$http',
-    'Constants',
-    'EmergencyFund',
-    'Four01kDb',
-    'HomeDownPayment',
-    'PettyCashDb',
-    'StockDb',
-    'Utilities',
-    CashDb 
-  ]);
+'use strict'
 
-function CashDb(
-  $http,
-  Constants,
-  EmergencyFund,
-  Four01kDb,
-  HomeDownPayment,
-  PettyCashDb,
-  StockDb,
-  Utilities
-  ){
+  var externalSeeds = {};
+  externalSeeds.getPettyCashSeeds = require('../bin/pettyCashSeeds.js');
+  
   var mattJobStart = '05/01/2017';
-
-  var service = {
-    blocks : getAllBlocks,
-  };
-
-  console.log('cashDb');
-
-  return service;
-
-  ///////////////
 
   function getAllBlocks() {
     var topLevel = {
@@ -41,7 +12,6 @@ function CashDb(
       type    : 'section',
       parents : [{}],
       children: tables(),
-      guid    : Utilities.guid(),
     };
 
     return [topLevel];
@@ -52,7 +22,6 @@ function CashDb(
       title              : 'total cash',
       annualEscalationPct: 0.0,
       name               : 'cashTally',
-      guid               : Utilities.guid(),
       type               : 'tally',
       classes            : ['cashTally'],
       initialPayment     : {
@@ -68,15 +37,13 @@ function CashDb(
       type    : 'section',
       parents : [{}],
       children: getNet(),
-      guid    : Utilities.guid(),
     };
-    Constants.tableConfig.temp.cashNetGuid = net.guid;
 
     return [
       net,
-      PettyCashDb.blocks,
-      EmergencyFund.blocks,
-      HomeDownPayment.blocks,
+      // externalSeeds.getPettyCashSeeds(),
+      // EmergencyFund.blocks,
+      // HomeDownPayment.blocks,
       // Four01kDb.blocks[0],
       // StockDb.blocks[0],
     ];
@@ -89,7 +56,6 @@ function CashDb(
       type    : 'section',
       parents : [{}],
       children: _getAdjustments(),
-      guid    : Utilities.guid(),
     };
 
 
@@ -98,12 +64,11 @@ function CashDb(
       title   : 'cash gross',
       type    : 'section',
       children: getCashBlocks(),
-      guid    : Utilities.guid(),
     };
 
     return [
       cash,
-      adjustments,
+      // adjustments,
     ];
   }
 
@@ -113,7 +78,6 @@ function CashDb(
       title   : 'inflows',
       type    : 'section',
       children: _getInflows(),
-      guid    : Utilities.guid(),
     };
 
     var outflows = {
@@ -121,7 +85,6 @@ function CashDb(
       name    : 'outflows',
       negate  : true,
       type    : 'section',
-      guid    : Utilities.guid(),
       children: _getOutflows(),
     };
 
@@ -136,47 +99,39 @@ function CashDb(
       type      : 'lineItem',
       title     : 'outflowToPettyCash',
       name      : 'outflowToPettyCash',
-      guid      : Utilities.guid(),
       seedData: {
         seedDataType: 'calculated',
         // function    : 'outflowToPettyCash',
       },
     };
 
-    Constants.tableConfig.temp.outflowToPettyCashGuid = outflowToPettyCash.guid;
 
     var outflowToEmergencyFund = {
       type      : 'lineItem',
       title     : 'outflowToEmergencyFund',
       name      : 'outflowToEmergencyFund',
-      guid      : Utilities.guid(),
       seedData: {
         seedDataType: 'calculated',
       },
     };
-    Constants.tableConfig.temp.outflowToEmergencyFundGuid = outflowToEmergencyFund.guid;
 
     var outflowToHomeDownPayment = {
       type      : 'lineItem',
       title     : 'outflowToHomeDownPayment',
       name      : 'outflowToHomeDownPayment',
-      guid      : Utilities.guid(),
       seedData: {
         seedDataType: 'calculated',
       },
     };
-    Constants.tableConfig.temp.outflowToHomeDownPaymentGuid = outflowToHomeDownPayment.guid;
 
     var outflowToStudentLoan = {
       type      : 'lineItem',
       title     : 'outflowToStudentLoan',
       name      : 'outflowToStudentLoan',
-      guid      : Utilities.guid(),
       seedData: {
         seedDataType: 'calculated',
       },
     };
-    Constants.tableConfig.temp.outflowToStudentLoanGuid = outflowToStudentLoan.guid;
 
     return [
       outflowToPettyCash,
@@ -191,7 +146,6 @@ function CashDb(
       type    : 'lineItem',
       title   : 'matt paycheck',
       name    : 'mattPaycheck',
-      guid    : Utilities.guid(),
       seedData: {
         seedDataType: 'periodicDates',
         initialPayment     : {
@@ -206,7 +160,6 @@ function CashDb(
       type    : 'lineItem',
       title   : 'pen  paycheck',
       name    : 'penPaycheck',
-      guid    : Utilities.guid(),
       seedData: {
         seedDataType: 'periodicDates',
         initialPayment     : {
@@ -222,7 +175,6 @@ function CashDb(
       name     : 'irregularInflows',
       collapsed: true,
       type     : 'section',
-      guid     : Utilities.guid(),
       children : _getIrregularInflows(),
     };
 
@@ -238,7 +190,6 @@ function CashDb(
       title   : 'tax refund',
       name    : 'taxRefund',
       type    : 'lineItem',
-      guid    : Utilities.guid(),
       seedData: {
         seedDataType: 'arbitraryDates',
         payments    : [
@@ -251,7 +202,6 @@ function CashDb(
       type    : 'lineItem',
       title   : 'pen bonus',
       name    : 'penBonus',
-      guid    : Utilities.guid(),
       seedData: {
         seedDataType: 'periodicDates',
         initialPayment     : {
@@ -266,7 +216,6 @@ function CashDb(
       type    : 'lineItem',
       title   : 'matt unemployment',
       name    : 'mattUnemployment',
-      guid    : Utilities.guid(),
       seedData: {
         seedDataType: 'periodicDates',
         initialPayment     : {
@@ -278,7 +227,7 @@ function CashDb(
     };
 
     return [
-      taxRefund,
+      // taxRefund,
       mattUnemployment,
       penBonus,
     ];
@@ -289,7 +238,6 @@ function CashDb(
       title   : 'groceries',
       name    : 'groceries',
       type    : 'lineItem',
-      guid    : Utilities.guid(),
       seedData: {
         seedDataType: 'periodicDates',
         initialPayment     : {
@@ -304,7 +252,6 @@ function CashDb(
       title   : 'rent',
       name    : 'rent',
       type    : 'lineItem',
-      guid    : Utilities.guid(),
       seedData: {
         seedDataType: 'periodicDates',
         initialPayment     : {
@@ -319,7 +266,6 @@ function CashDb(
       title   : 'groceries',
       name    : 'groceries',
       type    : 'lineItem',
-      guid    : Utilities.guid(),
       seedData: {
         seedDataType: 'periodicDates',
         initialPayment     : {
@@ -335,7 +281,6 @@ function CashDb(
       title       : 'montessori',
       name        : 'montessori',
       type        : 'section',
-      guid        : Utilities.guid(),
       children    : _getMontessori(),
     };
 
@@ -344,7 +289,6 @@ function CashDb(
       title       : 'transportation',
       name        : 'transportation',
       type        : 'section',
-      guid        : Utilities.guid(),
       children    : _getTransportation(),
     };
 
@@ -353,7 +297,6 @@ function CashDb(
       title       : 'medical',
       name        : 'medical',
       type        : 'section',
-      guid        : Utilities.guid(),
       children    : _getMedical(),
     };
 
@@ -371,7 +314,6 @@ function CashDb(
       title       : 'car',
       name        : 'car',
       type        : 'section',
-      guid        : Utilities.guid(),
       children    : _car(),
     };
     
@@ -379,7 +321,6 @@ function CashDb(
       title   : 'pen BART',
       name    : 'penBart',
       type    : 'lineItem',
-      guid    : Utilities.guid(),
       seedData: {
         seedDataType: 'periodicDates',
         initialPayment     : {
@@ -394,7 +335,6 @@ function CashDb(
       title   : 'matt BART',
       name    : 'mattBart',
       type    : 'lineItem',
-      guid    : Utilities.guid(),
       seedData: {
         seedDataType: 'periodicDates',
         initialPayment     : {
@@ -417,22 +357,47 @@ function CashDb(
 ////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////
 
-  function _car(){
-    var newData = Constants.newData;
-      newData.forEach(block=> {
-        block.guid = parseInt(block.id);
-        block.seedData.initialPayment = block.seedData.seedDataJoinPayment.seedPayment;
-        block.seedData.initialPayment.date = new Date(block.seedData.initialPayment.date);
-        block.seedData.seedDataJoinPayment = 'removed from object to avoid confusion';
-        
-        if (block.seedData.numDaysInInterval) {
-          block.seedData.numDaysInInterval = parseInt(block.seedData.numDaysInInterval);
-        }
+function _car(){
+  var initialPayment = {
+    date  : null,
+    amount: 50,
+  };
 
-      });
+  var seedData = {
+    seedDataType     : 'periodicDates',
+    initialPayment   : initialPayment,
+    numDaysInInterval: 30,
+  };
 
-    return newData;
-  }
+  var carInsurance = {
+    title   : 'car insurance',
+    name    : 'car insurance',
+    type    : 'lineItem',
+    // guid    : Utilities.guid(),
+    seedData: seedData,
+  };
+  
+  var carMaintenance = {
+    title   : 'car maintenance',
+    name    : 'car maintenance',
+    type    : 'lineItem',
+    // guid    : Utilities.guid(),
+    seedData: {
+      seedDataType: 'periodicDates',
+      initialPayment     : {
+        date        : null,
+        amount      : 25,
+      },
+      numDaysInInterval: 31,
+    }
+  };
+  
+  return [
+    carInsurance,
+    carMaintenance,
+  ];
+}
+
 ////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////
@@ -442,7 +407,6 @@ function CashDb(
       title   : 'therapy',
       name    : 'therapy',
       type    : 'lineItem',
-      guid    : Utilities.guid(),
       seedData: {
         seedDataType: 'periodicDates',
         initialPayment     : {
@@ -457,7 +421,6 @@ function CashDb(
       title   : 'doctor',
       name    : 'doctor',
       type    : 'lineItem',
-      guid    : Utilities.guid(),
       seedData: {
         seedDataType: 'periodicDates',
         initialPayment     : {
@@ -472,7 +435,6 @@ function CashDb(
       title   : 'dentist',
       name    : 'dentist',
       type    : 'lineItem',
-      guid    : Utilities.guid(),
       seedData: {
         seedDataType: 'periodicDates',
         initialPayment     : {
@@ -495,7 +457,6 @@ function CashDb(
       title   : 'tuition',
       name    : 'tuition',
       type    : 'lineItem',
-      guid    : Utilities.guid(),
       seedData: {
         seedDataType: 'periodicDates',
         initialPayment     : {
@@ -510,7 +471,6 @@ function CashDb(
       title   : 'teacher gifts',
       name    : 'teacherGifts',
       type    : 'lineItem',
-      guid    : Utilities.guid(),
       seedData: {
         seedDataType: 'periodicDates',
         initialPayment     : {
@@ -525,7 +485,6 @@ function CashDb(
       title   : 'holiday care',
       name    : 'holidayCare',
       type    : 'lineItem',
-      guid    : Utilities.guid(),
       seedData: {
         seedDataType: 'periodicDates',
         initialPayment     : {
@@ -540,7 +499,6 @@ function CashDb(
       title   : 'summer camp',
       name    : 'summerCamp',
       type    : 'lineItem',
-      guid    : Utilities.guid(),
 
       seedData: {
         seedDataType: 'arbitraryDates',
@@ -554,7 +512,10 @@ function CashDb(
       tuition,
       teacherGifts,
       holidayCare,
-      summerCamp,
+      // summerCamp,
     ];
   }
-}
+
+
+
+module.exports = getAllBlocks;

@@ -3,15 +3,17 @@ angular.module('app').factory('DataGeneration', ['Constants', 'Utilities', DataG
 
 function DataGeneration_(Constants, Utilities) {
   var seedConversionFunctions = {
-    arbitraryDates    : _createPaymentsFromArbitraryDates,
-    periodicDates     : _createPaymentsFromPeriodicDates,
-    calculated        : _createCalculatedPayments,
-    dependent         : _returnEmptyArray,
+    arbitraryDates: _createPaymentsFromArbitraryDates,
+    periodicDates : _createPaymentsFromPeriodicDates,
+    calculated    : _createCalculatedPayments,
+    dependent     : _returnEmptyArray,
   };
 
   var service = {
     seedConversionFunctions,
   };
+
+  console.log('data generation service');
 
   return service;
 
@@ -63,6 +65,7 @@ function DataGeneration_(Constants, Utilities) {
         valueToDisplay: paymentAmount,
       };
 
+      
       payments.push(payment);
       paymentDate = Utilities.addDays(paymentDate, lineItem.seedData.numDaysInInterval);
     }

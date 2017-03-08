@@ -1,22 +1,23 @@
 angular.module('nodeTodo', [])
 .controller('mainController', ($scope, $http) => {
-  console.log('Im here');
+  
+  console.log('app.js');
   
   $scope.formData = {};
-  $scope.todoData = {};
+  $scope.blocks = {};
 
   // Get all todos
   $http.get('/api/v1/todos')
   .success((data) => {
-    $scope.todoData = data;
-    console.log(data);
-
+    console.log('hitting todos route');
+    
 
     console.log('|++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++|');
     console.log('data: ');
     console.table(data);
     console.log('|------------------------------------------------------------------------------------------------|')
     
+    $scope.blocks = data;
     
 
   })
@@ -29,7 +30,7 @@ angular.module('nodeTodo', [])
     $http.post('/api/v1/todos', $scope.formData)
     .success((data) => {
       $scope.formData = {};
-      $scope.todoData = data;
+      $scope.blocks = data;
       console.log(data);
     })
     .error((error) => {
@@ -41,7 +42,7 @@ angular.module('nodeTodo', [])
   $scope.deleteTodo = (todoID) => {
     $http.delete('/api/v1/todos/' + todoID)
     .success((data) => {
-      $scope.todoData = data;
+      $scope.blocks = data;
       console.log(data);
     })
     .error((data) => {

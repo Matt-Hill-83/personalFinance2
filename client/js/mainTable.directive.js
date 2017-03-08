@@ -5,12 +5,31 @@ function mainTableController(Table, Constants) {
   return {
     restrict    : 'E',
     templateUrl : 'views/table.html',
-    controller  : ['Chart', '$rootScope', '$scope', 'Table', 'Constants', Ctrl],
+    controller  : [
+      'Api',
+      'Chart',
+      '$rootScope',
+      '$scope',
+      '$http',
+      'Table',
+      'Constants',
+      Ctrl
+    ],
     controllerAs: 'maintable',
   };
 }
 
-function Ctrl(Chart, $rootScope, $scope, Table, Constants) { 
+function Ctrl(
+  Api,
+  Chart,
+  $rootScope,
+  $scope,
+  $http,
+  Table,
+  Constants
+  ) { 
+  console.log('financeView Directive');
+  
   // attach jQuery datepicker styling to date input
   $(function() {
     $( "#datepicker" ).datepicker({});
@@ -46,8 +65,13 @@ function Ctrl(Chart, $rootScope, $scope, Table, Constants) {
     hightlightRow       : 'hightlightRow',
   };
 
-  Table.redrawTable(vm.tableConfig);
-  Chart.drawChart();
+
+  Api.get().then((resp) => {
+    Constants.newData = resp.data;
+    Table.redrawTable(vm.tableConfig);
+    Chart.drawChart();
+
+  });
 
   //////////////
 

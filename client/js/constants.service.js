@@ -21,7 +21,6 @@ function Constants_(Utilities) {
   };
 
   refreshTableConfig();
-
   return service;
 
   /////////////////////////////// public functions /////////////////////
@@ -44,7 +43,6 @@ function Constants_(Utilities) {
 
   function refreshTableConfig() {
     angular.extend(service.tableConfig, _getTableConfig());
-
   }
 
   /////////////////////////////// private functions /////////////////////

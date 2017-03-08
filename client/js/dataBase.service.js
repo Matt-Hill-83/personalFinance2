@@ -3,6 +3,7 @@ angular.module('app').factory('DataBase',
   [
     'DataGeneration',
     'CashDb',
+    'Cash2Db',
     'Constants',
     'Rules',
     'Utilities',
@@ -12,6 +13,7 @@ angular.module('app').factory('DataBase',
 function DataBase_(
   DataGeneration,
   CashDb,
+  Cash2Db,
   Constants,
   Rules,
   Utilities
@@ -33,22 +35,49 @@ function DataBase_(
 
   ///////////////
 
+  function getBlocksFromPostgres() {
+    var newData = Constants.newData;
+      newData.forEach(block=> {
+        block.guid = parseInt(block.id);
+
+        block.parentGuid = parseInt(block.parentGuid);
+        block.nestLevel  = parseInt(block.nestLevel);
+
+        if (
+          block.type === 'lineItem' &&
+          block.seedData &&
+          block.seedData.seedDataJoinPayment
+          ) {
+          block.seedData.initialPayment = block.seedData.seedDataJoinPayment.seedPayment;
+          block.seedData.initialPayment.date = new Date(block.seedData.initialPayment.date);
+          block.seedData.seedDataJoinPayment = 'removed from object to avoid confusion';
+        
+          if (block.seedData.numDaysInInterval) {
+            block.seedData.numDaysInInterval = parseInt(block.seedData.numDaysInInterval);
+          }
+        }
+
+      });
+
+    return newData;
+  }
+
   function rebuildLocalDataBase(){
     service.blockDb   = [];
     service.paymentDb = [];
 
-    var section       = CashDb.blocks[0];
-    section.nestLevel = 0;
+    var newData = getBlocksFromPostgres();
+    service.blockDb.push(...newData);
+    
+    var section = newData.filter(block=> block.guid === 1)[0];
     Constants.tableConfig.topSection = section;
 
+    console.log('|++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++|');
+    console.log('newData: ');
+    console.table(newData);
+    console.log('|------------------------------------------------------------------------------------------------|')
 
-
-
-
-    // Add top level section to db.
-    service.lineItems.create(section);
-
-    addLineItemsToDb(section);
+    addParents(section);
     addPaymentsToDb(section);
 
     // Recursively add all children to top level section.
@@ -56,39 +85,41 @@ function DataBase_(
       addTotalsToDb(section, date);
       addTalliesToDb(section, date);
       
-      Rules.rules.forEach(rule=> {
-        rulesFunctions[rule.function](rule, date);
-        addTotalsToDb(section, date);
-        addTalliesToDb(section, date);
-      });
+      // Rules.rules().forEach(rule=> {
+      //   rulesFunctions[rule.function](rule, date);
+      //   addTotalsToDb(section, date);
+      //   addTalliesToDb(section, date);
+      // });
+
     });
 
-    // console.log('|++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++|');
-    // console.log('service.blockDb: ');
-    // console.table(service.blockDb);
-    // console.log('|------------------------------------------------------------------------------------------------|')
+    console.log('|++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++|');
+    console.log('service.blockDb: ');
+    console.table(service.blockDb);
+    console.log('|------------------------------------------------------------------------------------------------|')
 
 
-    // console.log('|++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++|');
-    // console.log('service.paymentDb: ');
-    // console.table(service.paymentDb);
-    // console.log('|------------------------------------------------------------------------------------------------|')
+    console.log('|++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++|');
+    console.log('service.paymentDb: ');
+    console.table(service.paymentDb);
+    console.log('|------------------------------------------------------------------------------------------------|')
     
   }
 
-  function addLineItemsToDb(section) {
-    section.children.map(child=> {
-      // Create block record for each child block.
-      service.lineItems.create(child, section);
+  function addParents(section) {
+    var children = service.lineItems.getFirstChildrenOf(section);
+    children.map(child=> {
+      _addParentToLineage(child, section)      
       if (child.type === 'section') {
-        addLineItemsToDb(child);
+        addParents(child);
       }
 
     });
   }
 
   function addPaymentsToDb(section) {
-    section.children.map(child=> {
+    var children = service.lineItems.getFirstChildrenOf(section);
+    children.map(child=> {
       if (child.type === 'lineItem') {
         // Turn seed data into payments and add them to paymentDb.
           var newPayments =
@@ -103,7 +134,8 @@ function DataBase_(
   }
 
   function addTotalsToDb(section, date) {
-    section.children.map(child=> {
+    var children = service.lineItems.getFirstChildrenOf(section);
+    children.map(child=> {
       if (child.type === 'section') {
         addTotalsToDb(child, date);
         createTotal(child, date);          
@@ -112,7 +144,8 @@ function DataBase_(
   }
 
   function addTalliesToDb(section, date) {
-    section.children.map(child=> {
+    var children = service.lineItems.getFirstChildrenOf(section);
+    children.map(child=> {
       if (child.type === 'section') {
         addTalliesToDb(child, date);
         if (child.tally) {
@@ -298,10 +331,14 @@ function DataBase_(
     }
 
     function isChildBlockInSection(lineItem, section) {
-      // Get list of all parentsGuids in lineage.
-      var parentGuids = lineItem.parents.map(parent=> parent.guid);
-        // If the payment has the sectionGuid in its list of ancestors, return it.
-      return parentGuids.indexOf(section.guid) !== -1;
+      if (lineItem.parents) {
+        // Get list of all parentsGuids in lineage.
+        var parentGuids = lineItem.parents.map(parent=> parent.guid);
+          // If the payment has the sectionGuid in its list of ancestors, return it.
+        return parentGuids.indexOf(section.guid) !== -1;
+      } else {
+        return false;
+      }
     }
   }
 
