@@ -74,8 +74,9 @@ function Constants_(Utilities) {
     tableSettings: {
       tableInterval: 'monthly',
     },
-    scenarios: {},
-    charts   : [{}],
+    scenarios  : {},
+    charts     : [{}],
+    activeChart: null,
   };
 
   refreshTableConfig();

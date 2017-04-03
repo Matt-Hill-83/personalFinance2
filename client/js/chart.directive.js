@@ -50,9 +50,9 @@ function ChartCtrl(
     vm.landingPage = $scope.parent;
     vm.chartobject = $scope.chartobject;
     vm.chartId     = 'chart-div' + vm.chartobject.guid
-    vm.test        = 'fuck you you fucking fuck';
 
-    vm.clearChart = clearChart;
+    vm.clearChart          = clearChart;
+    vm.makeThisChartActive = makeThisChartActive;
 
     console.log('|++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++|');
     console.log('chartobject: ');
@@ -64,12 +64,22 @@ function ChartCtrl(
 
   // This is a hacky workaround to the fact that I can't delete some rows on chart.
   function clearChart(chartId) {
-    console.log('clearing chart');
-    
     Utilities.clearArray(Chart.series);
     Chart.drawChart(chartId);
   }
 
+  function makeThisChartActive(chartId) {
+    Constants.activeChart = chartId;
+
+
+    console.log('|++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++|');
+    console.log('Constants.charts: ');
+    console.table(Constants.charts);
+    console.log('|------------------------------------------------------------------------------------------------|')
+    
+    
+
+  }
 
   function drawChart(chartId) {
     vm.tableMatrix = Constants.scenarios[1].tableMatrix;

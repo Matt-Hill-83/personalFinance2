@@ -78,27 +78,29 @@ function LandingPageController(
   vm.selectDifferentStudy = selectDifferentStudy;
   vm.refreshTemplate      = refreshTemplate;
   vm.show                 = true;
-  vm.constantsTableHeader = ['name', 'value', 'units   .'];
-  vm.constants = [
-    {
-      name : 'car purchase date',
-      value: '01-01-2017',
-      units: '',
-      guid : 1,
-    },
-    {
-      name : 'car purchase amount',
-      value: 30000,
-      units: '$',
-      guid : 2,
-    },
-    {
-      name : 'car purchase interest rate',
-      value: 3.5,
-      units: 'pct',
-      guid : 2,
-    },
-  ];
+  // vm.constantsTableHeader = ['name', 'value', 'units   .'];
+
+  // // not implemented
+  // vm.constants = [
+  //   {
+  //     name : 'car purchase date',
+  //     value: '01-01-2017',
+  //     units: '',
+  //     guid : 1,
+  //   },
+  //   {
+  //     name : 'car purchase amount',
+  //     value: 30000,
+  //     units: '$',
+  //     guid : 2,
+  //   },
+  //   {
+  //     name : 'car purchase interest rate',
+  //     value: 3.5,
+  //     units: 'pct',
+  //     guid : 2,
+  //   },
+  // ];
 
   getStudys(0);
   getScenarios();
@@ -169,12 +171,13 @@ function LandingPageController(
       vm.studys.forEach(study=> {
         var user      = study.user ? ' {' + study.user + '}' : '';
         study.message = '[#' + study.guid + ']     ' + study.name + user
-        study.charts = charts;
+        // study.charts = charts;
       });
     } else {
       vm.studys = [noStudyMessage];
     }
-    vm.initialStudy = vm.studys[0];
+    vm.initialStudy  = vm.studys[0];
+    Constants.charts = vm.initialStudy.charts;
   }
 
   function getStudys(studyToShow){
@@ -182,6 +185,10 @@ function LandingPageController(
     .then((resp) => {
       if (resp.data.length > 0) {
         vm.studys = Api.sanitizeStudys(resp.data);
+
+        // replace this with real charts
+        vm.studys.forEach(study=> study.charts = charts);
+
       } else {
         vm.studys = [];
       }
@@ -192,7 +199,6 @@ function LandingPageController(
       vm.scenarios    = vm.initialStudy.scenarios;
     });
   }
-
 
 }
 

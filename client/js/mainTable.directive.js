@@ -45,8 +45,7 @@ function Ctrl(
   });
 
   var vm = this;
-  init()
-  // .then(()=> $rootScope.$broadcast('someEvent', [1,2,3]))
+  init();
 
   ///////////////////////////////////////////// Get Data /////////////////////////////////////
 
