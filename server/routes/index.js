@@ -14,7 +14,7 @@ router.get('/', (req, res, next) => {
 //////////////////////////////// Blocks ////////////////////////////////////////////
 
 
-// test
+// test ///////////////////////////
 
 console.log('|++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++|');
 console.log('process.env.TIMES: ');
@@ -30,6 +30,8 @@ router.get('/times', function(request, response) {
       result += i + ' ';
   response.send(result);
 });
+
+// test ///////////////////////////
 
 // get blocks for scenario
 router.get('/blocks/:scenarioId', (req, res)=>
