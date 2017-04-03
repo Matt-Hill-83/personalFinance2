@@ -190,6 +190,72 @@ router.get('/newStudy/:guid', function(req, res) {
   });
 });
 
+//////////////////////////////// Charts ////////////////////////////////////////////
+
+router.get('/charts', function(req, res) {
+  models.charts.findAll({
+  })
+  .then(charts => {
+    res.json(charts)
+  });
+});
+
+// update single chart
+router.put('/chart', function(req, res) {
+  var chartParams = {
+    name             : req.body.data.name,
+    indexWithinParent: req.body.data.indexWithinParent,
+    lineItemGuids    : req.body.data.lineItemGuids,
+  };
+
+  models.charts.find({
+    where: {
+      id: req.body.data.guid,
+    }})
+  .then(function(chart) {
+    if(chart){
+      chart.updateAttributes(chartParams)
+      .then(function(chart) {
+        res.send(chart);
+      });
+    }
+  });
+});
+
+router.post('/charts', function(req, res) {
+  var newchart = {
+    name             : req.body.name,
+    indexWithinParent: req.body.indexWithinParent,
+    lineItemGuids    : req.body.data.lineItemGuids,
+    studyId          : req.body.studyGuid,
+  };
+
+  models.charts.create(newchart)
+  .then(function(chart) {
+    res.json(chart);
+  });
+});
+
+// models.createChart = function(studyId) {
+//   console.log('jfjfjsdflkasjfas;lfkjsaf;lksajfas;lfkjsf;lskadjfas;flkj');
+  
+// }
+
+router.delete('/chart/:id', function(req, res) {
+  models.charts.destroy({
+    where: {
+      id: req.params.id
+    }
+  }).then(function(chart) {
+    res.json(chart);
+  });
+});
+
+
+
+
+
+
 //////////////////////////////// Rules ////////////////////////////////////////////
 
 router.get('/rules', function(req, res) {

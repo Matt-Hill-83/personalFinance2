@@ -66,9 +66,21 @@ function getStudy() {
     ];
   });
 
+  var charts = [
+    {
+      name         : 'cool stuff1',
+      lineItemGuids: '[1,2]',
+    },
+    {
+      name         : 'cool stuff2',
+      lineItemGuids: '[3,4]',
+    },
+  ];
+
   var study = {
     name     : 'household', 
     scenarios: scenarios,
+    charts   : charts
   };
 
   return study;

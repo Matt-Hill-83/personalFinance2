@@ -44,6 +44,35 @@ function createStudyFromSeedData(db, studyId) {
   ).then((newStudy)=> {
   	studyToReturn = newStudy;
 		var studyId  = newStudy.id;
+
+  	// Create chart objects.
+  	if (study.charts && study.charts.length > 0) {
+
+  		console.log('|++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++|');
+  		console.log('study.charts: ');
+  		console.log(study.charts);
+  		console.log('|------------------------------------------------------------------------------------------------|')
+  		
+  		
+			study.charts.forEach(chart=> {
+			  var newchart = {
+			    name             : chart.name,
+			    indexWithinParent: chart.indexWithinParent,
+			    lineItemGuids    : chart.lineItemGuids,
+			    studyId          : studyId,
+			  };
+
+			  db.charts.create(newchart)
+			  .then(function(chart) {
+			    res.json(chart);
+			  });
+
+			});
+    }
+
+
+
+
 		var promises = study.scenarios.map(scenarioObj=> {
 			scenarioObj.studyGuid = studyId;
   		return createScenario(db, scenarioObj)
@@ -110,6 +139,8 @@ function createBlock(db, block){
 		indexWithinParent: indexWithinParent,
   })
   .then(function(newBlock) {
+		block.id = newBlock.id;
+
   	// Find rule aliases that will be used to create rules from seed data.
   	if (block.ruleAlias) {
   		db.ruleSeedData.push(
