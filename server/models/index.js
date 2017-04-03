@@ -13,11 +13,21 @@ var env       = process.env.NODE_ENV || 'development';
 var config    = require(__dirname + '/../config.json')[env];
 var db        = {};
 
+
+	
+	console.log('|++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++|');
+	console.log('config: ');
+	console.log(config);
+	console.log('|------------------------------------------------------------------------------------------------|')
+	
+	
+
 if (config.use_env_variable) {
-	console.log('using_env_variable');
+	console.log('sequelize using_env_variable');
 	
   var sequelize = new Sequelize(process.env[config.use_env_variable]);
 } else {
+	console.log('sequelize not using_env_variable');
   var sequelize = new Sequelize(config.database, config.username, config.password, config);
 }
 
