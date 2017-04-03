@@ -13,26 +13,7 @@ var env       = process.env.NODE_ENV || 'development';
 var config    = require(__dirname + '/../config.json')[env];
 var db        = {};
 
-
-	
-	console.log('|++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++|');
-	console.log('config: ');
-	console.log(config);
-	console.log('|------------------------------------------------------------------------------------------------|')
-	
-	
-
-// if (config.use_env_variable) {
-// 	console.log('sequelize using_env_variable');
-	
-//   var sequelize = new Sequelize(process.env[config.use_env_variable]);
-// } else {
-// 	console.log('sequelize not using_env_variable');
-//   var sequelize = new Sequelize(config.database, config.username, config.password, config);
-// }
-
 if (process.env.DATABASE_URL) {
-	console.log('sequelize using_env_variable');
   // the application is executed on Heroku ... use the postgres database
   sequelize = new Sequelize(process.env.DATABASE_URL, {
     dialect:  'postgres',
@@ -44,9 +25,6 @@ if (process.env.DATABASE_URL) {
 		console.log('sequelize not using_env_variable');
 	  var sequelize = new Sequelize(config.database, config.username, config.password, config);
 }
-
-
-
 
 fs
 .readdirSync(__dirname)
