@@ -81,7 +81,7 @@ function Ctrl(
     vm.addSection         = addSection;
     vm.showRules          = showRules;
     vm.showUpdateRowModal = showUpdateRowModal;
-    vm.clearChart         = clearChart;
+    // vm.clearChart         = clearChart;
     vm.toggleRowOnChart   = toggleRowOnChart;
     vm.redrawTable        = redrawTable;
     vm.logRow             = logRow;
@@ -307,11 +307,11 @@ function Ctrl(
 
   ///////////////////////////////////////////// Refresh GUI /////////////////////////////////
 
-  // This is a hacky workaround to the fact that I can't delete some rows on chart.
-  function clearChart() {
-    Utilities.clearArray(Chart.series);
-    Chart.drawChart();
-  }
+  // // This is a hacky workaround to the fact that I can't delete some rows on chart.
+  // function clearChart() {
+  //   Utilities.clearArray(Chart.series);
+  //   Chart.drawChart();
+  // }
 
   function fixTable() {
     // This is a hacky work around because when the new data is pushed to the table, the styling of the table rows

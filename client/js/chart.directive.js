@@ -52,6 +52,8 @@ function ChartCtrl(
     vm.chartId     = 'chart-div' + vm.chartobject.guid
     vm.test        = 'fuck you you fucking fuck';
 
+    vm.clearChart = clearChart;
+
     console.log('|++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++|');
     console.log('chartobject: ');
     console.log(vm.chartobject);
@@ -60,7 +62,16 @@ function ChartCtrl(
     
   }
 
-  function drawChart(elementId) {
+  // This is a hacky workaround to the fact that I can't delete some rows on chart.
+  function clearChart(chartId) {
+    console.log('clearing chart');
+    
+    Utilities.clearArray(Chart.series);
+    Chart.drawChart(chartId);
+  }
+
+
+  function drawChart(chartId) {
     vm.tableMatrix = Constants.scenarios[1].tableMatrix;
     // If the chart is empty, add the top level row from each active scenario.
     if (Chart.series.length < 2) {
@@ -68,7 +79,7 @@ function ChartCtrl(
       Chart.series.push(Utilities.getLast(rowsToGraph));
     }
 
-    Chart.drawChart(elementId);
+    Chart.drawChart(chartId);
   }
 
 
