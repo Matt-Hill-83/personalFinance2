@@ -7,6 +7,9 @@ var cookieParser = require('cookie-parser');
 var bodyParser   = require('body-parser');
 var swig         = require('swig');
 
+console.log('im here');
+
+
 // *** routes *** //
 var routes = require('./routes/index.js');
 
