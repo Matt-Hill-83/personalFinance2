@@ -1,61 +1,189 @@
 functions = {
-	seedDataBase,
-
+	// createRuleSeeds,
+	createLineItemDefinition,
+	createStudyFromSeedData,
+	createSection,
+	createBlock,
+	createScenario,
 };
 
-function seedDataBase(db){
-  var topBlock = db.getBlockSeeds()[0];
-  topBlock.guid = 0;
-  createBlock(db, topBlock);
+function getBlockIdFromRuleAlias(ruleSeedData, ruleAlias, scenario) {
+	var results = ruleSeedData.filter(rule=> {
+		return (
+			rule.scenario  === scenario &&
+			rule.ruleAlias === ruleAlias
+		);
+	});
+
+	if (results.length !== 1) {
+		return 'error: no rule alias found!';
+	} else {
+		return results[0];
+	}
 }
 
-var nestLevel = -1;
-function createBlock(db, block){
-  nestLevel += 1;
-  
-  block.children.forEach(child=> {
-    // create child
-    return db.blocks.create({
-      id        : null,
-      name      : child.name,
-      title     : child.title,
-      type      : child.type,
-      nestLevel : nestLevel,
-      parentGuid: block.guid,
-    })
-    .then(function(createdObj) {
-      child.guid = createdObj.id;
-      if (createdObj.type === 'lineItem') {
-        createSeedData(db, child, createdObj);
-      } else if (child.type === 'section') {
-        createBlock(db, child);
-      }
+// Creates study, scenario, and all blocks, from template file.
+function createStudyFromSeedData(db, studyId) {
+	db.ruleSeedData = [];
 
-    });
+	var studys = [
+		db.getStudySeeds3(),	
+		db.getStudySeeds2(),	
+		db.getStudySeeds3(),	
+	];
+
+	var study = studys[studyId];
+	var studyToReturn = {};
+
+  return db.studys.create(
+  	{
+			id  : null,
+			name: study.name,
+			user: study.user,
+    }
+  ).then((newStudy)=> {
+  	studyToReturn = newStudy;
+		var studyId  = newStudy.id;
+		var promises = study.scenarios.map(scenarioObj=> {
+			scenarioObj.studyGuid = studyId;
+  		return createScenario(db, scenarioObj)
+  		.then(scenario=> {
+				var block        = scenarioObj.block;
+				block.scenario   = scenario.id;
+				block.parentGuid = -1;
+
+  			return createBlock(db, block)
+  			.then((newBlock)=> {
+			  	if (scenarioObj.ruleSeeds) {
+
+				  	scenarioObj.ruleSeeds.forEach((rule, index)=> {
+							var sourceGuid          = getBlockIdFromRuleAlias(db.ruleSeedData, rule.sourceGuid, scenario.id).blockId;
+							var destinationGuid     = getBlockIdFromRuleAlias(db.ruleSeedData, rule.destinationGuid, scenario.id).blockId;
+							var outflowLineItemGuid = getBlockIdFromRuleAlias(db.ruleSeedData, rule.outflowLineItemGuid, scenario.id).blockId;
+							var inflowLineItemGuid  = getBlockIdFromRuleAlias(db.ruleSeedData, rule.inflowLineItemGuid, scenario.id).blockId;
+
+						  var newRule = {
+						    name                : 'rule from seed',
+						    indexWithinParent   : index,
+						    scenario            : scenario.id,
+						    function            : rule.function,
+
+						    sourceGuid          : sourceGuid,
+						    destinationGuid     : destinationGuid,
+						    outflowLineItemGuid : outflowLineItemGuid,
+						    inflowLineItemGuid  : inflowLineItemGuid,
+						    
+						    sourceMinAmount     : rule.sourceMinAmount,
+						    destinationMaxAmount: rule.destinationMaxAmount,
+						  };
+						  db.rules.create(newRule);		  		
+				  	});
+			  		
+			  	} else {
+			  		return newBlock;
+			  	}
+
+  			});
+  		})
+  	});
+		return db.sequelize.Promise.all(promises);
+
   })
+  .then(()=> {
+  	return studyToReturn;
+  });
 }
 
-// return db.blocks.findAll({where: {id: parent.id}})
-function createSeedData(db, block, parent) {
-  var blockId       = 0;
-  var seedPaymentId = 0;
-  var seedDataId    = 0;
+// Creates sections and lineItems recursively.
+// Can be used with json from seed files, or to create blocks based on input data from client.
+// When the data is from client, there is no .children.
+function createBlock(db, block){
+	var indexWithinParent = block.indexWithinParent ? block.indexWithinParent : 0; // for the top level block
+  
+  return db.blocks.create({
+		collapsed        : block.collapsed,
+		scenario         : block.scenario,
+		name             : block.name,
+		type             : block.type,
+		subtype1         : block.subtype1,
+		parentGuid       : block.parentGuid,
+		indexWithinParent: indexWithinParent,
+  })
+  .then(function(newBlock) {
+  	// Find rule aliases that will be used to create rules from seed data.
+  	if (block.ruleAlias) {
+  		db.ruleSeedData.push(
+				{
+					scenario : block.scenario,
+					blockId  : newBlock.id,
+					ruleAlias: block.ruleAlias,
+				}	
+			);
+  	}
 
-  var blockId = parent.id;
+  	if (block.type === 'lineItem' && block.seedData) {
+  		block.id = newBlock.id;
+      return createLineItemDefinition(db, block);
+    }
+    else if (block.type === 'section' && block.tally) {
+	    return db.tallyPayments.create({
+	      amount: block.tally.tallyPayment.amount,
+	      date  : new Date(block.tally.tallyPayment.date),
+	    })
+	    .then(function(createdPayment) {
+			  return db.tallys.create({
+					blockId            : newBlock.id,
+					type               : 'tally',
+					annualEscalationPct: block.tally.annualEscalationPct,
+					tallyPaymentId     : createdPayment.id
+			  })
+			  .then(()=> newBlock);
+	    });
+  	} else {
+      return db.sequelize.Promise.resolve(newBlock);
+  	}
+  })
+  .then(function(newBlock) {
+  	if (block.children) {
+			var indexWithinParent = 0;  
+			var promises = block.children.map(child=> {
+		  	indexWithinParent += 1;
+	      child.indexWithinParent = indexWithinParent;
+
+				child.scenario   = block.scenario;
+				child.parentGuid = newBlock.id;
+
+        return createBlock(db, child);
+	    });
+		  return db.sequelize.Promise.all(promises);
+  	} else {
+      return db.sequelize.Promise.resolve(newBlock);
+  	}
+
+  })
+  // .then(()=> newBlock)
+}
+
+// Create a lineItem
+function createLineItemDefinition(db, block) {
+	var seedPaymentId = 0;
+	var seedDataId    = 0;
+	var blockId       = block.id;
   
   // create seed data
-  return db.seedDatas.create({
+	var seedPromise = db.seedDatas.create({
     id               : null,
     blockId          : blockId,
     seedDataType     : block.seedData.seedDataType,
     numDaysInInterval: block.seedData.numDaysInInterval,
+    numPayments      : block.seedData.numPayments,
   })
 
   // create payment
-  .then(function(parent) {
+  .then(function(newSeedData) {
   	// Only create a payment if one is defined.
 		if (block.seedData.initialPayment) {
-	    seedDataId = parent.id;
+	    seedDataId = newSeedData.id;
 	    
 	    var date;
 	    if (block.seedData.initialPayment.date) {
@@ -69,8 +197,8 @@ function createSeedData(db, block, parent) {
 	    })
 
 	    // create seedDataJoinPayment
-	    .then(function(parent) {
-	      seedPaymentId = parent.id;
+	    .then(function(newPayment) {
+	      seedPaymentId = newPayment.id;
 	      return db.seedDataJoinPayments.create({
 	        id           : null,
 	        seedDataId   : parseInt(seedDataId),
@@ -79,6 +207,67 @@ function createSeedData(db, block, parent) {
 	    });
 		}
   });
+  
+  return seedPromise;
 }
+
+////////////////////////// helpers //////////////////////////////////////////
+
+function addStudyJoinScenariosToDb(db, studyId, scenarioId) {
+  var resp = db.studyJoinScenarios.create(
+  	{
+			studyId,
+			scenarioId,
+    }
+  );
+
+  return resp;
+}
+
+// Creates a scenario and joins is to section.
+// This should be split into 2 functions.
+function createScenario(db, scenarioObj={name: 'new scenario'}) {
+ 	var name =  scenarioObj.name ? scenarioObj.name : 'new scenario';
+ 	var createdScenario;
+  return db.scenarios.create(
+  	{
+			name: scenarioObj.name,
+    }
+  ).then(resp=> {
+  	createdScenario = resp;
+  	return addStudyJoinScenariosToDb(db, scenarioObj.studyGuid, resp.id)
+  	.then(resp=> {return createdScenario})
+  })
+}
+
+// Insert a new blank section, from template in file.
+function createSection(db, data) {
+	var newSection               = db.getBasicSection();
+	newSection.scenario          = data.scenario;
+	newSection.parentGuid        = data.parentGuid;
+	newSection.indexWithinParent = data.indexWithinParent;
+
+	return createBlock(db, newSection);
+}
+
+// function createRuleSeeds(db) {
+//   var indexWithinParent = -1;  
+//   db.getRuleSeeds().forEach(rule=> {
+//     indexWithinParent += 1;
+//     // create rule
+//     return db.rules.create(
+//     	{
+// 				id                  : null,
+// 				indexWithinParent   : indexWithinParent,
+// 				function            : rule.function,
+// 				sourceGuid          : rule.source.guid,
+// 				outflowLineItemGuid : rule.source.outflowLineItemGuid,
+// 				destinationGuid     : rule.destination.guid,
+// 				inflowLineItemGuid  : rule.destination.inflowLineItemGuid,
+// 				destinationMaxAmount: rule.destination.targetAmount,
+// 	    }
+//     ).then((resp)=> {});
+//   });
+// }
 
 module.exports = functions;

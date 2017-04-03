@@ -3,22 +3,22 @@
     "username": "postgres",
     "password": "blackie",
     "database": "todos",
-    "host": "localhost",
-    "port": "5432",
-    "dialect": "postgres"
+    "host"    : "localhost",
+    "port"    : "5432",
+    "dialect" : "postgres"
   },
   "test": {
     "username": "postgres",
     "password": "blackie",
     "database": "todos",
-    "host": "localhost",
-    "dialect": "postgres"
+    "host"    : "localhost",
+    "dialect" : "postgres"
   },
   "production": {
     "username": "postgres",
     "password": "blackie",
     "database": "todos",
-    "host": "localhost",
-    "dialect": "postgres"
+    "host"    : "localhost",
+    "dialect" : "postgres"
   }
 }

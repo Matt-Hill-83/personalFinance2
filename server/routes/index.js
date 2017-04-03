@@ -1,6 +1,9 @@
 var express = require('express');
-var router = express.Router();
-var models = require('../models/index');
+var router  = express.Router();
+var models  = require('../models/index');
+
+require('./block.routes.js')(router);
+require('./study.routes.js')(router);
 
 const path = require('path');
 
@@ -8,106 +11,332 @@ router.get('/', (req, res, next) => {
   res.sendFile(path.join(__dirname, '..', '..', 'client', 'views', 'finance.html'));
 });
 
-// * @param  {Array<Object|Model>}       [options.include] A list of associations to eagerly load using a left join.
-// Supported is either `{ include: [ Model1, Model2, ...]}` or `{ include: [{ model: Model1, as: 'Alias' }]}`.
-// If your association are set up with an `as` (eg. `X.hasMany(Y, { as: 'Z }`, you need to specify Z in the
-// as attribute when eager loading Y).
+//////////////////////////////// Blocks ////////////////////////////////////////////
 
-//    * @param  {Model}                     [options.include[].model] The model you want to eagerly load
-//    * @param  {String}                    [options.include[].as] The alias of the relation, in case the model you want to eagerly load is aliassed. For `hasOne` / `belongsTo`, this should be the singular name, and for `hasMany`, it should be the plural
-//    * @param  {Association}               [options.include[].association] The association you want to eagerly load. (This can be used instead of providing a model/as pair)
-//    * @param  {Object}                    [options.include[].where] Where clauses to apply to the child models. Note that this converts the eager load to an inner join, unless you explicitly set `required: false`
-//    * @param  {Array<String>}             [options.include[].attributes] A list of attributes to select from the child model
-//    * @param  {Boolean}                   [options.include[].required] If true, converts to an inner join, which means that the parent model will only be loaded if it has any matching children. True if `include.where` is set, false otherwise.
-//    * @param  {Array<Object|Model>}       [options.include[].include] Load further nested related models
+// get blocks for scenario
+router.get('/blocks/:scenarioId', (req, res)=>
+  getBlocksWithChildrenForScenario(req.params.scenarioId)
+  .then(blocks => {res.json(blocks)})
+);
 
-router.get('/blocks', function(req, res) {
-  models.blocks.findAll({
+function getBlocksWithChildrenForScenario(scenarioId) {
+  return models.blocks.findAll({
+    where: {
+      scenario: parseInt(scenarioId)
+    },
     include: [
       {
-        model: models.seedDatas,
+        model  : models.tallys,
+        include: [{model: models.tallyPayments}],
+      },
+      {
+        model  : models.seedDatas,
         include: [
           {
-            model: models.seedDataJoinPayments,
-            include: [
-              {
-                model: models.seedPayments
-              }
-            ],
-
+            model  : models.seedDataJoinPayments,
+            include: [{model: models.seedPayments}],
           }
         ]
+      },
+    ]
+  });
+}
+
+router.post('/addRow', function(req, res) {
+  models.addSeeds.createBlock(models, req.body.data)
+  .then(blocks => {
+    res.json(blocks)
+  });
+});
+
+router.post('/addSection', function(req, res) {
+  return models.addSeeds.createSection(models, req.body.data)
+  .then(section => {
+    res.json(section)
+  });
+});
+
+// update single block
+router.put('/blocks', function(req, res) {
+  if (req.body.blockChanged) {
+    var blockParams = {
+      name             : req.body.data.name,
+      indexWithinParent: req.body.data.indexWithinParent,
+    };
+
+    models.blocks.find({
+      where: {
+        id: req.body.data.id,
+      }})
+    .then(function(block) {
+      if(block){
+        // TODO: this is a security risk.  I should list out the parameters that can be updated.
+        block.updateAttributes(blockParams)
+        .then(function(block) {
+          res.send(block);
+        });
+      }
+    });
+  }
+
+  if (req.body.seedDataChanged && req.body.data.seedData) {
+    var seedDataParams = {
+      numDaysInInterval: req.body.data.seedData.numDaysInInterval,
+      seedDataType     : req.body.data.seedData.seedDataType,
+    };
+    
+    models.seedDatas.find({
+      where: {
+        id: req.body.data.seedData.id
+      }
+    }).then(function(seedData) {
+      if(seedData){
+        seedData.updateAttributes(seedDataParams)
+        .then(function(seedData) {
+          // res.send(seedData);
+        });
+      }
+    });
+  }
+
+  if (
+      req.body.initialPaymentChanged &&
+      req.body.data.seedData &&
+      req.body.data.seedData.initialPayment
+    ) {
+    var initialPaymentParams = {
+      amount: req.body.data.seedData.initialPayment.amount,
+      date  : req.body.data.seedData.initialPayment.date,
+    };
+    models.seedPayments.find({
+      where: {
+        id: req.body.data.seedData.initialPayment.id
+      }
+    }).then(function(seedPayment) {
+      if(seedPayment){
+        seedPayment.updateAttributes(initialPaymentParams)
+        .then(function(seedPayment) {
+          // res.send(seedPayment);
+        });
+      }
+    });
+  }
+});
+
+// delete a single block and all dependencies.
+router.delete('/blocks/:id', (req, res)=> router.blockRoutes.destroyBlockWithChildren(req.params.id, res));
+
+////////////////////// Scenarios /////////////////////////////////////////////
+
+router.get('/scenarios', function(req, res) {
+  models.scenarios.findAll({
+  })
+  .then(scenarios => {
+    res.json(scenarios)
+  });
+});
+
+router.post('/scenario', function(req, res) {
+  models.addSeeds.createScenario(models, req.body.data)
+  .then(function(resp) {
+    res.json(resp)
+  });
+});
+
+router.delete('/scenario/:id', function(req, res) {
+  router.studyRoutes.destroyStudyJoinScenariosByScenarioId(req.params.id)
+  .then(()=> {
+    router.studyRoutes.destroyScenario(req.params.id)
+  })
+  .then(function(resp) {res.json(resp) });
+});
+
+////////////////////// Studys /////////////////////////////////////////////
+
+// delete a single study and all dependencies.
+router.delete('/studys/:id', (req, res)=> router.studyRoutes.destroyStudyWithChildren(req.params.id, res));
+
+// get studys
+router.get('/studys', function(req, res) {
+  models.studys.findAll({
+    where: {
+      // user: 'matt'
+    },
+    include: [
+      {
+        model  : models.studyJoinScenarios,
+        include: {model: models.scenarios},
       }
     ]
   })
   .then(blocks => {
-        res.json(blocks)
+    res.json(blocks)
   });
 });
 
-router.post('/users', function(req, res) {
-  models.User.create({
-    email: req.body.email
-  }).then(function(user) {
-    res.json(user);
+router.get('/newStudy/:guid', function(req, res) {
+  // Select which study you want here.
+  var studyId = 0;
+  var studyId = 2; // tally test
+  var studyId = 1; // big one
+
+  var studyGuid = req.params.guid;
+  models.addSeeds.createStudyFromSeedData(models, studyGuid)
+  .then(resp => {
+    res.json(resp)
   });
 });
 
-// get all todos
-router.get('/todos', function(req, res) {
-  models.Todo.findAll({}).then(function(todos) {
-    res.json(todos);
+//////////////////////////////// Rules ////////////////////////////////////////////
+
+router.get('/rules', function(req, res) {
+  models.rules.findAll({
+  })
+  .then(rules => {
+    res.json(rules)
   });
 });
 
-// get single todo
-router.get('/todo/:id', function(req, res) {
-  models.Todo.find({
+// update single rule
+router.put('/rule', function(req, res) {
+  var ruleParams = {
+    name               : req.body.data.name,
+    indexWithinParent  : req.body.data.indexWithinParent,
+
+    sourceGuid         : req.body.data.sourceGuid,
+    destinationGuid    : req.body.data.destinationGuid,
+    outflowLineItemGuid: req.body.data.outflowLineItemGuid,
+    inflowLineItemGuid : req.body.data.inflowLineItemGuid,
+
+    destinationMaxAmount: req.body.data.destinationMaxAmount,
+    sourceMinAmount     : req.body.data.sourceMinAmount,
+  };
+
+  models.rules.find({
     where: {
-      id: req.params.id
-    }
-  }).then(function(todo) {
-    res.json(todo);
-  });
-});
-
-// add new todo
-router.post('/todos', function(req, res) {
-  models.Todo.create({
-    title: req.body.title,
-    UserId: req.body.user_id
-  }).then(function(todo) {
-    res.json(todo);
-  });
-});
-
-// update single todo
-router.put('/todo/:id', function(req, res) {
-  models.Todo.find({
-    where: {
-      id: req.params.id
-    }
-  }).then(function(todo) {
-    if(todo){
-      todo.updateAttributes({
-        title: req.body.title,
-        complete: req.body.complete
-      }).then(function(todo) {
-        res.send(todo);
+      id: req.body.data.guid,
+    }})
+  .then(function(rule) {
+    if(rule){
+      rule.updateAttributes(ruleParams)
+      .then(function(rule) {
+        res.send(rule);
       });
     }
   });
 });
 
-// delete a single todo
-router.delete('/todo/:id', function(req, res) {
-  models.Todo.destroy({
+router.post('/rules', function(req, res) {
+  var newRule = {
+    name                : req.body.name,
+    description         : req.body.description,
+    indexWithinParent   : req.body.indexWithinParent,
+    scenario            : req.body.scenario,
+    function            : req.body.function,
+    sourceGuid          : req.body.sourceGuid,
+    sourceMinAmount     : req.body.sourceMinAmount,
+    outflowLineItemGuid : req.body.outflowLineItemGuid,
+    destinationGuid     : req.body.destinationGuid,
+    inflowLineItemGuid  : req.body.inflowLineItemGuid,
+    destinationMaxAmount: req.body.destinationMaxAmount,
+  };
+
+  models.rules.create(newRule)
+  .then(function(rule) {
+    res.json(rule);
+  });
+});
+
+router.delete('/rule/:id', function(req, res) {
+  models.rules.destroy({
     where: {
       id: req.params.id
     }
-  }).then(function(todo) {
-    res.json(todo);
+  }).then(function(rule) {
+    res.json(rule);
   });
 });
+
+////////////////////// Tables /////////////////////////////////////////////
+
+// delete all data.
+router.delete('/tables', function(req, res) {
+  models.sequelize.sync({
+   force: true,
+  }).then(function(resp) {
+    res.json('dropped');
+  });
+});
+
+////////////////////////////////////////////////
+
+// crap saved from demo
+function oldStuff() {
+  // This container just lets me fold the code.
+  router.post('/users', function(req, res) {
+    models.User.create({
+      email: req.body.email
+    }).then(function(user) {
+      res.json(user);
+    });
+  });
+
+  // get all todos
+  router.get('/todos', function(req, res) {
+    models.Todo.findAll({}).then(function(todos) {
+      res.json(todos);
+    });
+  });
+
+  // get single todo
+  router.get('/todo/:id', function(req, res) {
+    models.Todo.find({
+      where: {
+        id: req.params.id
+      }
+    }).then(function(todo) {
+      res.json(todo);
+    });
+  });
+
+  // add new todo
+  router.post('/todos', function(req, res) {
+    models.Todo.create({
+      title: req.body.title,
+      UserId: req.body.user_id
+    }).then(function(todo) {
+      res.json(todo);
+    });
+  });
+
+  // update single todo
+  router.put('/todo/:id', function(req, res) {
+    models.Todo.find({
+      where: {
+        id: req.params.id
+      }
+    }).then(function(todo) {
+      if(todo){
+        todo.updateAttributes({
+          title: req.body.title,
+          complete: req.body.complete
+        }).then(function(todo) {
+          res.send(todo);
+        });
+      }
+    });
+  });
+
+  // delete a single todo
+  router.delete('/todo/:id', function(req, res) {
+    models.Todo.destroy({
+      where: {
+        id: req.params.id
+      }
+    }).then(function(todo) {
+      res.json(todo);
+    });
+  });
+}
 
 module.exports = router;

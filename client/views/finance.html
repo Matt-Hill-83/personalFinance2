@@ -12,6 +12,9 @@ var value = rule.value;            //both selectorText and value are settable. -
 
 	<!-- Get styles -->
     <link rel="stylesheet" href="/css/styles.css" media="screen">
+    <link rel="stylesheet" href="/css/mainTable.css" media="screen">
+    <link rel="stylesheet" href="/css/rulesTable.css" media="screen">
+    <link rel="stylesheet" href="/css/ngDialog-theme-default.css">
 
     <!-- Styles for date picker -->
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
@@ -21,40 +24,43 @@ var value = rule.value;            //both selectorText and value are settable. -
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
 
     <!-- Load local packages -->
-    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.0rc1/angular-route.min.js"></script>
 
     <!-- high charts!!! -->
     <script src="https://code.highcharts.com/highcharts.js"></script>
     <script src="https://code.highcharts.com/modules/exporting.js"></script>
 
+    <!-- ngDialog -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/ng-dialog/1.0.1/js/ngDialog.min.js"></script>
+    <!-- <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/ng-dialog/1.0.1/css/ngDialog-theme-default.min.css"></link> -->
+    <!-- <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/ng-dialog/1.0.1/css/ngDialog-theme-plain.min.css"></link> -->
+    <!-- <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/ng-dialog/1.0.1/css/ngDialog-theme-default.min.css"></link> -->
+
+
+    <!-- controllers -->
     <script src="js/finance.controller.js"></script>
+    
+    <!-- services -->
     <script src="js/api.service.js"></script>
     <script src="js/constants.service.js"></script>
     <script src="js/chart.service.js"></script>
 
-    <!-- load database files -->
-    <script src="js/dataBases/pettyCashDb.service.js"></script>
-    <script src="js/dataBases/cashDb.service.js"></script>
-    <script src="js/dataBases/cash2Db.service.js"></script>
-    
-    <script src="js/dataBases/stockDb.service.js"></script>
-    <script src="js/dataBases/four01kDb.service.js"></script>
-    <script src="js/dataBases/emergencyFund.service.js"></script>
-    <script src="js/dataBases/homeDownPayment.service.js"></script>
-
+    <script src="js/rules.service.js"></script>
     <script src="js/dataBase.service.js"></script>
     <script src="js/dataGeneration.service.js"></script>
     <script src="js/utilities.service.js"></script>
     <script src="js/table.service.js"></script>
-    <script src="js/rules.service.js"></script>
+
+    <!-- directives -->
     <script src="js/mainTable.directive.js"></script>
+    <script src="js/chart.directive.js"></script>
+    <script src="js/landingPage.directive.js"></script>
+    <script src="js/createEditLineItem.directive.js"></script>
+    <script src="js/ruleManager.directive.js"></script>
 </head>
 
 <body ng-app="app">
-	<div class="container" ng-controller="FinanceTable">
-    <finance-view> </finance-view>
-    <br>
-    <br>
-    <div id="container"></div>
+  <landing-page> </landing-page>
 </body>
 </html>

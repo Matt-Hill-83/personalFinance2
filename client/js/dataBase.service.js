@@ -1,25 +1,34 @@
 "use strict"
 angular.module('app').factory('DataBase',
   [
+    'Api',
+    '$q',
     'DataGeneration',
-    'CashDb',
-    'Cash2Db',
     'Constants',
-    'Rules',
     'Utilities',
     DataBase_
   ]);
 
+var logBlocks   = true;
+var logBlocks   = false;
+
+var logPayments = true;
+var logPayments = false;
+
+var logRules    = true;
+var logRules    = false;
+
 function DataBase_(
+  Api,
+  $q,
   DataGeneration,
-  CashDb,
-  Cash2Db,
   Constants,
-  Rules,
   Utilities
   ) {
   var service = {
     extendBaseParams,
+    cloneScenario,
+    deleteScenario,
     rebuildLocalDataBase,
     blockDb  : [],
     paymentDb: [], 
@@ -29,86 +38,147 @@ function DataBase_(
 
   var rulesFunctions = {
     moveUntilFull,
-  }
+  };
+
+  var clonedBlockGuidMap;
+  var tallyRecalcUnderway;
 
   return service;
 
-  ///////////////
+  ////////////////////////////////////////////////////// Clone Scenario //////////////////////////////////
 
-  function getBlocksFromPostgres() {
-    var newData = Constants.newData;
-      newData.forEach(block=> {
-        block.guid = parseInt(block.id);
+  function rebuildLocalDataBase(scenarioGuid){
+    var scenarioExistsInBlockDb = service.blockDb.some(block=> block.scenario === scenarioGuid);
 
-        block.parentGuid = parseInt(block.parentGuid);
-        block.nestLevel  = parseInt(block.nestLevel);
+    if (scenarioExistsInBlockDb) {
+      var cleanedDb = service.blockDb.filter(block=> block.scenario !== scenarioGuid);
+      service.blockDb.splice(0, service.blockDb.length, ...cleanedDb);
+    }
+    
+    var scenarioExistsInPaymentDb = service.paymentDb.some(payment=> payment.scenario === scenarioGuid);
 
-        if (
-          block.type === 'lineItem' &&
-          block.seedData &&
-          block.seedData.seedDataJoinPayment
-          ) {
-          block.seedData.initialPayment = block.seedData.seedDataJoinPayment.seedPayment;
-          block.seedData.initialPayment.date = new Date(block.seedData.initialPayment.date);
-          block.seedData.seedDataJoinPayment = 'removed from object to avoid confusion';
+    if (scenarioExistsInPaymentDb) {
+      var cleanedDb = service.paymentDb.filter(payment=> payment.scenario !== scenarioGuid);
+      service.paymentDb.splice(0, service.paymentDb.length, ...cleanedDb);
+    }
+    
+    service.blockDb.push(...Constants.scenarios[scenarioGuid].newBlocks);
+
+    // move this to preprocesser.
+    var topSection = Constants.scenarios[scenarioGuid].newBlocks.filter(block=> block.parentGuid === -1)[0];
+    topSection.nestLevel = 0;
+    Constants.scenarios[scenarioGuid].topSection = topSection;
+
+    addParents(topSection);
+    addPaymentsToDb(topSection);
+
+    // Recursively add all children to top level topSection.
+    Constants.tableConfig.dates.forEach((date, index)=> {
+      addTotalsToDb(topSection, date);
+      addTalliesToDb(topSection, date);
+    
+      var rules = Constants.rules.filter(rule=>rule.scenario === scenarioGuid);
+      
+      rules.forEach(rule=> {
+        var dataBaseSubset = service.blockDb.filter((block)=> block.scenario === scenarioGuid);
         
-          if (block.seedData.numDaysInInterval) {
-            block.seedData.numDaysInInterval = parseInt(block.seedData.numDaysInInterval);
+        if (rule.function) {
+          var ruleMadeChanges = rulesFunctions[rule.function](rule, date);
+
+          // Get the chain of parents for the line item that was changed.
+          // Only these blocks will need to have their totals and tallys recreated.
+          if (ruleMadeChanges) {
+            var blockIdsNeedingTallyRecalc = [];
+
+            var outflowBlock = service.lineItems.getSectionByGuid(rule.outflowLineItemGuid, dataBaseSubset);
+            var inflowBlock  = service.lineItems.getSectionByGuid(rule.inflowLineItemGuid, dataBaseSubset);
+            blockIdsNeedingTallyRecalc.push(...outflowBlock.parents.map(parent=> parent.guid));
+            blockIdsNeedingTallyRecalc.push(...inflowBlock.parents.map(parent=> parent.guid));
+
+            var blocksNeedingTallyRecalc = [];
+            blockIdsNeedingTallyRecalc.forEach(guid=> {
+              // Don't include top block.  It contains no data, and is just a container.
+              if (guid === topSection.guid) {
+                return;
+              }  
+              
+              blocksNeedingTallyRecalc.push(service.lineItems.getSectionByGuid(guid, dataBaseSubset));
+            });
+
+            blocksNeedingTallyRecalc.forEach(block=> block.recalculateTally = true);
+            tallyRecalcUnderway = true;
+            
+            addTotalsToDb(topSection, date);
+            addTalliesToDb(topSection, date);
+    
+            blocksNeedingTallyRecalc.forEach(block=> block.recalculateTally = false);
+            tallyRecalcUnderway = false;
           }
+          // Throw in a final total and tally in case the outermost section is a sum of tallys.
+          // A better way to do this would be to step upward from the bottom recursively after each rule and total and tally
+          // according to what the blocks require.  Brain pretzel. TODO
+          addTotalsToDb(topSection, date);
         }
 
       });
-
-    return newData;
-  }
-
-  function rebuildLocalDataBase(){
-    service.blockDb   = [];
-    service.paymentDb = [];
-
-    var newData = getBlocksFromPostgres();
-    service.blockDb.push(...newData);
-    
-    var section = newData.filter(block=> block.guid === 1)[0];
-    Constants.tableConfig.topSection = section;
-
-    console.log('|++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++|');
-    console.log('newData: ');
-    console.table(newData);
-    console.log('|------------------------------------------------------------------------------------------------|')
-
-    addParents(section);
-    addPaymentsToDb(section);
-
-    // Recursively add all children to top level section.
-    Constants.tableConfig.dates.forEach((date, index)=> {
-      addTotalsToDb(section, date);
-      addTalliesToDb(section, date);
-      
-      // Rules.rules().forEach(rule=> {
-      //   rulesFunctions[rule.function](rule, date);
-      //   addTotalsToDb(section, date);
-      //   addTalliesToDb(section, date);
-      // });
-
     });
 
-    console.log('|++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++|');
-    console.log('service.blockDb: ');
-    console.table(service.blockDb);
-    console.log('|------------------------------------------------------------------------------------------------|')
+    if (logBlocks) {
+      console.log('|++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++|');
+      console.log('service.blockDb: ');
+      console.table(service.blockDb);
+      console.log('|------------------------------------------------------------------------------------------------|')
+    }
 
-
-    console.log('|++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++|');
-    console.log('service.paymentDb: ');
-    console.table(service.paymentDb);
-    console.log('|------------------------------------------------------------------------------------------------|')
+    if (logPayments) {
+      console.log('|++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++|');
+      console.log('service.paymentDb: ');
+      console.table(service.paymentDb);
+      console.log('|------------------------------------------------------------------------------------------------|')
+    }
     
+    if (logRules) {
+      console.log('|++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++|');
+      console.log('Constants.rules: ');
+      console.table(Constants.rules);
+      console.log('|------------------------------------------------------------------------------------------------|')
+    }
+
+  }
+
+  function queryLocalDb(params, db) {
+    return db.filter(payment=> {
+      for (var param in params) {
+        if (!params[param]) {
+          return 'bad paramater was passed';
+        }
+
+        // Date objects cannot be compared with ===.
+        // If the param is a date, use a different comparison.
+        // Figure out if it is a date by checking to see if the getTime
+        // method exists.
+        if (params[param].getTime) {
+          var paramTrue = Utilities.areDatesEqual(payment[param], params[param]);
+        } else {
+          var paramTrue = payment[param] === params[param];
+        }
+
+        if (!paramTrue) {
+          // Stop looking and eturn false if any parameter is not found.
+          return false;
+        }
+      }
+      // If all params were found, return true.
+      return true;
+    });    
   }
 
   function addParents(section) {
+    // TODO: move this to model where it will be permanent:
+    section.showOnChart = false;
     var children = service.lineItems.getFirstChildrenOf(section);
     children.map(child=> {
+      child.showOnChart = false;
       _addParentToLineage(child, section)      
       if (child.type === 'section') {
         addParents(child);
@@ -120,7 +190,7 @@ function DataBase_(
   function addPaymentsToDb(section) {
     var children = service.lineItems.getFirstChildrenOf(section);
     children.map(child=> {
-      if (child.type === 'lineItem') {
+      if (child.type === 'lineItem' && child.seedData) {
         // Turn seed data into payments and add them to paymentDb.
           var newPayments =
             DataGeneration.seedConversionFunctions[child.seedData.seedDataType](child, Constants.tableConfig);
@@ -138,7 +208,7 @@ function DataBase_(
     children.map(child=> {
       if (child.type === 'section') {
         addTotalsToDb(child, date);
-        createTotal(child, date);          
+        service.payments.createTotal(child, date);          
       }
     });
   }
@@ -147,6 +217,7 @@ function DataBase_(
     var children = service.lineItems.getFirstChildrenOf(section);
     children.map(child=> {
       if (child.type === 'section') {
+        // Create most deeply nested tallies first.
         addTalliesToDb(child, date);
         if (child.tally) {
           service.payments.createTallyPayment(child, date);
@@ -155,108 +226,9 @@ function DataBase_(
     });
   }
 
-  function moveUntilFull(inputs, date) {
-    var pettyCashTarget    = inputs.destination.targetAmount;
-    var sourcePayment      = service.payments.getPaymentByDateAndGuid(date, inputs.source.guid);
-    var destinationPayment = service.payments.getByParams(
-      {
-        date      : date,
-        type      : 'tally',
-        parentGuid: inputs.destination.guid,
-      }
-    )[0];
-
-    if (
-      sourcePayment &&
-      destinationPayment &&
-      sourcePayment.amount > 0 &&
-      destinationPayment.amount < pettyCashTarget
-      ) {
-      
-      var outflowLineItem = service.lineItems.getByParams({guid: inputs.source.outflowLineItemGuid})[0];
-      var inflowLineItem = service.lineItems.getByParams({guid: inputs.destination.inflowLineItemGuid})[0];
-
-      var pettyCashShortfall = pettyCashTarget - destinationPayment.amount;
-
-      // Don't transfer more than you have.
-      var amountToTransfer = pettyCashShortfall > sourcePayment.amount ? sourcePayment.amount : pettyCashShortfall;
-
-      var paymentToSend = {
-        date          : date,
-        type          : outflowLineItem.type,
-        amount        : -amountToTransfer,
-        name          : outflowLineItem.name,
-      };
-  
-      paymentToSend.valueToDisplay = paymentToSend.amount;
-      service.payments.create(paymentToSend, outflowLineItem);
-
-
-      var paymentToReceive = {
-        date          : date,
-        type          : inflowLineItem.type,
-        amount        : amountToTransfer,
-        name          : inflowLineItem.name,
-      };
-  
-      paymentToReceive.valueToDisplay = paymentToReceive.amount;
-      service.payments.create(paymentToReceive, inflowLineItem);
-
-    }
-
-  }
-
-  function createTotal(section, date) {
-    var newPayment = {
-      date          : date,
-      type          : 'total gross',
-      amount        : 0,
-      name          : section.name,
-    };
-
-    // Get children of item to be totalled.
-    var firstChildren = service.lineItems.getFirstChildrenOf(section).filter(child=> {
-      return (
-        child.type === 'lineItem' ||
-        child.type === 'section'
-      );
-    });
-
-    firstChildren.forEach(child=> {
-        var payment = service.payments.getPaymentByDate(date, child);
-        var paymentAmount = payment ? payment.amount : 0;
-
-        if (child.negate) {
-          newPayment.amount -= paymentAmount;
-        } else {
-          newPayment.amount += paymentAmount;
-        }
-    });
-
-    newPayment.valueToDisplay = newPayment.amount;
-
-    // Create or update record.
-    var params = {
-      date      : date,
-      parentGuid: section.guid,
-      type      : 'total gross',
-    };
-
-    // Get previously created section total payment.
-    var existingPayment = service.payments.getByParams(params)[0];
-    if (existingPayment) {
-      existingPayment.amount         = newPayment.amount;
-      existingPayment.valueToDisplay = newPayment.amount;
-    } else {
-      service.payments.create(newPayment, section);
-    }
-
-  }
-
   function _addParentToLineage(child, parent) {
-    child.parentGuid = parent.guid;
-    child.nestLevel  = parent.nestLevel + 1;
-
+    child.parentGuid  = parent.guid;
+    child.nestLevel   = parent.nestLevel + 1;
     var parentParents = parent.parents ? parent.parents : [];
 
     child.parents = parentParents.concat([
@@ -274,20 +246,150 @@ function DataBase_(
     return angular.extend(baseParamsCopy, customizedParams);
   }
 
+  ////////////////////////////////////////////////////// Clone Scenario //////////////////////////////////
+
+  function deleteScenario(scenarioGuid) {
+    return Api.deleteScenario(scenarioGuid);
+  }
+
+  function getNewGuidFromOldGuid(oldGuid, clonedBlockGuidMap){
+    var result = clonedBlockGuidMap.filter(item=> item.oldGuid === oldGuid);
+    if (result[0]) {
+      return result[0].newGuid;
+    } else {
+      return 'error';
+    }
+  }
+
+  // TODO: This function could be run twice and both instances could modify the same array. Fix this.
+  function cloneScenario(scenarioGuid, studyGuid) {
+    clonedBlockGuidMap = [];
+    var params = {
+      parentGuid: -1,
+      scenario  : scenarioGuid,
+    };
+
+    var topBlock = service.lineItems.getByParams(params)[0];
+    return Api.createScenario(studyGuid)
+    .then((resp)=> {
+      var newScenarioGuid = resp.data.id;
+      return cloneBlocks(newScenarioGuid, topBlock)
+      .then(()=> {
+        var rules = Constants.rules.filter(rule=>rule.scenario === scenarioGuid);
+        var promises = rules.forEach(rule=> {
+          rule.scenario            = newScenarioGuid;
+          rule.sourceGuid          = getNewGuidFromOldGuid(rule.sourceGuid, clonedBlockGuidMap);
+          rule.outflowLineItemGuid = getNewGuidFromOldGuid(rule.outflowLineItemGuid, clonedBlockGuidMap);
+          rule.destinationGuid     = getNewGuidFromOldGuid(rule.destinationGuid, clonedBlockGuidMap);
+          rule.inflowLineItemGuid  = getNewGuidFromOldGuid(rule.inflowLineItemGuid, clonedBlockGuidMap);
+
+          return Api.addRule(rule);
+        });
+        return $q.all(promises);
+      });
+    });
+  }
+
+  function cloneBlocks(newScenarioGuid, block, parentGuid=-1) {
+    var newGuidMapRecord = {oldGuid: block.guid};
+    return Api.createRow(convertBlockToRequest(newScenarioGuid, block, parentGuid))
+    .then((resp)=> {
+      var newGuid = resp.data.id;
+      newGuidMapRecord.newGuid = parseInt(newGuid);
+      clonedBlockGuidMap.push(newGuidMapRecord);
+      var children = service.lineItems.getFirstChildrenOf(block);
+      var promises = children.map(child=> {
+        return cloneBlocks(newScenarioGuid, child, newGuid);
+      });
+
+      return $q.all(promises);
+    });
+  }
+
+  function convertBlockToRequest(newScenarioGuid, block, parentGuid) {
+    var newBlock = angular.copy(block);
+
+    if (newBlock.parentGuid === -1) {
+      newBlock.parentGuid = -1
+    } else {
+      newBlock.parentGuid = parentGuid;
+    }
+
+    newBlock.name     = newBlock.name;
+    newBlock.scenario = newScenarioGuid;
+    return newBlock;
+  }
+
+  ////////////////////////////////////////////////////// Rules //////////////////////////////////
+
+  function moveUntilFull(rule, date) {
+    var pettyCashTarget = rule.destinationMaxAmount;
+    var outflowLineItem = service.lineItems.getByParams({guid: rule.outflowLineItemGuid})[0];
+    var inflowLineItem  = service.lineItems.getByParams({guid: rule.inflowLineItemGuid})[0];
+
+    var sourcePayment      = service.payments.getTotalGrossPaymentByDateAndGuid(date, rule.sourceGuid);
+    var destinationPayment = service.payments.getByParams(
+      {
+        date      : date,
+        type      : 'tally',
+        parentGuid: rule.destinationGuid,
+      }
+    )[0];
+
+    if (
+      outflowLineItem &&
+      inflowLineItem &&
+      pettyCashTarget &&
+      sourcePayment &&
+      destinationPayment &&
+      sourcePayment.amount > rule.sourceMinAmount &&
+      destinationPayment.amount < pettyCashTarget
+      ) {
+      var pettyCashShortfall = pettyCashTarget - destinationPayment.amount;
+
+      // Don't transfer more than you have.
+      var sourceAmountAvailable = sourcePayment.amount - rule.sourceMinAmount;
+      var amountToTransfer      = pettyCashShortfall > sourceAmountAvailable ? sourceAmountAvailable : pettyCashShortfall;
+
+      var paymentToSend = {
+        date  : date,
+        type  : outflowLineItem.type,
+        amount: -amountToTransfer,
+        name  : outflowLineItem.name,
+      };
+  
+      paymentToSend.valueToDisplay = paymentToSend.amount;
+      service.payments.create(paymentToSend, outflowLineItem);
+
+      var paymentToReceive = {
+        date  : date,
+        type  : inflowLineItem.type,
+        amount: amountToTransfer,
+        name  : inflowLineItem.name,
+      };
+  
+      paymentToReceive.valueToDisplay = paymentToReceive.amount;
+      service.payments.create(paymentToReceive, inflowLineItem);
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   ////////////////////////////////////////
 
   function lineItems() {
     return {
       create,
+      getSectionByGuid,
       getSections,
+      getSiblings,
+      getBlockFromGuid,
       getByParams,
       getChildBlocksFromSection,
+      getInterestRowForTally,
       getFirstChildrenOf,
     };
-
-    function getSections() {
-      return getByParams({type: 'section'});
-    }
 
     function create(record, parent) {
       if (parent) {
@@ -299,35 +401,81 @@ function DataBase_(
       return record;
     }
 
-    function getByParams(params) {
-      return service.blockDb.filter(blocks=> {
+    function getSectionByGuid(guid, dataBase) {
+      var result = dataBase.filter(block=> block.guid === guid);
 
-        // TODO - this is duplicated, turn it into a function.
-        var allParamsTrue = true;
-        for (var param in params) {
-          // Date objects cannot be compared with ===.
-          // If the param is a date, use a different comparison.
-          // Figure out if it is a date by checking to see if the getTime
-          // method exists.
-          if (params[param].getTime) {
-            var paramTrue = Utilities.areDatesEqual(blocks[param], params[param]);
-          } else {
-            var paramTrue = blocks[param] === params[param];
-          }
+      if (result.length === 1) {
+        return result[0];
+      } else if (result.length === 0) {
+        return 'no blocks found';
+      } else if (result.length > 1) {
+        return 'more than 1 blocks found';
+      }
+    }
 
-          // This mechanism sets allParams to false, if any param is not true.
-          allParamsTrue = allParamsTrue && paramTrue;
-        }
-        return allParamsTrue;
+    function getInterestRowForTally(tallyGuid) {
+      var result = service.blockDb.filter(block=> {
+        return (
+          block.parentGuid === tallyGuid &&
+          block.subtype1 === 'interest'
+        );
       });
+
+      if (result.length === 1) {
+        return result[0];
+      } else if (result.length === 0) {
+        return 'no blocks found';
+      } else if (result.length > 1) {
+        return 'more than 1 blocks found';
+      }
+    }
+
+    function getBlockFromGuid(blockGuid) {
+      var params = {
+        guid: blockGuid,
+      };
+      var result = getByParams(params);
+
+      if (result.length === 1) {
+        return result[0];
+      } else if (result.length === 0) {
+        return 'no blocks found';
+      } else if (result.length > 1) {
+        return 'more than 1 blocks found';
+      }
+    }
+    
+    function getSections() {
+      return getByParams({type: 'section'});
+    }
+
+    function getSiblings(block) {
+      var params = {
+        guid: block.parentGuid
+      };
+
+      var parent   = service.lineItems.getByParams(params)[0];
+      var siblings = service.lineItems.getFirstChildrenOf(parent);
+      return siblings;
+    }
+
+    function getByParams(params, db) {
+      if (!db) {
+        db = service.blockDb;
+      }
+
+      var children = queryLocalDb(params, db);
+      return Utilities.sortSections(children);
     }
 
     function getChildBlocksFromSection(section) {
-      return service.blockDb.filter(block=> isChildBlockInSection(block, section));
+      var children = service.blockDb.filter(block=> isChildBlockInSection(block, section));
+      return Utilities.sortSections(children);
     }
 
     function getFirstChildrenOf(parent) {
-      return service.blockDb.filter(child=> child.parentGuid === parent.guid);
+      var children = service.blockDb.filter(child=> child.parentGuid === parent.guid);
+      return Utilities.sortSections(children);
     }
 
     function isChildBlockInSection(lineItem, section) {
@@ -346,11 +494,12 @@ function DataBase_(
     return {
       create,
       createOrUpdate,
+      createTotal,
       createSumPayments,      
       createTallyPayment,
       getByParams,
       getPaymentByDate,
-      getPaymentByDateAndGuid,
+      getTotalGrossPaymentByDateAndGuid,
       getPaymentsByDates,
     };
 
@@ -363,37 +512,25 @@ function DataBase_(
 
       // TODO: base params are not being extended correctly.  
       // record.classes = ['cell'];
-      record.classes = Constants.getPaymentBaseParams().classes;
+      record.scenario       = parent.scenario;
+      record.classes        = Constants.getPaymentBaseParams().classes;
       record.valueToDisplay = record.amount;
 
       service.paymentDb.push(record);
     }
 
-    function getByParams(params) {
-      return service.paymentDb.filter(payment=> {
-        var allParamsTrue = true;
-        for (var param in params) {
-          // Date objects cannot be compared with ===.
-          // If the param is a date, use a different comparison.
-          // Figure out if it is a date by checking to see if the getTime
-          // method exists.
-          if (params[param].getTime) {
-            var paramTrue = Utilities.areDatesEqual(payment[param], params[param]);
-          } else {
-            var paramTrue = payment[param] === params[param];
-          }
-
-          // This mechanism sets allParams to false, if any param is not true.
-          allParamsTrue = allParamsTrue && paramTrue;
-        }
-        return allParamsTrue;
-      });
+    function getByParams(params, db) {
+      if (!db) {
+        db = service.paymentDb;
+      }
+      return queryLocalDb(params, db);
     }
 
-    function getPaymentByDateAndGuid(date, parentGuid) {
+    function getTotalGrossPaymentByDateAndGuid(date, parentGuid) {
       var params = {
         date      : date,
         parentGuid: parentGuid,
+        type      : 'total gross',
       };
 
       var payments = getByParams(params);
@@ -438,68 +575,6 @@ function DataBase_(
       );
     }
 
-    function createTallyPayment(section, tableDate) {
-      var tableConfig = Constants.tableConfig;
-      var paymentDate;
-      var yesterdayAmount;
-
-      // unit test this math.
-      var annualEscalationPct      = section.tally.annualEscalationPct ? section.tally.annualEscalationPct : 0;
-      var dailyAnnualEscalationPct = Math.pow(
-        (1+annualEscalationPct),(1/365)
-        ) - 1;
-
-      // For the first calculation, start tally from tally initial payment date.
-      if (Utilities.areDatesEqual(tableDate, tableConfig.dates[0])) {
-        paymentDate     = section.tally.initialPayment.date;
-        yesterdayAmount = section.tally.initialPayment.amount;
-      } else {
-        var previousPaymentDate = Utilities.addDays(tableDate, -tableConfig.timeIntervalDays);
-        paymentDate             = Utilities.addDays(previousPaymentDate, 1);
-
-        var params = {
-          date      : previousPaymentDate,
-          parentGuid: section.guid,
-          type      : 'tally',
-        };
-
-        var yesterdayTally = service.payments.getByParams(params)[0];
-        yesterdayAmount    = yesterdayTally.amount;
-      }
-
-      while (paymentDate <= tableDate) {
-        var params = {
-          date      : paymentDate,
-          parentGuid: section.guid,
-          type      : 'total gross',
-        };
-
-        // Get previously created section total payment.
-        var todayTotal = service.payments.getByParams(params)[0];
-
-        var todayTotalAmount = todayTotal ? todayTotal.amount : 0;
-        var interestOnTally = (yesterdayAmount *  dailyAnnualEscalationPct);
-
-        // TODO: make interest its own line item.
-        var todayTallyAmount = yesterdayAmount + interestOnTally + todayTotalAmount;
-
-        if (paymentDate.getTime() === tableDate.getTime()) {
-          var newPayment = {
-            amount: todayTallyAmount,
-            date  : paymentDate,
-            type  : 'tally',
-            name  : section.name,
-          };
-
-          service.payments.createOrUpdate(newPayment, section);
-          break;
-        }
-
-        paymentDate     = Utilities.addDays(paymentDate, 1);
-        yesterdayAmount = todayTallyAmount;
-      }
-    }
-
     function createOrUpdate(newPayment, section) {
       var params = {
         date      : newPayment.date,
@@ -542,6 +617,194 @@ function DataBase_(
         service.payments.create(newPayment, sum);
       });
     }
+
+    function createTotal(section, date) {
+      if (tallyRecalcUnderway && !section.recalculateTally) {
+        return;
+      }
+
+      var newPayment = {
+        date  : date,
+        type  : 'total gross',
+        amount: 0,
+        name  : section.name,
+      };
+
+      // Get children of item to be totalled.
+      var firstChildren = service.lineItems.getFirstChildrenOf(section).filter(child=> {
+        return (
+          child.type === 'lineItem' ||
+          child.type === 'section'
+        );
+      });
+
+      firstChildren.forEach(child=> {
+        // If the parent is a 'total of tallies', only sum payments of children that are tally payments.
+        if (section.subtype1 === 'total of tallies'){
+          var params = {
+            date      : date,
+            parentGuid: child.guid,
+            type      : 'tally',
+          };
+        } else {
+          // If parent is any other type of block, only include certain child payments in total.
+          // Don't include interest payments in the section totals.  They have not been calculated yet and 
+          // will be calculated separately when the tally payments are created.
+          if (child.subtype1 === 'interest') {
+            return;
+          }
+            
+          // If the child is a tally, only grab the 'tally' type payments.
+          // Tally sections also have 'total gross' payments, which are there for calculating the tally payments.
+          if (child.tally) {
+            var params = {
+              date      : date,
+              parentGuid: child.guid,
+              type      : 'tally',
+            };
+
+          } else {
+            // //////////////////////// TODO: fix this, it is probably grabbing tally payments too.
+            // This only matters when you have a total section above a tally section.
+            var params = {
+              date      : date,
+              parentGuid: child.guid,
+            };
+        }
+
+        }
+          var payment       = service.payments.getByParams(params)[0];
+          var paymentAmount = payment ? payment.amount : 0;
+          newPayment.amount += paymentAmount;
+      });
+
+      newPayment.valueToDisplay = newPayment.amount;
+
+      // if (newPayment.amount !== 0) {
+        // Create or update record.
+        var params = {
+          date      : date,
+          parentGuid: section.guid,
+          type      : 'total gross',
+        };
+
+        // Get previously created section total payment.
+        var existingPayment = service.payments.getByParams(params)[0];
+        if (existingPayment) {
+          existingPayment.amount         = newPayment.amount;
+          existingPayment.valueToDisplay = newPayment.amount;
+        } else {
+          service.payments.create(newPayment, section);
+        }
+
+      // }
+    }
+
+    function createTallyPayment(section, tableDate) {
+      if (tallyRecalcUnderway && !section.recalculateTally) {
+        return;
+      }
+
+      var paymentDate;
+      var yesterdayAmount;
+      var dailyEscalationPct;
+
+      // unit test this math.
+      var annualEscalationPct = section.tally.annualEscalationPct ? section.tally.annualEscalationPct : 0;
+      if (annualEscalationPct !== 0) {
+        dailyEscalationPct = Math.pow(
+          // (1 + annualEscalationPct*100),(1/365)
+          (1 + annualEscalationPct/100),(1/365)
+          ) - 1;
+      } else {
+        dailyEscalationPct = 0;
+      }
+
+      // For the first calculation, if tally has a non-zero start amount,
+      // start tally from tally initial payment date.
+      if (Utilities.areDatesEqual(tableDate, Constants.tableConfig.dates[0])) {
+        if (section.tally.tallyPayment && section.tally.tallyPayment.amount > 0) {
+            paymentDate     = section.tally.tallyPayment.date;
+            yesterdayAmount = section.tally.tallyPayment.amount;
+        } else {
+          paymentDate     = Constants.tableConfig.dates[0];
+          yesterdayAmount = 0;
+        }
+
+      } else {
+        var previousPaymentDate = Utilities.addDays(tableDate, -Constants.tableConfig.timeIntervalDays);
+        paymentDate             = Utilities.addDays(previousPaymentDate, 1);
+
+        var params = {
+          date      : previousPaymentDate,
+          parentGuid: section.guid,
+          type      : 'tally',
+        };
+
+        var yesterdayTally = service.payments.getByParams(params)[0];
+        yesterdayAmount    = yesterdayTally.amount;
+      }
+
+      // Grab a slice of the db, so you don't need to look through the entire db every iteration.
+      var dbSliceParams = {
+        parentGuid: section.guid,
+        type      : 'total gross',
+      };
+
+      var dbSlice = service.payments.getByParams(dbSliceParams);
+
+      var todayTotalParams = {
+        date: paymentDate,
+      };
+
+      var todayTotal;
+      var todayTotalAmount;
+      var interestOnTally;
+      var interestAccumulatedSinceLastTallyRecord = 0;
+      var todayTallyAmount;
+
+      while (paymentDate <= tableDate) {
+        todayTotalParams.date = paymentDate;
+
+        // Get previously created section total payment.
+        todayTotal       = service.payments.getByParams(todayTotalParams, dbSlice)[0];
+        todayTotalAmount = todayTotal ? todayTotal.amount : 0;
+        interestOnTally  = (yesterdayAmount *  dailyEscalationPct);
+        interestAccumulatedSinceLastTallyRecord += interestOnTally;
+
+        // TODO: make interest its own line item.
+        // todayTallyAmount = yesterdayAmount + todayTotalAmount;
+        todayTallyAmount = yesterdayAmount + interestOnTally + todayTotalAmount;
+
+        var interestBlock = service.lineItems.getInterestRowForTally(section.guid);
+
+        if (Utilities.areDatesEqual(paymentDate, tableDate)) {
+          var newInterestPayment = {
+            amount: interestAccumulatedSinceLastTallyRecord,
+            date  : paymentDate,
+            type  : 'interest on tally',
+            name  : interestBlock.name,
+          };
+
+          var newPayment = {
+            amount: todayTallyAmount,
+            date  : paymentDate,
+            type  : 'tally',
+            name  : section.name,
+          };
+
+          // TODO: If the previous one was null, and the new one is 0, don't update
+          service.payments.createOrUpdate(newInterestPayment, interestBlock);
+          service.payments.createOrUpdate(newPayment, section);
+          interestAccumulatedSinceLastTallyRecord = 0;
+          break;
+        }
+
+        paymentDate     = Utilities.addDays(paymentDate, 1);
+        yesterdayAmount = todayTallyAmount;
+      }
+    }
+
   }
 
 }

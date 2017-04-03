@@ -1,0 +1,117 @@
+<div class="flex-container" ng-controller="FinanceTable">
+
+	<!-- hacky workaround to fix databinding issue -->
+  <div ng-if="!landingPage.show">
+    {{landingPage.refreshTemplate()}}
+  </div>
+
+	<header ng-if="false">
+		<h1>Money Buckets!</h1>
+	</header>
+
+	<div class="flex-area">
+		
+		<section>
+			<article>
+				<!-- Landing Page options -->
+					<select
+					  class      ="drop-down"    
+					  ng-change  ="landingPage.selectDifferentStudy()"    
+					  ng-options ="study.message for study in landingPage.studys track by study.guid"
+					  ng-model   ="landingPage.initialStudy"
+					></select>    
+				<br>
+
+				<div>
+					<button
+						class     ="study-action-button"
+						ng-click  ="landingPage.newStudy(landingPage.studyToCreate)"
+						type      ="button"
+					>
+						New Study
+					</button>    
+					<select
+					  class      ="drop-down"    
+					  ng-options ="studyTemplate.name for studyTemplate in landingPage.studyTemplates track by studyTemplate.guid"
+					  ng-model   ="landingPage.studyToCreate"
+					></select>  					
+				</div>
+
+				<button
+					class     ="study-action-button"
+					ng-click ="landingPage.deleteStudy(landingPage.initialStudy)"
+					type     ="button"
+				>
+				  Delete Study
+				</button>    
+
+				<button
+					class     ="study-action-button"
+					ng-click  ="landingPage.editStudy()"
+					type      ="button"
+				>
+				  Edit Study
+				</button>    
+
+				<button
+					class     ="study-action-button"
+					ng-click  ="landingPage.cloneStudy()"
+					type      ="button"
+				>
+				  Clone Study
+				</button>    
+
+				<button
+					class     ="study-action-button"
+					ng-click  ="landingPage.editStudys()"
+					type      ="button"
+				>
+				  Edit Studies
+				</button>    
+
+				<button
+					class     ="study-action-button"
+					ng-click  ="landingPage.dropDb()"
+					type      ="button"
+				>
+				  Clear Database
+				</button>    
+			</article>
+
+			<!-- global constants -->
+			<article ng-if="false">
+			  <div>
+			    <table class ="table-cashflow">
+			      <tr>
+			        <th ng-repeat ="header in landingPage.constantsTableHeader track by $index">
+			          {{header}}
+			        </th>
+			      </tr>
+
+			      <tr ng-repeat ="constant in landingPage.constants track by $index">
+			        <td> {{constant.name}} </td>
+			        <td> {{constant.value}} </td>
+			        <td> {{constant.units}} </td>
+			      </tr>
+			    </table>
+			  </div>
+			</article>
+
+				<!-- Draw Tables -->
+				<div ng-if="landingPage.show">
+					<div ng-repeat="scenario in landingPage.initialStudy.scenarios track by $index">
+				    <finance-view tableobject=scenario parent=landingPage> </finance-view>
+					</div>
+				</div>
+				
+				<!-- Draw Charts -->
+				<div ng-if="landingPage.show">
+					<article ng-repeat="chart in landingPage.initialStudy.charts track by $index">
+				    <money-chart chartobject=chart parent=landingPage> </money-chart>
+					</article>
+				</div>
+				
+		</section>
+	</div>
+</div>
+

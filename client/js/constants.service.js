@@ -3,21 +3,79 @@ angular.module('app').factory('Constants', [ 'Utilities', Constants_]);
 
 function Constants_(Utilities) {
   var tableConfig = {
-    numColInTable       : 3,
+    numColInTable       : 30,
+    numColInTable       : 10,
     startDate           : '01/01/2017',
     endDate             : null,
     dates               : [],
     timeIntervalDays    : 30,
     monthTransitionCells: [],
     yearTransitionCells : [],
-    temp                : {}, // For storing guids.
   };
+
+  // var comparators = [
+  //   {
+  //     index: 0,
+  //     text :'is less than',
+  //   },
+  //   {
+  //     index: 1,
+  //     text :'is equal to',
+  //   },
+  //   {
+  //     index: 2,
+  //     text :'is greater than',
+  //   },
+  // ];
+
+  // var conjunctions = [
+  //   {
+  //     index: 0,
+  //     text :'AND',
+  //   },
+  //   {
+  //     index: 1,
+  //     text :'OR',
+  //   },
+  // ];
+
+  // // obsolete
+  // var myRules = [
+  //   {
+  //     name           : 'from household to reserve',
+  //     sourceGuid     : 645,
+  //     destinationGuid: 640,
+  //     conditions: [
+  //       {
+  //         blockGuid  : 624,
+  //         value      : 0,
+  //         comparator : comparators[2],
+  //         conjunction: conjunctions[0],
+  //       },
+  //       {
+  //         blockGuid  : 625,
+  //         value      : 10000,
+  //         comparator : comparators[0],
+  //         conjunction: null,
+  //       },
+  
+  //     ],
+  //   },
+  // ];
 
   var service = {
     getLineItemBaseParams,
     getPaymentBaseParams ,
     refreshTableConfig,
-    tableConfig: tableConfig,
+    tableConfig,
+    // myRules,
+    // comparators,
+    // conjunctions,
+    tableSettings: {
+      tableInterval: 'monthly',
+    },
+    scenarios: {},
+    charts   : [{}],
   };
 
   refreshTableConfig();
@@ -48,7 +106,7 @@ function Constants_(Utilities) {
   /////////////////////////////// private functions /////////////////////
 
   function _getTableConfig() {
-    var tableConfig = service.tableConfig;
+    var tableConfig       = service.tableConfig;
     tableConfig.startDate = new Date(tableConfig.startDate);
 
     tableConfig.dates = [];

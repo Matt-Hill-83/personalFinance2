@@ -1,0 +1,124 @@
+<div
+  class="flex-container-modal"
+  ng-controller="FinanceTable"
+  >
+
+  <form
+    action  =#
+    id      ="my-form"
+    class   ="add-line-item-modal"
+	  >
+    <fieldset>
+      <!-- This button is both the Creat and Modify button. -->
+      <button
+        ng-click ="createEditLineItem.button.function()"
+        type     ="button"
+        >
+        {{createEditLineItem.button.label}}
+      </button>           
+
+      <button
+        ng-click ="createEditLineItem.closeModal()"
+        type     ="button"
+	      >
+        Cancel
+      </button>           
+
+      <legend>Periodic Payments</legend>
+      <ul class=form-fields>
+          <li>
+              <label for=first-name>Num Days in Interval</label>
+              <input
+                ng-model ="createEditLineItem.newLineItem.seedData.numDaysInInterval"
+                type     ="number"
+                class    =text-input
+                id       =first-name
+              >
+          </li>
+
+          <li>
+              <label for=first-name>Name</label>
+              <input
+                ng-model ="createEditLineItem.newLineItem.name"
+                type     =text
+                class    =text-input
+                id       =first-name
+              >
+          </li>
+
+          <li>
+              <label for=first-name>Start Date</label>
+              <input
+                type      ="text"
+                id        ="datepicker"
+                ng-model  ="createEditLineItem.newLineItem.seedData.initialPayment.date">
+          </li>
+          
+          <li>
+              <label for=last-name>Amount</label>
+              <input
+                ng-model ="createEditLineItem.newLineItem.seedData.initialPayment.amount"
+                type     ="number"
+                class    =text-input
+                id       =last-name
+              >
+          </li>
+          
+          <li>
+              <label for=last-name>Number of Payments</label>
+              <input
+                ng-model ="createEditLineItem.newLineItem.seedData.numPayments"
+                type     ="number"
+                class    =text-input
+                id       =last-name
+              >
+          </li>
+          
+      </ul>
+
+      periodic or arbitrary
+      <br>
+      Repeats [daily, weekly, monthly, yearly]
+      <br>
+
+      Repeats every x days
+      <br>
+      
+    </fieldset>
+
+  </form>
+</div>
+
+<!-- experimental table -->
+      <!-- <div ng-if="false">
+        <table
+          class        ="table-cashflow"
+          ng-mouseover ="createEditLineItem.showOptionDetails(option)"
+        >
+          <tr
+            ng-repeat ="row in [createEditLineItem.lineItemDefinitionChart[0]] track by $index"
+            ng-class  ="{{row.classes}}"
+            >
+            <th
+              ng-repeat     ="cell in row track by $index"
+              ng-class      ="{{cell.classes}}"
+            >
+              {{cell.name}}
+            </th>
+          </tr>
+
+          <tr
+            ng-repeat ="row in createEditLineItem.lineItemDefinitionChart track by $index"
+            ng-class  ="{{row.classes}}"
+            >
+            <td
+              ng-repeat     ="cell in row track by $index"
+              ng-class      ="{{cell.classes}}"
+            >
+              {{cell.value}}
+
+            </td>
+          </tr>
+        </table>
+      </div>
+ -->

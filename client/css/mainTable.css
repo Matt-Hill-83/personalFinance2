@@ -1,0 +1,220 @@
+.year-cell {
+	background-color: #bcc0d6;
+}
+
+.month-cell {
+	background-color: #bcc0d6;
+}
+
+.table-cashflow {
+	border-collapse: collapse;
+	border-spacing : 0;
+	border-color   : #aabcfe;
+	padding        : 0px;
+	cursor         : default;
+	margin         :auto;
+}
+
+.table-cashflow tr td{
+	padding   :0.2em 0.3em;
+	border    :solid 1px #c3d0fe;
+	text-align:right;
+}
+
+.table-cashflow tr td.cell {
+	width :3.5em;
+  font-family: Trebuchet MS, sans-serif;
+}
+
+.table-cashflow tr  {
+	background-color:#e8edff;
+}
+
+.table-cashflow tr td.date-cell {
+	text-align: center;
+}
+
+.table-cashflow tr td.year0 {
+	background-color: #bcc0d6;
+	text-align      : center;
+}
+
+.table-cashflow tr td.year1 {
+	background-color: #dfddee;
+	text-align      : center;
+}
+
+/* month colors - start */
+.table-cashflow tr td.jan {
+	background-color: yellow;
+	text-align      : center;
+}
+
+.table-cashflow tr td.feb {
+	background-color: orange;
+	text-align      : center;
+}
+
+.table-cashflow tr td.mar {
+	background-color: yellow;
+	text-align      : center;
+}
+
+.table-cashflow tr td.apr {
+	background-color: orange;
+	text-align      : center;
+}
+
+.table-cashflow tr td.may {
+	background-color: yellow;
+	text-align      : center;
+}
+
+.table-cashflow tr td.jun {
+	background-color: orange;
+	text-align      : center;
+}
+
+.table-cashflow tr td.jul {
+	background-color: yellow;
+	text-align      : center;
+}
+
+.table-cashflow tr td.aug {
+	background-color: orange;
+	text-align      : center;
+}
+
+.table-cashflow tr td.sep {
+	background-color: yellow;
+	text-align      : center;
+}
+
+.table-cashflow tr td.oct {
+	background-color: orange;
+	text-align      : center;
+}
+
+.table-cashflow tr td.nov {
+	background-color: yellow;
+	text-align      : center;
+}
+
+.table-cashflow tr td.dec {
+	background-color: orange;
+	text-align      : center;
+}
+
+/* month colors - end */
+
+.table-cashflow tr td.right-border {
+	border-right: black solid 1px;
+}
+
+.table-cashflow tr.date-row {
+	text-align      : center;
+}
+
+/* Format column 1 */
+.table-cashflow tr td:nth-child(1) {	
+	text-align      : left;
+	background-color: rgba(100, 149, 237, 0);
+}
+
+/*do this in JS, not in css*/
+.table-cashflow tr td.rowHeader0 {
+	padding-left: 1em;
+}
+
+.table-cashflow tr td.rowHeader1 {
+	padding-left: 2em;
+}
+
+.table-cashflow tr td.rowHeader2 {
+	padding-left: 3em;
+}
+
+.table-cashflow tr td.rowHeader3 {
+	padding-left: 4em;
+}
+
+.table-cashflow tr td.rowHeader4 {
+	padding-left: 5em;
+}
+
+.table-cashflow tr td.rowHeader5 {
+	padding-left: 6em;
+}
+
+.table-cashflow tr td.rowHeader6 {
+	padding-left: 7em;
+}
+
+.table-cashflow tr td.rowHeader7 {
+	padding-left: 8em;
+}
+
+.table-cashflow tr td span.expander {
+	cursor: default;
+}
+
+.table-cashflow tr td span.expander:hover {
+	color      : blue;
+	cursor     : default;
+	font-weight: bold;
+}
+
+.table-cashflow tr td.blank {
+	color             : rgba(0, 0, 0, 0);
+	background-color  : rgba(0, 0, 0, 0);
+	border-right-color: rgba(0, 0, 0, 0);
+	border-left-color : rgba(0, 0, 0, 0);
+}
+
+.table-cashflow tr.blank {
+	line-height     : 0px;
+	color           : rgba(0, 0, 0, 0);
+	background-color: rgba(0, 0, 0, 0);
+}
+
+.table-cashflow tr.blank-background {
+	background-color: rgba(0, 0, 0, 0);
+}
+
+.table-cashflow tr td.tally {
+	background-color: #dcf5f0;
+}
+
+.table-cashflow tr td.top-left {
+  border-right: 1px solid rgba(255, 0, 0, 0);
+  border-left : 1px solid rgba(255, 0, 0, 0);
+  border-top  : 1px solid rgba(255, 0, 0, 0);
+}
+
+.table-cashflow tr td.table-right {
+	border-right: solid 1px black;
+}
+
+.table-cashflow tr td.table-bottom {
+	border-bottom: solid 1px black;
+}
+
+.table-cashflow tr td.month-cell {
+	text-align   : center;
+	border-top   : 1px solid black;
+	border-bottom: 1px solid black;
+}
+
+.table-cashflow tr.hightlightRow {
+	background-color: #91d2c6;
+}
+
+.header-buttons {
+	margin-left: 0px;
+}
+
+.table-cashflow tr:nth-child(1) td.header-buttons {	
+	background-color: rgba(255, 0, 0, 0);
+	color           : rgba(255, 0, 0, 0);
+	border-right    : 1px solid black;
+}

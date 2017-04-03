@@ -13,13 +13,15 @@ function DataGeneration_(Constants, Utilities) {
     seedConversionFunctions,
   };
 
-  console.log('data generation service');
-
   return service;
 
   ///////////////
 
   function _createPaymentsFromArbitraryDates(lineItem, tableConfig) {
+    if (!lineItem.seedData) {
+      return [];
+    }
+    
     var payments = lineItem.seedData.payments.map(payment=> {
       var newParams = {
         date          : new Date(payment.date),
@@ -54,9 +56,22 @@ function DataGeneration_(Constants, Utilities) {
     var paymentDate   = startDate;
     var paymentAmount = lineItem.seedData.initialPayment.amount;
     var payments      = [];
-
+    
     // Create payment objects.
+    var numPaymentsCreated = 0;
     while (paymentDate <= tableConfig.endDate) {
+      var test = typeof(lineItem.seedData.numPayments);
+
+      // If the seedData type is based on a specific number of payments, break when that number of payments
+      // has been created.
+      if (
+        lineItem.seedData.numPayments !== -1 &&
+        lineItem.seedData.numPayments !== null &&
+        numPaymentsCreated >= lineItem.seedData.numPayments
+        ) {
+        break;
+      }
+
       var payment = {
         amount        : paymentAmount,
         date          : paymentDate,
@@ -68,6 +83,7 @@ function DataGeneration_(Constants, Utilities) {
       
       payments.push(payment);
       paymentDate = Utilities.addDays(paymentDate, lineItem.seedData.numDaysInInterval);
+      numPaymentsCreated += 1;
     }
 
     payments = _convertPaymentsToCorrectInterval(payments, tableConfig);

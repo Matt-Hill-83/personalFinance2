@@ -1,14 +1,7 @@
 "use strict";
 
-angular.module('app',[])
+angular.module('app',['ngRoute', 'ngDialog'])
 	.controller('FinanceTable', financeController);
 
-function financeController($scope, $http) {
-  console.log('financeController controller');
-  
-  $scope.myScopeVar = "property from financeController";
-
-  $scope.formData = {};
-  $scope.blocks = {};
-  
+function financeController($scope, $http, ngDialog) {
 }

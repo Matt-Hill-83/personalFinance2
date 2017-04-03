@@ -2,62 +2,49 @@
 angular.module('app').factory('Rules', [ 'Constants', Rules_]);
 
 function Rules_(Constants) {
-  console.log('rules service');
-  
-  function getRules() {
-    var homeToPettyCash = {
-      function: 'moveUntilFull', 
-      source  : {
-        guid               : Constants.tableConfig.temp.cashNetGuid,
-        outflowLineItemGuid: Constants.tableConfig.temp.outflowToPettyCashGuid,
-      },
-      destination: {
-        guid              : Constants.tableConfig.temp.pettyCashTallyGuid,
-        targetAmount      : 10000,
-        inflowLineItemGuid: Constants.tableConfig.temp.inflowFromHouseholdGuid,
-      },
-    };
+  // function getRules() {
+  //   var homeToPettyCash = {
+  //     function: 'moveUntilFull', 
+  //     source  : {
+  //       guid               : 2,
+  //       outflowLineItemGuid: 12,
+  //     },
+  //     destination: {
+  //       guid              : 3,
+  //       targetAmount      : 10000,
+  //       inflowLineItemGuid: 7,
+  //     },
+  //   };
 
-    var homeToEmergencyFund = {
-      function: 'moveUntilFull', 
-      source  : {
-        guid               : Constants.tableConfig.temp.cashNetGuid,
-        outflowLineItemGuid: Constants.tableConfig.temp.outflowToEmergencyFundGuid,
-      },
-      destination: {
-        guid              : Constants.tableConfig.temp.emergencyFund.tallyGuid,
-        targetAmount      : 30000,
-        inflowLineItemGuid: Constants.tableConfig.temp.emergencyFund.inflowFromHouseholdGuid,
-      },
-    };
+  //   var homeToEmergencyFund = {
+  //     function: 'moveUntilFull', 
+  //     source  : {
+  //       guid               : 2,
+  //       outflowLineItemGuid: 13,
+  //     },
+  //     destination: {
+  //       guid              : 4,
+  //       targetAmount      : 30000,
+  //       inflowLineItemGuid: 9,
+  //     },
+  //   };
 
-    var outflowToHomeDownPayment = {
-      function: 'moveUntilFull', 
-      source  : {
-        guid               : Constants.tableConfig.temp.cashNetGuid,
-        outflowLineItemGuid: Constants.tableConfig.temp.outflowToHomeDownPaymentGuid,
-      },
-      destination: {
-        guid              : Constants.tableConfig.temp.homeDownPayment.tallyGuid,
-        targetAmount      : 200000,
-        inflowLineItemGuid: Constants.tableConfig.temp.homeDownPayment.inflowFromHouseholdGuid,
-      },
-    };
-    
-    var rules = [
-      homeToPettyCash,
-      homeToEmergencyFund,
-      outflowToHomeDownPayment,
-    ];
+  //   var rules = [
+  //     homeToPettyCash,
+  //     homeToEmergencyFund,
+  //   ];
 
-    return rules;
+  //   return rules;
 
-  }
+  // }
 
   var service = {
-    rules: getRules,
+    rules: [],
   };
 
   return service;
+
+  /////////////////////////////////
+
 
 }

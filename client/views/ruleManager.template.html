@@ -1,0 +1,117 @@
+<div class="rules-flex-container">
+
+  <span> Rules</span>      
+  <table class ="table-cashflow">
+    <tr>
+      <th>
+        <span>name</span>
+      </th>
+      <th>
+        <span>source row</span>
+      </th>
+
+      <th>
+        <span>source min value</span>
+      </th>
+
+      <th>
+        <span>destination row</span>
+      </th>
+
+      <th>
+        <span>destination max value</span>
+      </th>
+
+      <th>
+        <span>outflow row</span>
+      </th>
+
+      <th>
+        <span>inflow row</span>
+      </th>
+
+      <th>
+        <span>options</span>
+      </th>
+    </tr>
+
+    <tr ng-repeat="rule in ruleManager.rules">
+      <td>
+        <span>
+        <input
+          ng-if            ="!rule.fakeRule" 
+          type             ="text"
+          name             ="input"
+          ng-model         ="rule.name"
+          xxx-ng-pattern   ="example.word"
+          required ng-trim ="false"
+          ng-blur          = "ruleManager.updateRule(rule)"
+          >
+        </span>
+      </td>
+      <td>
+        <span
+          class    ="hyperlink"
+          ng-click ="ruleManager.showPicker(rule, rule.sourceGuidCallBack)"
+          >
+          {{rule.sourceGuidName}}
+        </span>
+      </td>
+      <td>
+        <input
+          ng-if            ="!rule.fakeRule" 
+          type             ="number"
+          name             ="input"
+          ng-model         ="rule.sourceMinAmount"
+          xxx-ng-pattern   ="example.word"
+          required ng-trim ="false"
+          ng-blur          = "ruleManager.updateRule(rule)"
+          >
+      </td>
+      <td>
+        <span
+          class    ="hyperlink"
+          ng-click ="ruleManager.showPicker(rule, rule.destinationGuidCallBack)"
+          >
+          {{rule.destinationGuidName}}
+        </span>
+      </td>
+      <td>
+        <input
+          ng-if            ="!rule.fakeRule" 
+          type             ="number"
+          name             ="input"
+          ng-model         ="rule.destinationMaxAmount"
+          xxx-ng-pattern   ="example.word"
+          required ng-trim ="false"
+          ng-blur          = "ruleManager.updateRule(rule)"
+          >
+      </td>
+      <td>
+        <span
+          class    ="hyperlink"
+          ng-click ="ruleManager.showPicker(rule, rule.outflowLineItemGuidCallBack)"
+          >
+          {{rule.outflowLineItemGuidName}}
+        </span>
+      </td>
+      <td>
+        <span
+          class    ="hyperlink"
+          ng-click ="ruleManager.showPicker(rule, rule.inflowLineItemGuidCallBack)"
+          >
+          {{rule.inflowLineItemGuidName}}
+        </span>
+      </td>
+
+      <td>
+        <span>
+          <span ng-click="ruleManager.addRule(rule)">[add]</span>
+          <span ng-click="ruleManager.deleteRule(rule)">[delete]</span>
+        </span>
+      </td>
+
+    </tr>
+  </table>    
+
+</div>

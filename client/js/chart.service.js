@@ -2,20 +2,50 @@
 angular.module('app').factory('Chart', ['DataGeneration', 'DataBase', 'Constants', 'Utilities', Main_]);
 
 function Main_(DataGeneration, DataBase, Constants, Utilities) {
+  var series = [];
   var service = {
+    deleteRow,
     drawChart,
+    formatRowData,
+    series,
   };
 
-  var recursion = 0;
   return service;
 
   ////////////////////////////////////////////////////////////////////////////////////
 
+  function deleteRow(rowGuid) {
+    var indexOfRowToDelete;
+    service.series.forEach((row, index)=> {
+      if (row.guid === rowGuid) {
+        indexOfRowToDelete = index;
+        return;
+      }            
 
-  function drawChart() {
-    _setTheme();
+    });
+    service.series.splice(indexOfRowToDelete, 1);
+    drawChart();
+  }
 
-    Highcharts.chart('container', {
+  function formatRowData() {
+    var output = service.series.map(row=> {
+      var cells = row.cells.map(cell=> cell.valueToDisplay);
+      // chop off first 2 cells.
+      var name  = cells.splice(0,2);
+
+      // grab the name from the first cell.
+      return {
+        name: 'scenario: ' + row.scenario + '--' + name[0],
+        data: cells,
+      };
+
+    });
+    return output;
+  }
+
+  function drawChart(elementId) {
+    // _setTheme();
+    Highcharts.chart(elementId, {
 
         title: {
             text: 'Cash - Base Case'
@@ -31,28 +61,18 @@ function Main_(DataGeneration, DataBase, Constants, Utilities) {
             }
         },
         legend: {
-            layout: 'vertical',
-            align: 'right',
+            layout       : 'vertical',
+            align        : 'right',
             verticalAlign: 'middle'
         },
 
         plotOptions: {
             series: {
-                pointStart: 2010
+                pointStart: 2
             }
         },
 
-        series: [
-          {
-              name: 'Net Income',
-              data: [43934, 52503, 57177, 69658, 97031, 119931, 137133, 154175]
-          },
-          {
-              name: 'Other',
-              data: [12908, 5948, 8105, 11248, 8989, 11816, 18274, 18111]
-          }
-        ]
-
+        series: service.formatRowData(),
     });  
 
   }

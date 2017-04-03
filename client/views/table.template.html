@@ -1,0 +1,232 @@
+<div>
+
+  <!-- This is a little hack to force the data binding to refresh  -->
+  <div ng-if="maintable.fixTheTable">
+    {{maintable.fixTable()}}
+  </div>
+
+  <!-- Hidable rules section. -->
+  <article ng-if="maintable.rulesAreVisible && maintable.initRuleManager">
+    <rule-manager></rule-manager>
+  </article>
+
+  <article>
+
+    <!--   <p>Start Date:
+        <input
+          type      ="text"
+          id        ="datepicker"
+          ng-change ="maintable.redrawTable(mainTable.scenarioGuid)"
+          ng-model  ="maintable.tableConfig.startDate"
+        >
+      </p>
+
+      <p>Num Days:
+          <input
+             type     ="text"
+             id       ="numdays"
+             ng-blur  ="maintable.redrawTable(mainTable.scenarioGuid)"
+             ng-model ="maintable.tableConfig.numColInTable">
+      </p>
+     -->
+
+    <!-- modal to allow user to create/edit line items, will be replaced with ngDialog -->
+    <create-edit-line-item
+      ng-if  ="maintable.showRowDefinitionModal.value"
+      params ="maintable.paramsForCreateEditModal"
+    ></create-edit-line-item>
+
+    <!-- Main row for each table -->
+    <div class="table-row">
+      <div class="row-holder">
+        <table
+          class        ="table-cashflow"
+          ng-mouseover ="maintable.showOptionDetails(option)"
+          >
+          <tr
+            ng-repeat ="row in maintable.tableMatrix track by $index"
+            ng-init   ="rowIndex = $index"
+            ng-if     ="row.rowVisible"
+            ng-class  ="{{row.classes}}"
+            >
+            <td
+              ng-repeat    ="cell in row.cells track by $index"
+              ng-init      ="cellIndex = $index"
+              ng-class     ="{{cell.classes}}"
+              ng-mouseover ="maintable.enteredHeader($event, rowIndex, cellIndex, row, cell)"
+            >
+              {{cell.valueToDisplay === 0 ? '' : cell.valueToDisplay}}
+              <span ng-click ="maintable.changeCollapseState(row, $index)"> {{cell.expander}}</span>
+              <span 
+                ng-show  ="rowIndex === 0 && cellIndex === 0"
+                ng-class ="scenario-button-capsule"
+                ng-init   ="shower = true"
+                >
+                <select 
+                  class      ="scenario-picker"    
+                  ng-change  ="maintable.changeScenario()"    
+                  ng-options ="'[#' + scenario.guid + ']     ' + ' ' + scenario.name  for scenario in maintable.scenarios track by scenario.guid"    
+                  ng-model   ="maintable.selectedScenario"
+                  ></select>
+                  
+                <span class="scenario-button-holder"
+                    >
+                  <button
+                    ng-click ="maintable.deleteScenario()"
+                    class    ="scenario-action-button2"
+                    type     ="button"
+                  >
+                    <span>Delete Scenario</span>
+                  </button>
+                  <button
+                    ng-click ="maintable.cloneScenario()"
+                    class    ="scenario-action-button2"
+                    type     ="button"
+                  >
+                    <span>Clone Scenario</span>
+                  </button>
+
+                  <button
+                    ng-click ="maintable.clearChart()"
+                    class    ="scenario-action-button2"
+                    type     ="button"
+                  >
+                    <span>Clear Chart</span>
+                  </button>      
+              
+                  <button
+                    ng-click ="maintable.showRules()"
+                    class    ="scenario-action-button2"
+                    type     ="button"
+                  >
+                    <span>Rules</span>
+                  </button>      
+              
+              
+                  <button
+                    ng-click ="shower = !shower"
+                    class    ="scenario-action-button2"
+                    type     ="button"
+                  >
+                    <span>[hide]</span>
+                  </button>   
+
+                 <!--                <button
+                    ng-click ="maintable.newScenario()"
+                    class    ="scenario-action-button2"
+                    type     ="button"
+                  >
+                    <span>Add Scenario</span>
+                  </button>      
+              
+                  ng-if="shower"
+                  <button
+                    ng-click ="maintable.removeScenario()"
+                    class    ="scenario-action-button2"
+                    type     ="button"
+                  >
+                    <span>Remove Scenario</span>
+                  </button>       -->                          
+                </span>    
+
+              </span>
+
+              <span ng-show ="cellIndex === 1">
+                <!-- table settings icons -->
+
+                <span ng-if="!maintable.pickerIsVisible && shower">           
+                  <span
+                    ng-click ="maintable.showUpdateRowModal('create')"
+                    class    ="delete-icon"
+                  >
+                    [addRow]
+                  </span>
+
+                  <span
+                    ng-click ="maintable.addSection(row)"
+                    class    ="delete-icon"
+                  >
+                    [addSec]
+                  </span>
+
+                  <span
+                    ng-click ="maintable.showUpdateRowModal('update')"
+                    class    ="delete-icon"
+                  >
+                    [edit]
+                  </span>
+
+                  <span
+                    ng-click ="maintable.deleteRow()"
+                    class    ="delete-icon"
+                  >
+                    [x]
+                  </span>
+
+                  <span
+                    ng-click ="maintable.logRow()"
+                    class    ="delete-icon"
+                  >
+                    [L]
+                  </span>
+                  <span
+                    class        ="delete-icon"
+                    ng-click     ="maintable.toggleRowOnChart(row)"
+                    xxx-ng-class ="row.showOnChart"
+                  >
+                    [g]
+                  </span>
+                </span>
+
+                <!-- row selector icon -->
+                <span
+                  ng-if    ="maintable.pickerIsVisible"
+                  ng-click ="maintable.pickThisRow(row)"
+                  class    ="delete-icon red"
+                >
+                  [pick this row!]
+                </span>
+              </span>
+            </td>
+          </tr>
+        </table>
+      </div>
+    <!-- 
+        <div class="button-section-holder">
+          <div class="vertical-button-container">
+              <button
+                ng-click ="maintable.clearChart()"
+                class    ="scenario-action-button"
+                type     ="button"
+              >
+                <span>Clear Chart</span>
+              </button>      
+          
+              <button
+                ng-click ="maintable.showRules()"
+                class    ="scenario-action-button"
+                type     ="button"
+              >
+                <span>Show Rules</span>
+              </button>      
+          </div>
+        </div>
+     -->
+
+
+    </div>
+  </article>
+
+</div>
+
+
+
+  <!-- header modal, convert this to a directive -->
+
+<!--   <div 
+   id            ="{{maintable.rowHeaderModalId}}"
+   class         ="header-modal"
+   ng-mouseleave ="maintable.exitedModal()"
+  > 
+  </div>
+

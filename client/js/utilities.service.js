@@ -2,11 +2,14 @@
 angular.module('app').factory('Utilities', [Utilities_]);
 
 function Utilities_() {
-  var months   = ['January','February','March','April','May','June','July','August','September','October','November','December'];
-  var weekdays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+  var months      = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+  var monthsLower = months.map(month=> month.toLowerCase());
+  var weekdays    = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
   var service = {
     addDays,
+    arrayIncludes,
+    arrayDoesNotInclude,
     areDatesEqual,
     clearArray,
     concatArrayPreserveReference,
@@ -14,13 +17,40 @@ function Utilities_() {
     guid,
     initArray,
     months,
+    monthsLower,
     padNumber,
+    addClasses,
+    sortSections,
     weekdays,
   };
 
   return service;
 
   ///////////////
+
+  function addClasses(element, classes) {
+    if (element.classes) {
+      element.classes.push(...classes);
+    } else {
+      element.classes = classes;
+    }
+    return element;
+  }
+
+  function arrayIncludes(array, item) {
+    return array.indexOf(item) !== -1;
+  }
+
+  function arrayDoesNotInclude(array, item) {
+    return array.indexOf(item) === -1;
+  }
+
+  function sortSections(sections) {
+    sections.sort(function(a, b) { 
+      return a.indexWithinParent - b.indexWithinParent;
+    });
+    return sections;    
+  }
 
   function addDays(date, days) {
     var result = new Date(date);
@@ -29,14 +59,7 @@ function Utilities_() {
   }
 
   function areDatesEqual(date1, date2) {
-    date1 = new Date(date1);
-    date2 = new Date(date2);
-
-    return (
-      date1.getMonth()    === date2.getMonth() &&
-      date1.getDate()     === date2.getDate() &&
-      date1.getFullYear() === date2.getFullYear()
-    );
+    return date1.valueOf() === date2.valueOf();
   }
 
   function padNumber(number) {
@@ -59,7 +82,7 @@ function Utilities_() {
   }  
 
   function initArray(length, value) {
-    return Array(length).fill(value);
+    return Array(length).fill(angular.copy(value));
   }
 
   function getLast(array) {
