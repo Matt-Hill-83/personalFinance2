@@ -16,7 +16,7 @@
   },
   "production": {
     "username": "postgres",
-    "password": "blackie",
+    "password": "prod",
     "database": "todos",
     "host"    : "localhost",
     "dialect" : "postgres"
