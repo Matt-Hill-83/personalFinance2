@@ -22,14 +22,31 @@ var db        = {};
 	
 	
 
-if (config.use_env_variable) {
-	console.log('sequelize using_env_variable');
+// if (config.use_env_variable) {
+// 	console.log('sequelize using_env_variable');
 	
-  var sequelize = new Sequelize(process.env[config.use_env_variable]);
+//   var sequelize = new Sequelize(process.env[config.use_env_variable]);
+// } else {
+// 	console.log('sequelize not using_env_variable');
+//   var sequelize = new Sequelize(config.database, config.username, config.password, config);
+// }
+
+if (process.env.DATABASE_URL) {
+	console.log('sequelize using_env_variable');
+  // the application is executed on Heroku ... use the postgres database
+  sequelize = new Sequelize(process.env.DATABASE_URL, {
+    dialect:  'postgres',
+    protocol: 'postgres',
+    logging:  true //false
+  });
 } else {
-	console.log('sequelize not using_env_variable');
-  var sequelize = new Sequelize(config.database, config.username, config.password, config);
+  // the application is executed on the local machine
+		console.log('sequelize not using_env_variable');
+	  var sequelize = new Sequelize(config.database, config.username, config.password, config);
 }
+
+
+
 
 fs
 .readdirSync(__dirname)

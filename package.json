@@ -1,8 +1,4 @@
 {
-
-  "main": "./server/routes/index.js",
-
-
   "name"       : "money buckest",
   "version"    : "0.1.0",
   "description": "matt personal finance",
