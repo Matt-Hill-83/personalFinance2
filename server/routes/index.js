@@ -13,6 +13,24 @@ router.get('/', (req, res, next) => {
 
 //////////////////////////////// Blocks ////////////////////////////////////////////
 
+
+// test
+
+console.log('|++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++|');
+console.log('process.env.TIMES: ');
+console.log(process.env.TIMES);
+console.log('|------------------------------------------------------------------------------------------------|')
+
+
+
+router.get('/times', function(request, response) {
+    var result = ''
+    var times = process.env.TIMES || 5
+    for (i=0; i < times; i++)
+      result += i + ' ';
+  response.send(result);
+});
+
 // get blocks for scenario
 router.get('/blocks/:scenarioId', (req, res)=>
   getBlocksWithChildrenForScenario(req.params.scenarioId)
