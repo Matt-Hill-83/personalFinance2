@@ -57,6 +57,9 @@ db.tallyPayments        = require('../models/lineItemDefinitions/tallyPayment.js
 // rules
 db.rules = require('../models/rules/rule.js')(sequelize, Sequelize);
 
+// charts
+db.charts = require('../models/charts/chart.js')(sequelize, Sequelize);
+
 // config
 db.scenarios          = require('../models/config/scenario.js')(sequelize, Sequelize);
 db.studys             = require('../models/config/study.js')(sequelize, Sequelize);
@@ -82,6 +85,7 @@ db.blocks              .hasOne   (db.seedDatas);
 // studys
 db.studyJoinScenarios.belongsTo(db.scenarios);
 db.studys            .hasMany  (db.studyJoinScenarios);
+db.studys            .hasMany  (db.charts);
 
 db.sequelize.sync({
  force: dropDataBase,

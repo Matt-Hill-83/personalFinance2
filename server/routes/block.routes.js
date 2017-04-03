@@ -5,7 +5,6 @@ module.exports = function(router){
     destroyBlockWithChildren
   };
 
-
   function destroyBlockWithChildren(id, res) {
     return getBlockWithChildren(id)
     .then((resp)=> {

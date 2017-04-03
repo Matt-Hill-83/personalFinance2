@@ -13,40 +13,6 @@ router.get('/', (req, res, next) => {
 
 //////////////////////////////// Blocks ////////////////////////////////////////////
 
-var pg = require('pg');
-
-router.get('/db', function (request, response) {
-  pg.connect(process.env.DATABASE_URL, function(err, client, done) {
-    client.query('SELECT * FROM test_table', function(err, result) {
-      done();
-      if (err)
-       { console.error(err); response.send("Error " + err); }
-      else
-       // { response.render('./views/pages/db', {results: result.rows} ); }
-       { console.log({results: result.rows} ); }
-    });
-  });
-});
-
-// test ///////////////////////////
-
-console.log('|++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++|');
-console.log('process.env.TIMES: ');
-console.log(process.env.TIMES);
-console.log('|------------------------------------------------------------------------------------------------|')
-
-
-
-router.get('/times', function(request, response) {
-    var result = ''
-    var times = process.env.TIMES || 5
-    for (i=0; i < times; i++)
-      result += i + ' ';
-  response.send(result);
-});
-
-// test ///////////////////////////
-
 // get blocks for scenario
 router.get('/blocks/:scenarioId', (req, res)=>
   getBlocksWithChildrenForScenario(req.params.scenarioId)
@@ -200,7 +166,10 @@ router.get('/studys', function(req, res) {
       {
         model  : models.studyJoinScenarios,
         include: {model: models.scenarios},
-      }
+      },
+      {
+        model: models.charts,
+      },
     ]
   })
   .then(blocks => {

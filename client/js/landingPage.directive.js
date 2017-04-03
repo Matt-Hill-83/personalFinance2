@@ -171,7 +171,6 @@ function LandingPageController(
       vm.studys.forEach(study=> {
         var user      = study.user ? ' {' + study.user + '}' : '';
         study.message = '[#' + study.guid + ']     ' + study.name + user
-        // study.charts = charts;
       });
     } else {
       vm.studys = [noStudyMessage];
