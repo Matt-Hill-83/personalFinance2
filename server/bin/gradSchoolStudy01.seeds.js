@@ -68,11 +68,11 @@ function getStudy() {
   });
 
   var charts = [
-    {
-      name         : 'total cash',
-      subTitle     : 'base case',
-      lineItemGuids: '[-2]',
-    },
+    // {
+    //   name         : 'total cash',
+    //   subTitle     : 'base case',
+    //   lineItemGuids: '[-2]',
+    // },
     {
       name         : 'house downpayment growth',
       subTitle     : 'base case vs. frugal living',

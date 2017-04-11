@@ -80,12 +80,12 @@ function ChartCtrl(
 
       // Total of buckets graph compares total of buckets lineItem from bothe graphs.
       if (chart.lineItemGuids[0] === -1) {
-        var guid1 = getLineItemGuidFromLineItemName('total of buckets', vm.study.scenarios[0].guid);
-        var guid2 = getLineItemGuidFromLineItemName('total of buckets', vm.study.scenarios[1].guid);
+        var guid1 = getLineItemGuidFromLineItemName('total of BUCKETS', vm.study.scenarios[0].guid);
+        var guid2 = getLineItemGuidFromLineItemName('total of BUCKETS', vm.study.scenarios[1].guid);
         var guids = [guid1, guid2];
       }
           
-      // Total of buckets graph compares total of buckets lineItem from bothe graphs.
+      // Total of buckets graph compares total of buckets lineItem from both graphs.
       if (chart.lineItemGuids[0] === -2) {
         var guid1 = getLineItemGuidFromLineItemName('petty cash', vm.study.scenarios[0].guid);
         var guid2 = getLineItemGuidFromLineItemName('emergency fund', vm.study.scenarios[0].guid);
