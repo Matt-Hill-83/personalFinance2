@@ -76,7 +76,6 @@ function ChartCtrl(
     // For seed data, chart traces must be attached to chart object after data has been loaded.
     // The chart definitions are updated and pushed to the db.
     if (chart.lineItemGuids[0] < 0 && DataBase.blockDb.length > 0) {
-      console.log('setting chart initial traces');
       var guids = [undefined];
 
       // Total of buckets graph compares total of buckets lineItem from bothe graphs.

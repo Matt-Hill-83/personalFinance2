@@ -19,6 +19,7 @@
 							<!-- non-editable version of field -->
 							<!-- study selector -->
 							<select
+							  ng-click="landingPage.updateStudy(landingPage.activeStudy)"
 								ng-if      ="!landingPage.editingStudy"
 								class      ="crayon-font study-title"
 								ng-change  ="landingPage.selectDifferentStudy(landingPage.activeStudy)"    
