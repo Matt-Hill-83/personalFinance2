@@ -49,7 +49,7 @@ function getStudy() {
 
   var params = {study: 'getMba'}
   var scenario2 = {
-    name  : 'get a fancy degree in business administration',
+    name  : 'get a fancy degree in business administration like dad',
     block : householdBlocks(params),
   };
 
@@ -73,11 +73,11 @@ function getStudy() {
       subTitle     : 'base case',
       lineItemGuids: '[-2]',
     },
-    // {
-    //   name         : 'house downpayment growth',
-    //   subTitle     : 'base case vs. frugal living',
-    //   lineItemGuids: '[-1]',
-    // },
+    {
+      name         : 'house downpayment growth',
+      subTitle     : 'base case vs. frugal living',
+      lineItemGuids: '[-1]',
+    },
   ];
 
   var descriptionStrings = [
@@ -91,7 +91,6 @@ function getStudy() {
     description: description, 
     scenarios  : scenarios,
     charts     : charts,
-    // user       : 'none'
   };
 
   return study;

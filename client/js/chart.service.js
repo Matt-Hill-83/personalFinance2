@@ -160,7 +160,22 @@ function Main_(
     var subTitle = chart.subTitle;
 
     chart.lineItems = chart.lineItemGuids.map(guid=> DataBase.lineItems.getBlockFromGuid(guid));
-    var dataIsReady    = chart.lineItems.every(lineItem=> typeof(lineItem) === 'object');
+    var dataIsReady = chart.lineItems.every(lineItem=> typeof(lineItem) === 'object');
+
+    // deal with common errors
+    if (!dataIsReady || !chart.chartDivId || !series) {
+      return;
+    }
+
+    console.log('|++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++|');
+    console.log('dataIsReady: ');
+    console.log(dataIsReady);
+    console.log('|------------------------------------------------------------------------------------------------|')
+
+    console.log('|++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++|');
+    console.log('chart.chartDivId: ');
+    console.log(chart.chartDivId);
+    console.log('|------------------------------------------------------------------------------------------------|')
 
     Highcharts.chart(chart.chartDivId, {
         chart: {
