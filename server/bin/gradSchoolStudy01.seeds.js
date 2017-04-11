@@ -42,7 +42,6 @@ function getStudy() {
     "destinationMaxAmount": 200000,
   };
 
-
   var scenario1 = {
     name  : 'base case',
     block : householdBlocks(params={}),
@@ -88,7 +87,7 @@ function getStudy() {
 
   var description = descriptionStrings.join();
   var study = {
-    name       : 'Is grad school worth it ---xxx?', 
+    name       : 'Is grad school worth it???', 
     description: description, 
     scenarios  : scenarios,
     charts     : charts,

@@ -473,8 +473,8 @@ function _getMontessori(){
     seedData: {
       seedDataType: 'periodicDates',
       initialPayment     : {
-        date        :null,
-        amount      : -2100,
+        date  : null,
+        amount: -2100,
       },
       numDaysInInterval: 30,
     }

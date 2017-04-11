@@ -67,7 +67,7 @@ function LandingPageController(
       name: 'Pay student loan or max out 401k?',
     },
   ];
-  
+
   vm.studyToCreate = vm.studyTemplates[0];
   vm.showCharts    = true;
   vm.editingStudy  = false;
@@ -199,7 +199,7 @@ function LandingPageController(
         vm.studys = [];
         return addStudy(vm.studyTemplates[0])
         .then(()=>{
-          return addStudy(vm.studyTemplates[1])
+          return addStudy(vm.studyTemplates[0])
           .then(()=> {
             newPageLoad = false;
           });

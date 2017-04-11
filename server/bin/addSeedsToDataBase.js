@@ -83,7 +83,7 @@ function createStudyFromSeedData(db, params) {
 							var inflowLineItemGuid  = getBlockIdFromRuleAlias(db.ruleSeedData, rule.inflowLineItemGuid, scenario.id).blockId;
 
 						  var newRule = {
-						    name                : 'rule from seed',
+						    name                : rule.name,
 						    indexWithinParent   : index,
 						    scenario            : scenario.id,
 						    function            : rule.function,
