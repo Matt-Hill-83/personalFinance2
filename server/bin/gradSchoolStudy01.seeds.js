@@ -49,13 +49,13 @@ function getStudy() {
 
   var params = {study: 'getMba'}
   var scenario2 = {
-    name  : 'get a degree in business administration',
+    name  : 'get a fancy degree in business administration',
     block : householdBlocks(params),
   };
 
   var scenarios = [
     scenario1,
-    // scenario2
+    scenario2
   ];
 
   scenarios.forEach(scenario=> {
@@ -87,11 +87,11 @@ function getStudy() {
 
   var description = descriptionStrings.join();
   var study = {
-    name       : 'Is grad school worth it???', 
+    name       : 'Dude! Is grad school even worth it???', 
     description: description, 
     scenarios  : scenarios,
-    // charts     : charts,
-    user       : 'none'
+    charts     : charts,
+    // user       : 'none'
   };
 
   return study;

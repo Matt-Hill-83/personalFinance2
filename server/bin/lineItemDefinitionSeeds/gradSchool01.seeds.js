@@ -193,12 +193,12 @@ function _getInflows(){
 
 function _getIrregularInflows() {
   var taxRefund = {
-    name    : 'groceries',
+    name    : 'aunt nanna stamp collection',
     type    : 'lineItem',
     seedData: {
       seedDataType: 'periodicDates',
       initialPayment     : {
-        date        : null,
+        date        : '03/05/2017',
         amount      : 5000,
       },
       numDaysInInterval: 365,
@@ -207,8 +207,6 @@ function _getIrregularInflows() {
 
   return [
     taxRefund,
-    // mattUnemployment,
-    // penBonus,
   ];
 }
 
@@ -250,7 +248,7 @@ function _getOutflows(){
     type    : 'lineItem',
     seedData: {
       seedDataType: 'periodicDates',
-      initialPayment     : {
+      initialPayment: {
         date        : null,
         amount      : -2000,
       },
@@ -260,7 +258,7 @@ function _getOutflows(){
   
   var irregularOutflows = {
     collapsed: true,
-    name     : 'irregular payments',
+    name     : 'irregular outflows',
     type     : 'section',
     children : _getIrregularOutflows(),
   };

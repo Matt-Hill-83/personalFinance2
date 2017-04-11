@@ -3,16 +3,6 @@
 	<div class="flex-area">
 		
 		<section>
-			<div class="study-button-container">
-				<button
-					class    ="study-action-button"
-					ng-click ="landingPage.dropDb()"
-					type     ="button"
-				>
-				  Clear Database
-				</button>    
-			</div>
-
 				<article>
 					<div class="study-container">
 						<div class="study-title-container">
@@ -119,6 +109,15 @@
 			    {{landingPage.refreshTables()}}
 			  </div>
 				
+		<div class="study-button-container">
+			<button
+				class    ="study-action-button"
+				ng-click ="landingPage.dropDb()"
+				type     ="button"
+			>
+			  Clear Database
+			</button>    
+		</div>		
 		</section>
 	</div>
 </div>
