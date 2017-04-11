@@ -213,16 +213,9 @@ function LandingPageController(
       vm.activeStudy        = vm.studys[0];
       Constants.activeStudy = vm.activeStudy;
       vm.scenarios          = vm.activeStudy.scenarios;
+
+      // Not yet implemented
       vm.studyDescription   = $filter('html')(vm.activeStudy.description);
-
-
-
-      console.log('|++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++|');
-      console.log('vm.studyDescription: ');
-      console.log(vm.studyDescription);
-      console.log('|------------------------------------------------------------------------------------------------|')
-      
-      
 
 
       // vm.showTables         = false;

@@ -36,13 +36,13 @@
 							</div>
 
 							<!-- delete study icon -->
-              <div class=" edit-study-icon grey tooltip" ng-click ="landingPage.deleteStudy(landingPage.activeStudy)">
+              <div class="edit-study-icon grey tooltip" ng-click ="landingPage.deleteStudy(landingPage.activeStudy)">
                 <i class="fa fa-trash-o fa-fw"></i>
                 <span class="grey tooltiptext">delete study</span>
               </div>
 
 							<!-- new study icon -->
-              <div class="grey tooltip" ng-click="maintable.cloneScenario()">
+              <div class="edit-study-icon grey tooltip" ng-click ="landingPage.newStudy(landingPage.studyToCreate)">
                 <i class="fa fa-clone fa-fw"></i>
                 <span class="grey tooltiptext">clone study</span>
               </div>              
@@ -71,14 +71,7 @@
 								    	</div>
 
 								    	 -->
-					<div>
-						<button
-							class    ="study-action-button"
-							ng-click ="landingPage.newStudy(landingPage.studyToCreate)"
-							type     ="button"
-						>
-							New Study
-						</button>    
+					<div class="new-study-picker">
 						<select
 						  class      ="drop-down"    
 						  ng-options ="studyTemplate.name for studyTemplate in landingPage.studyTemplates track by studyTemplate.guid"

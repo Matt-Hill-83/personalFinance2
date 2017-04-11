@@ -44,6 +44,7 @@
 .edit-study-input {
 	display      : flex;
 	width        : 100%;
+	min-width    : 16em;	
 	border       : 1px solid black;
 	border-radius: 6px;
 }
@@ -57,5 +58,8 @@
 	display: flex;
 }
 
+.new-study-picker {
+	display: flex;
 
+}
 
