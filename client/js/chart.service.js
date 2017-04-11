@@ -151,11 +151,7 @@ function Main_(
     console.log('refreshing chart');
     
     // _setTheme();
-    var series = formatRowData(chart);
-    if (!series) {
-      return;
-    }
-
+    var series   = formatRowData(chart);
     var title    = chart.name;
     var subTitle = chart.subTitle;
 
@@ -177,10 +173,8 @@ function Main_(
     }
 
     if (!series.every(item=> item)) {
-      console.log('series is bad');
-
       console.log('|++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++|');
-      console.log('series: ');
+      console.log('series is bad');
       console.log(series);
       console.log('|------------------------------------------------------------------------------------------------|')
       return;

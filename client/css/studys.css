@@ -5,7 +5,7 @@
 	border-radius   : 12px;	
 	background-color: #c9c9ec;
 	box-shadow      :2px 2px 5px #800000;
-	
+
 }
 
 .study-selector {
@@ -43,7 +43,6 @@
 .study-button-container {
 	display         : flex;
 	flex-direction  : row;		
-	/*border          : 1px solid black;*/
 }
 
 .study-description {
@@ -65,19 +64,12 @@
 
 .study-title-container {
 	display: flex;
-
 }
 
 .new-study-picker {
 	display: flex;
-
 }
 
-
-/*.new-study-picker{
- width:300px;   
-}
-*/
 .new-study-picker option{
 	font-size: 10px;
   font-family: Trebuchet MS, sans-serif;
