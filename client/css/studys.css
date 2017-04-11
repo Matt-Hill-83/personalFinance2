@@ -3,7 +3,9 @@
 	flex-direction  : column;		
 	border          : 1px solid black;
 	border-radius   : 12px;	
-	background-color: #c9c9ec; 
+	background-color: #c9c9ec;
+	box-shadow      :2px 2px 5px #800000;
+	
 }
 
 .study-selector {
@@ -63,6 +65,7 @@
 
 .study-title-container {
 	display: flex;
+
 }
 
 .new-study-picker {
