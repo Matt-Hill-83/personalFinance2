@@ -218,7 +218,7 @@ function _getIrregularOutflows() {
       seedDataType: 'periodicDates',
       initialPayment     : {
         date        : null,
-        amount      : 15000,
+        amount      : -15000,
       },
       numDaysInInterval: 180,
     }
