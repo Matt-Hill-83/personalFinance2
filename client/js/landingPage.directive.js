@@ -68,13 +68,11 @@ function LandingPageController(
     },
   ]
   vm.studyToCreate = vm.studyTemplates[0];
-  var myNewStudy = vm.studyTemplates[0];
+  vm.showCharts    = true;
+  vm.editingStudy  = false;
 
-  vm.showCharts   = true;
-  vm.editingStudy = false;
-
-  getStudys(0);
-  getScenarios();
+  getStudys();
+  // getScenarios();
 
   var noStudyMessage = {
     guid: 0,
@@ -103,7 +101,7 @@ function LandingPageController(
 
   ////////////////////////////////////////////////////// Charts /////////////////////////////////
 
-  function dropDb(study){
+    function dropDb(study){
     return Api.dropDb({data: 'zippy'})
   }
 
@@ -130,46 +128,43 @@ function LandingPageController(
   }
 
   function updateStudy(study){
-
     console.log('|++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++|');
     console.log('study: ');
     console.log(study);
     console.log('|------------------------------------------------------------------------------------------------|')
-    
-    
   }
 
   function selectDifferentStudy(studyFromPicker) {
-    
-    
     if (vm.activeStudy) {
       vm.scenarios          = vm.activeStudy.scenarios;
       vm.showTables         = false;
       Constants.activeStudy = vm.activeStudy;
     }
-    
   }
 
-  function newStudy(study) {
+  function newStudy(study, incrementName) {
     return Api.newStudy(study.guid)
     .then(resp=> {
       returnedStudy = resp.data;
       var name = vm.activeStudy ? vm.activeStudy.name : study.name;
       
-      returnedStudy.name = name + '  [copy]';
+      if (incrementName) {
+        returnedStudy.name = name + '  [copy]';
+      }
       return Api.updateStudy(returnedStudy);
     })
     .then(refreshData)
     .then(resp=> {
-      vm.activeStudy = Utilities.getLast(vm.studys);
-      Constants.activeStudy = vm.activeStudy;
-      vm.scenarios = vm.activeStudy.scenarios;
-    })
+      vm.activeStudy        = Utilities.getLast(vm.studys);
+      rebind();
+      // Constants.activeStudy = vm.activeStudy;
+      // vm.scenarios          = vm.activeStudy.scenarios;
+    });
   }
 
   function rebind() {
     Constants.activeStudy = vm.activeStudy;
-    vm.scenarios = vm.activeStudy.scenarios;
+    vm.scenarios          = vm.activeStudy.scenarios;
   }
 
   function refreshData() {
@@ -189,14 +184,17 @@ function LandingPageController(
     }
   }
 
-  function getStudys(studyToShow){
+  function getStudys(){
     return Api.getStudys()
     .then((resp) => {
       if (resp.data.length > 0) {
         vm.studys = Api.sanitizeStudys(resp.data);
       } else {
         vm.studys = [];
-        return newStudy(myNewStudy);
+        return newStudy(vm.studyTemplates[0])
+        .then(()=>{
+          return newStudy(vm.studyTemplates[1])
+        });
       }
     })
     .then(()=> {
@@ -210,15 +208,13 @@ function LandingPageController(
     // })
     .then(()=> {
       formatStudies(vm.studys);
-      vm.activeStudy        = vm.studys[0];
-      Constants.activeStudy = vm.activeStudy;
-      vm.scenarios          = vm.activeStudy.scenarios;
+      vm.activeStudy = vm.studys[0];
+      rebind();
+      // Constants.activeStudy = vm.activeStudy;
+      // vm.scenarios          = vm.activeStudy.scenarios;
 
       // Not yet implemented
       vm.studyDescription   = $filter('html')(vm.activeStudy.description);
-
-
-      // vm.showTables         = false;
     });
   }
 

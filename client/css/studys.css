@@ -23,18 +23,25 @@
 }
 
 .study-title {
-	display   : flex;
-	color     : #4b4b86;	
-	font-size : 4.2em;	
-	align-self: center;
-	/*border          : 1px solid black;*/
+	display         : flex;
+	color           : #4b4b86;
+	background-color: #c9c9ec;	
+	font-size       : 4.2em;	
+	align-self      : center;
+}
+
+.study-title-edit-mode {
+	display         : flex;
+	color           : #4b4b86;
+	background-color: white;	
+	font-size       : 4.2em;	
+	align-self      : center;
 }
 
 .study-button-container {
 	display         : flex;
 	flex-direction  : row;		
 	border          : 1px solid black;
-	/*background-color: #c9c9ec; */
 }
 
 .study-description {
@@ -63,3 +70,12 @@
 
 }
 
+
+/*.new-study-picker{
+ width:300px;   
+}
+*/
+.new-study-picker option{
+	font-size: 10px;
+  font-family: Trebuchet MS, sans-serif;
+}
