@@ -71,7 +71,7 @@ function LandingPageController(
   vm.showCharts    = true;
   vm.editingStudy  = false;
 
-  getStudys();
+  getStudys(newPageLoad=true);
 
   var noStudyMessage = {
     guid: 0,
@@ -106,7 +106,7 @@ function LandingPageController(
 
   function getScenarios() {
     return Api.getScenarios()
-    .then((resp) => {
+    .then(resp=> {
       Constants.allScenarios = Api.sanitizeObjects(resp.data);
     });
   }
@@ -142,7 +142,7 @@ function LandingPageController(
   }
 
   function addStudy(study, incrementName) {
-    return Api.addStudy(study.guid)
+    return Api.newStudy(study.guid)
     .then(resp=> {
       var returnedStudy = resp.data;
       // var name = vm.activeStudy ? vm.activeStudy.name : study.name;
@@ -181,12 +181,12 @@ function LandingPageController(
     }
   }
 
-  function getStudys(){
+  function getStudys(newPageLoad){
     return Api.getStudys()
-    .then((resp) => {
+    .then(resp=> {
       if (resp.data.length > 0) {
         vm.studys = Api.sanitizeStudys(resp.data);
-      } else {
+      } else if (newPageLoad) {
         vm.studys = [];
         return addStudy(vm.studyTemplates[0])
         .then(()=>{
