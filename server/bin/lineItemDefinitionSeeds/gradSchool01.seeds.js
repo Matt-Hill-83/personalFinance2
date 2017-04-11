@@ -92,7 +92,7 @@ function getHouseholdNet() {
   };
 
   var cash = {
-    // collapsed: true,
+    collapsed: true,
     name     : 'household gross',
     type     : 'section',
     children : getHouseholdGross(),
