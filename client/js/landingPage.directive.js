@@ -66,18 +66,19 @@ function LandingPageController(
       guid: 3,
       name: 'Pay student loan or max out 401k?',
     },
-  ]
+  ];
+  
   vm.studyToCreate = vm.studyTemplates[0];
   vm.showCharts    = true;
   vm.editingStudy  = false;
 
-  getStudys(newPageLoad=true);
-
   var noStudyMessage = {
-    guid: 0,
+    guid   : 0,
     message: 'no studies available',
     name   : 'no studies available',
   };
+
+  getStudys(newPageLoad=true);
 
   ////////////////////////////////////////////////////// Charts /////////////////////////////////
 
