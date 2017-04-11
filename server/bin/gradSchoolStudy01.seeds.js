@@ -43,19 +43,19 @@ function getStudy() {
   };
 
   var scenario1 = {
-    name  : 'base case',
+    name  : 'perpetuate meaningless existence at EvilCorp',
     block : householdBlocks(params={}),
   };
 
   var params = {study: 'getMba'}
   var scenario2 = {
-    name  : 'frugal living',
+    name  : 'get a degree in business administration',
     block : householdBlocks(params),
   };
 
   var scenarios = [
     scenario1,
-    scenario2
+    // scenario2
   ];
 
   scenarios.forEach(scenario=> {
@@ -73,11 +73,11 @@ function getStudy() {
       subTitle     : 'base case',
       lineItemGuids: '[-2]',
     },
-    {
-      name         : 'house downpayment growth',
-      subTitle     : 'base case vs. frugal living',
-      lineItemGuids: '[-1]',
-    },
+    // {
+    //   name         : 'house downpayment growth',
+    //   subTitle     : 'base case vs. frugal living',
+    //   lineItemGuids: '[-1]',
+    // },
   ];
 
   var descriptionStrings = [
@@ -90,7 +90,7 @@ function getStudy() {
     name       : 'Is grad school worth it???', 
     description: description, 
     scenarios  : scenarios,
-    charts     : charts,
+    // charts     : charts,
     user       : 'none'
   };
 

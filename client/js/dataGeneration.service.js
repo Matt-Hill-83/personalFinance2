@@ -18,6 +18,13 @@ function DataGeneration_(Constants, Utilities) {
   ///////////////
 
   function _createPaymentsFromArbitraryDates(lineItem, tableConfig) {
+
+    console.log('|++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++|');
+    console.log('lineItem: ');
+    console.log(lineItem);
+    console.log('|------------------------------------------------------------------------------------------------|')
+    
+    
     if (!lineItem.seedData) {
       return [];
     }
