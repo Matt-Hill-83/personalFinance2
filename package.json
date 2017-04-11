@@ -1,26 +1,28 @@
 {
-  "name"       : "money buckest",
-  "version"    : "0.1.0",
+  "name": "moneybuckets",
+  "version": "0.1.0",
   "description": "matt personal finance",
-  "private"    : true,
-  "scripts"    : {
+  "private": true,
+  "scripts": {
     "start": "node ./server/bin/www"
   },
   "dependencies": {
-    "body-parser"  : "~1.15.1",
-    "cookie-parser": "~1.4.3",
-    "debug"        : "~2.2.0",
-    "express"      : "~4.13.4",
-    "jquery"       : ">=1.9.0",
-    "morgan"       : "~1.7.0",
-    "pg"           : "^6.1.0",
-    "pg-hstore"    : "^2.3.2",
-    "pug"          : "^2.0.0-beta11",
-    "sequelize"    : "^3.30.2",
-    "sequelize-cli": "^2.1.0",
-    "serve-favicon": "~2.3.0",
-    "sortablejs"   : "^1.5.1",
-    "swig"         : "^1.4.2"
+    "angular-cookies": "^1.5.7",
+    "body-parser"    : "~1.15.1",
+    "cookie-parser"  : "^1.4.3",
+    "debug"          : "~2.2.0",
+    "express"        : "~4.13.4",
+    "jquery"         : ">=1.9.0",
+    "morgan"         : "~1.7.0",
+    "ng-dialog"      : "^1.0.1",
+    "pg"             : "^6.1.0",
+    "pg-hstore"      : "^2.3.2",
+    "pug"            : "^2.0.0-beta11",
+    "sequelize"      : "^3.30.2",
+    "sequelize-cli"  : "^2.1.0",
+    "serve-favicon"  : "~2.3.0",
+    "sortablejs"     : "^1.5.1",
+    "swig"           : "^1.4.2"
   },
   "devDependencies": {
     "browser-sync"    : "2.9.6",
@@ -49,9 +51,9 @@
     "type": "git",
     "url": "https://github.com/Matt-Hill-83/personalFinance2.git"
   },
-  "author" : "Matt Hill",
+  "author": "Matt Hill",
   "license": "MIT",
-  "bugs"   : {
+  "bugs": {
     "url": "https://github.com/Matt-Hill-83/issues"
   },
   "homepage": "https://github.com/Matt-Hill-83/personalFinance2"

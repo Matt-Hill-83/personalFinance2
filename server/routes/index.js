@@ -2,6 +2,8 @@ var express = require('express');
 var router  = express.Router();
 var models  = require('../models/index');
 
+var cookieParser = require('cookie-parser');
+
 require('./block.routes.js')(router);
 require('./study.routes.js')(router);
 
@@ -158,9 +160,12 @@ router.delete('/studys/:id', (req, res)=> router.studyRoutes.destroyStudyWithChi
 
 // get studys
 router.get('/studys', function(req, res) {
+  cookieParser.JSONCookie(req.headers.cookie);
+  var userGuid = req.cookies.userGuid;
+  
   models.studys.findAll({
     where: {
-      // user: 'matt'
+      user: userGuid
     },
     include: [
       {
@@ -178,17 +183,48 @@ router.get('/studys', function(req, res) {
 });
 
 router.get('/newStudy/:guid', function(req, res) {
+  cookieParser.JSONCookie(req.headers.cookie);
+  var userGuid = req.cookies.userGuid;
+
   // Select which study you want here.
   var studyId = 0;
   var studyId = 2; // tally test
   var studyId = 1; // big one
 
   var studyGuid = req.params.guid;
-  models.addSeeds.createStudyFromSeedData(models, studyGuid)
+  var params = {
+    studyId : req.params.guid,
+    userGuid: userGuid,
+    };
+
+  models.addSeeds.createStudyFromSeedData(models, params)
   .then(resp => {
     res.json(resp)
   });
 });
+
+// update single study
+router.put('/study', function(req, res) {
+  var studyParams = {
+    name             : req.body.name,
+    user             : req.body.user,
+    indexWithinParent: req.body.indexWithinParent,
+  };
+
+  models.studys.find({
+    where: {
+      id: req.body.id,
+    }})
+  .then(function(study) {
+    if(study){
+      study.updateAttributes(studyParams)
+      .then(function(study) {
+        res.send(study);
+      });
+    }
+  });
+});
+
 
 //////////////////////////////// Charts ////////////////////////////////////////////
 
@@ -206,6 +242,7 @@ router.put('/chart', function(req, res) {
     name             : req.body.data.name,
     indexWithinParent: req.body.data.indexWithinParent,
     lineItemGuids    : req.body.data.lineItemGuids,
+    subTitle         : req.body.data.subTitle,
   };
 
   models.charts.find({
@@ -223,23 +260,26 @@ router.put('/chart', function(req, res) {
 });
 
 router.post('/charts', function(req, res) {
-  var newchart = {
-    name             : req.body.name,
-    indexWithinParent: req.body.indexWithinParent,
-    lineItemGuids    : req.body.data.lineItemGuids,
-    studyId          : req.body.studyGuid,
-  };
-
-  models.charts.create(newchart)
+  var chart   = req.body.data;
+  var studyId = req.body.data.studyGuid;
+  
+  models.createChart(chart, studyId)
   .then(function(chart) {
     res.json(chart);
   });
 });
 
-// models.createChart = function(studyId) {
-//   console.log('jfjfjsdflkasjfas;lfkjsaf;lksajfas;lfkjsf;lskadjfas;flkj');
-  
-// }
+models.createChart = function(chart, studyId) {
+  var newchart = {
+    name             : chart.name,
+    indexWithinParent: chart.indexWithinParent,
+    lineItemGuids    : chart.lineItemGuids,
+    subTitle         : chart.subTitle,
+    studyId          : studyId,
+  };
+
+  return models.charts.create(newchart);
+}
 
 router.delete('/chart/:id', function(req, res) {
   models.charts.destroy({
@@ -250,11 +290,6 @@ router.delete('/chart/:id', function(req, res) {
     res.json(chart);
   });
 });
-
-
-
-
-
 
 //////////////////////////////// Rules ////////////////////////////////////////////
 

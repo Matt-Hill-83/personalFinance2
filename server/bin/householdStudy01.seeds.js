@@ -42,19 +42,21 @@ function getStudy() {
     "destinationMaxAmount": 200000,
   };
 
+
   var scenario1 = {
-    name  : 'household base',
-    block : householdBlocks(),
+    name  : 'base case',
+    block : householdBlocks(params={}),
   };
 
+  var params = {study: 'getMba'}
   var scenario2 = {
-    name  : 'household modified',
-    block : householdBlocks(),
+    name  : 'frugal living',
+    block : householdBlocks(params),
   };
 
   var scenarios = [
     scenario1,
-    // scenario2
+    scenario2
   ];
 
   scenarios.forEach(scenario=> {
@@ -68,19 +70,29 @@ function getStudy() {
 
   var charts = [
     {
-      name         : 'cool stuff1',
-      lineItemGuids: '[1,2]',
+      name         : 'total cash',
+      subTitle     : 'base case',
+      lineItemGuids: '[-2]',
     },
     {
-      name         : 'cool stuff2',
-      lineItemGuids: '[3,4]',
+      name         : 'house downpayment growth',
+      subTitle     : 'base case vs. frugal living',
+      lineItemGuids: '[-1]',
     },
   ];
 
+  var descriptionStrings = [
+    'On what date will I break even financially after going to grad school?'
+    // 'On what date will I have $10,00 in the bank after grad school?',
+  ];
+
+  var description = descriptionStrings.join();
   var study = {
-    name     : 'household', 
-    scenarios: scenarios,
-    charts   : charts
+    name       : 'Is grad school worth it?', 
+    description: description, 
+    scenarios  : scenarios,
+    charts     : charts,
+    user       : 'none'
   };
 
   return study;

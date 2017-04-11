@@ -1,13 +1,50 @@
-<div ng-click ="moneychart.makeThisChartActive(moneychart.chartId)">
-
-	<button
-	  ng-click ="moneychart.clearChart(moneychart.chartId)"
-	  class    ="scenario-action-button2"
-	  type     ="button"
+<div
+	class    ="chart-container"
+	ng-click ="moneychart.toggleChartActivation(moneychart.chartId)"
 	>
-	  <span>Clear Chart</span>
-	</button>      
-	<div id="{{moneychart.chartId}}"></div>
+  <div class="chart-button-holder">
+		<button
+			ng-click ="moneychart.addChart()"
+			class    ="chart-action-button"
+			type     ="button"
+		>
+		  <span>New Chart</span>
+		</button>      
+		
+		<button
+			ng-click ="moneychart.editChart()"
+			class    ="chart-action-button"
+			ng-class ="{'chart-action-button-edit': moneychart.chart.active}"			
+			type     ="button"
+		>
+		  <span>Edit Chart</span>
+		</button>      
+		
+		<button
+		  ng-click ="moneychart.clearChart()"
+		  class    ="chart-action-button"
+		  type     ="button"
+		>
+		  <span>Clear Chart</span>
+		</button>      
+
+		<button
+      ng-click ="moneychart.deleteChart()"
+		  class    ="chart-action-button"
+		  type     ="button"
+		>
+		  <span>Delete Chart</span>
+		</button>      
+		
+  </div>    
+
+	<div ng-class="{'active': moneychart.chart.active}" class="chart-sizer" id="{{moneychart.chart.chartDivId}}">
+		<!-- hacky workaround to allow chart to redraw only after div id has been created -->
+	  <div ng-if="!moneychart.chartHasBeenDrawn">
+	    {{moneychart.redrawChart()}}
+	  </div>
+	</div>
+
 </div>
 
 

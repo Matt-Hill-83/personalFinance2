@@ -1,0 +1,122 @@
+.edit-create-modal {
+  display       : flex;
+  flex-direction: column;
+  max-width     : 600px;
+  font-family   : "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+  font-size     : 1.2em; 
+}
+
+div.edit-create-modal div.modal-legend {
+    display        : flex;
+    flex-direction : row;
+    justify-content: center;
+    align-self     : center;
+    align-items    : flex-start;    
+    font-size      : 1.5em;
+    margin-bottom  : 2em;
+    margin-top     : 0.2em;
+
+}
+
+div.edit-create-modal div.input-fields {
+    display        : flex;
+    flex-direction : row;
+    justify-content: center;
+    align-self     : center;
+}
+div.edit-create-modal div.button-section {
+    display        : flex;
+    flex-direction : row;
+    justify-content: center;
+    align-self     : center;
+    margin         : 2em;
+}
+
+div.edit-create-modal div.label-box {
+    display        : flex;
+    flex-direction : column;
+    height         : auto;
+    width          : auto;
+    justify-content: center;
+    align-items    : center;
+}
+/*
+div.edit-create-modal div.left-spacer,
+div.edit-create-modal div.right-spacer,
+div.edit-create-modal div.middle-spacer {
+    height: auto;
+    width : 20px;
+}
+*/
+div.edit-create-modal div.middle-spacer {
+    height: auto;
+    width : 2em;
+}
+
+div.edit-create-modal div.value-box {
+    height         : auto;
+    width          : auto;
+    display        : flex;
+    flex-direction : column;
+    justify-content: ;
+    align-items    : ;
+    align-content  : flex-start;
+}
+
+div.edit-create-modal div.value-box input {
+    height               : 40px;
+    min-width            : 13em;
+    font-size            : 1.2em;
+    box-sizing           : border-box;
+    padding              : 0 0.5em;
+    border               : 1px solid #183b8d;
+    margin               : 4px;
+    border-radius        : 6px;
+    -webkit-border-radius: 6px;
+    -moz-border-radius   : 6px;
+    color                : black;
+}
+
+div.edit-create-modal div.label-box div.span-centerer {
+    display         : flex;
+    flex-direction  : row;  
+    justify-content : flex-end;
+    align-items     : center;   
+    height          : 40px;
+    box-sizing      : border-box;
+    min-width       : 13em;
+    width           : 100%;
+    margin          : 4px;
+}
+
+div.edit-create-modal div.label-box span.label {
+    color      : black;
+    display    : flex;
+    font-size  : 1.2em;
+    box-sizing : border-box;
+    padding    : 0 0.5em;
+    white-space: nowrap;
+}
+
+.edit-create-modal fieldset{
+  border-radius        : 6px;
+  -webkit-border-radius: 6px;
+  -moz-border-radius   : 6px;
+  margin               : 0px 0px 10px 0px;
+  border               : 1px solid #183b8d;
+  background           : #e8edff;
+}
+
+.edit-create-modal input[type=submit],
+.edit-create-modal input[type=button]{
+    background           : #f5f8fc;
+    border               : 1px solid #183b8d;
+    padding              : 5px 15px 5px 15px;
+    color                : #000000;
+    border-radius        : 3px;
+    border-radius        : 3px;
+    -webkit-border-radius: 3px;
+    -moz-border-radius   : 3px;    
+    font-weight          : bold;
+    font-size            : 1.6em;
+}

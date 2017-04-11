@@ -17,6 +17,7 @@ function mainTableController() {
       '$rootScope',
       '$q',
       'Utilities',
+      'Chart',
       'Table',
       'ngDialog',
       'Constants',
@@ -34,6 +35,7 @@ function Ctrl(
   $rootScope,
   $q,
   Utilities,
+  Chart,
   Table,
   ngDialog,
   Constants
@@ -50,11 +52,12 @@ function Ctrl(
   ///////////////////////////////////////////// Get Data /////////////////////////////////////
 
   function init() {
-    vm.showRowDefinitionModal = {value: false};
-    vm.initRuleManager        = false;
-    vm.pickerIsVisible        = false;
-    vm.rulesAreVisible        = false;
-    vm.fixTheTable            = false;
+    vm.initRuleManager = false;
+    vm.rulePickerIsVisible = false;
+    vm.rulesAreVisible = false;
+    vm.fixTheTable     = false;
+
+    vm.chartData = Constants.chartData; // grab the container, so immutable objects can be bound.
 
     vm.rowThatGotPicked;
     vm.cell;
@@ -62,7 +65,6 @@ function Ctrl(
     vm.showModal;
     vm.oldRule; // used by ruleManager directive to capture selected rule and fire a callback.
 
-    vm.scenarios   = Constants.allScenarios;
     vm.landingPage = $scope.parent;
 
     refreshScenarioData($scope.tableobject.guid);
@@ -80,7 +82,6 @@ function Ctrl(
     vm.addSection         = addSection;
     vm.showRules          = showRules;
     vm.showUpdateRowModal = showUpdateRowModal;
-    // vm.clearChart         = clearChart;
     vm.toggleRowOnChart   = toggleRowOnChart;
     vm.redrawTable        = redrawTable;
     vm.logRow             = logRow;
@@ -93,6 +94,7 @@ function Ctrl(
     vm.fixTable            = fixTable;
     
     vm.enteredHeader       = enteredHeader;
+    vm.exitedTable         = exitedTable;
     vm.exitedModal         = exitedModal;
     vm.changeCollapseState = changeCollapseState;
     
@@ -108,18 +110,17 @@ function Ctrl(
     vm.rowClasses = RowClasses();
 
     vm.classes = {
-      hightlightHeaderCell: 'hightlightHeaderCell',
-      hightlightRow       : 'hightlightRow',
+      highlightHeaderCell: 'highlightHeaderCell',
+      highlightRow       : 'highlightRow',
     };
 
     vm.paramsForCreateEditModal = {
       addRow,
       updateRows,
-      callback              : null,
-      headerModal           : vm.headerModal,
-      newLineItem           : null,
-      row                   : vm.row,
-      showRowDefinitionModal: vm.showRowDefinitionModal    
+      callback   : null,
+      headerModal: vm.headerModal,
+      newLineItem: null,
+      row        : vm.row,
     };
 
     return fetchData();
@@ -131,8 +132,8 @@ function Ctrl(
     }
 
     return Api.getBlocks(vm.selectedScenario.guid)
-    .then((resp)=> {
-      Constants.scenarios[vm.selectedScenario.guid].newBlocks = Api.sanitizeBlocks(resp.data);
+    .then(blocks=> {
+      Constants.scenarios[vm.selectedScenario.guid].newBlocks = blocks.data;
       fetchRulesAndRedrawTable();
     });
   }
@@ -146,8 +147,8 @@ function Ctrl(
     if (!Constants.scenarios[scenarioGuid].tableMatrix) {
       Constants.scenarios[scenarioGuid].tableMatrix = [];
     }
-    vm.tableMatrix  = Constants.scenarios[scenarioGuid].tableMatrix;
-    vm.tableConfig  = Constants.tableConfig; // Does this exist yet?
+    vm.tableMatrix = Constants.scenarios[scenarioGuid].tableMatrix;
+    vm.tableConfig = Constants.tableConfig; // Does this exist yet?
     if (vm.selectedScenario) {
       vm.scenarioGuid = vm.selectedScenario.guid;
     }
@@ -155,7 +156,7 @@ function Ctrl(
 
   function fetchRules() {
     return Api.getRules()
-    .then((resp)=> {
+    .then(resp=> {
       Constants.rules = Api.sanitizeRules(resp.data);
     });
   }
@@ -163,7 +164,7 @@ function Ctrl(
   function fetchRulesAndRedrawTable() {
     vm.initRuleManager = false;
     return Api.getRules()
-    .then((resp)=> {
+    .then(resp=> {
       Constants.rules = Api.sanitizeRules(resp.data);
       rebuildDataBaseAndRedraw();
       vm.initRuleManager = true;
@@ -173,14 +174,37 @@ function Ctrl(
   ///////////////////////////////////////////// Clone Scenario /////////////////////////////////
 
   function cloneScenario() {
-    DataBase.cloneScenario(vm.scenarioGuid, vm.landingPage.initialStudy.guid)
-    // .then(fetchData);
+    DataBase.cloneScenario(vm.scenarioGuid, vm.landingPage.activeStudy.guid)
     .then(vm.landingPage.refreshData)    
   }
 
   function deleteScenario() {
     DataBase.deleteScenario(vm.scenarioGuid)
-    .then(vm.landingPage.refreshData);
+    .then(resp=> {
+      // Remove any charts that reference the scenario to be deleted from the parent study.
+      // TODO: also make this change in the database.
+      var chartsWithoutDeletedScenario = Constants.activeStudy.charts.filter(chart=> {
+        if (!chart.lineItems) {
+          Chart.deleteChart(chart);
+          return;  
+        }
+
+        var goodCharts =  chart.lineItems.every(lineItem=> {
+          var chartIsGood = lineItem.scenario !== vm.scenarioGuid;
+          if (!chartIsGood) {
+            Chart.deleteChart(chart);
+          }
+          return chartIsGood;
+        });
+        return goodCharts;
+      });
+
+      Constants.activeStudy.charts = chartsWithoutDeletedScenario;  
+      
+    })
+    .then(resp=> {
+      vm.landingPage.refreshData();
+    });
   }
 
   ///////////////////////////////////////////// Process Data /////////////////////////////////
@@ -188,14 +212,6 @@ function Ctrl(
   function rebuildDataBaseAndRedraw(){
     DataBase.rebuildLocalDataBase(vm.scenarioGuid);
     Table.redrawTable(vm.scenarioGuid);
-
-    // If the chart is empty, add the top level row from each active scenario.
-    if (Chart.series.length < 2) {
-      var rowsToGraph = vm.tableMatrix.filter(row=> row.nestLevel === 1);
-      Chart.series.push(Utilities.getLast(rowsToGraph));
-    }
-
-    // Chart.drawChart();
 
     // Hacky fix to refresh table styling.
     vm.tableMatrix = [];
@@ -228,7 +244,6 @@ function Ctrl(
     .then(resp=>Api.createRow(lineItem))
     .then(resp=>fetchData())
     .then(resp=>{
-      vm.showRowDefinitionModal.value = false;
     });
   }
 
@@ -249,7 +264,6 @@ function Ctrl(
       // fetchData();
     })
     .then(()=>{
-      vm.showRowDefinitionModal.value = false;
     });
   }    
 
@@ -275,7 +289,6 @@ function Ctrl(
     .then(resp=>Api.addSection(newSection))
     .then(resp=>fetchData())
     .then(resp=>{
-      vm.showRowDefinitionModal.value = false;
     });
   }
 
@@ -297,20 +310,13 @@ function Ctrl(
   }
 
   function deleteRow() {
-    // Delete row from db.
-    Api.deleteRow(vm.row.id).then(
+    return Api.deleteRow(vm.row.id).then(
       ()=>fetchData(),
       ()=> {console.log('fail')}
     );
   }
 
   ///////////////////////////////////////////// Refresh GUI /////////////////////////////////
-
-  // // This is a hacky workaround to the fact that I can't delete some rows on chart.
-  // function clearChart() {
-  //   Utilities.clearArray(Chart.series);
-  //   Chart.drawChart();
-  // }
 
   function fixTable() {
     // This is a hacky work around because when the new data is pushed to the table, the styling of the table rows
@@ -342,23 +348,16 @@ function Ctrl(
   }
 
   function logRow() {
-    console.log('|++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++|');
-    console.log('vm.row: ');
+    console.log('|------------------------------------------------------------------------------------------------|')
+    console.log('lineItem: ');
     console.log(vm.row);
+    console.log('classes: ');
     console.log(vm.row.classes);
     console.log('|------------------------------------------------------------------------------------------------|')
   }
 
   function toggleRowOnChart(row) {
-    row.showOnChart = !row.showOnChart;
-
-    if (row.showOnChart) {    
-      Chart.series.push(row);
-    } else {
-      Chart.deleteRow(row.guid);
-    }
-    
-    Chart.drawChart();
+    return Chart.toggleRowOnChart(row);
   }
 
   ///////////////////////////////////////////// Deal with Rules Directive /////////////////////////////////
@@ -368,22 +367,23 @@ function Ctrl(
   }
 
   function showPicker() {
-    vm.pickerIsVisible = true;
+    vm.rulePickerIsVisible = true;
   }
 
   function pickThisRow(row) {
     vm.oldRule.callBack(row.guid);
-    vm.pickerIsVisible = false;
+    vm.rulePickerIsVisible = false;
   }
 
   function showUpdateRowModal(mode) {
     vm.paramsForCreateEditModal.callback = createOrUpdateModalCallback;
     vm.paramsForCreateEditModal.row      = vm.row;
     vm.paramsForCreateEditModal.mode     = mode;
+    vm.paramsForCreateEditModal.ngDialog = ngDialog; // pass ngDialog to the modal
 
     ngDialog.open(
       {
-        showClose      : true,
+        showClose      : false,
         closeByDocument: true,
         closeByEscape  : true,
         appendTo       : false,
@@ -399,16 +399,18 @@ function Ctrl(
     if (data.update) {
 
       // TODO, pass the actual value, since vm.row can change when the mouse moves
-      promise = updateRows([vm.row]);
+      promise = updateRows([data.lineItem]);
     } else if (data.create) {
       promise = addRow(data.newLineItem);
     }
     
     return promise;
-    vm.showRowDefinitionModal.value = false;
   }
+  //////////////////////////////////////////// Row Highlighting //////////////////////////////
 
-  ///////////////////////////////////////////// Old Stuff /////////////////////////////////
+  function exitedTable() {
+    vm.rowClasses.deactivate();
+  }
 
   function enteredHeader(event, rowIndex, colIndex, row, cell) {
     vm.cell            = cell;
@@ -447,6 +449,8 @@ function Ctrl(
     }
   }
 
+  ///////////////////////////////////////////// Old Stuff /////////////////////////////////
+
   function exitedModal() {
     vm.rowClasses.deactivate();
   }
@@ -458,17 +462,17 @@ function Ctrl(
     };
 
     function activate(){
-      vm.$activeHeaderCell.addClass(vm.classes.hightlightHeaderCell);
-      vm.$activeRow.addClass(vm.classes.hightlightRow);
+      // vm.$activeHeaderCell.addClass(vm.classes.highlightHeaderCell);
+      vm.$activeRow.addClass(vm.classes.highlightRow);
     }
     
     function deactivate(){
-      if (vm.$activeHeaderCell && vm.$activeHeaderCell.hasClass(vm.classes.hightlightHeaderCell) ) {
-        vm.$activeHeaderCell.removeClass(vm.classes.hightlightHeaderCell);
+      if (vm.$activeHeaderCell && vm.$activeHeaderCell.hasClass(vm.classes.highlightHeaderCell) ) {
+        vm.$activeHeaderCell.removeClass(vm.classes.highlightHeaderCell);
       }
   
       if (vm.$activeRow) {
-        vm.$activeRow.removeClass(vm.classes.hightlightRow);
+        vm.$activeRow.removeClass(vm.classes.highlightRow);
       }
     }
 

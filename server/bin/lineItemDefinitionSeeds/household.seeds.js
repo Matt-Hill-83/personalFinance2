@@ -7,8 +7,11 @@ externalSeeds.getHouseDownPaymentSeeds = require('../../bin/lineItemDefinitionSe
 
 var simplify = false;
 var simplify = true;
+var globalParams = {};
 
-function getTopBlock() {
+function getTopBlock(params) {
+  globalParams = params;
+  
   return {
     name    : 'top level',
     type    : 'section',
@@ -18,7 +21,7 @@ function getTopBlock() {
 
 function getBucketSummary() {
   var bucketSummary = {
-    name    : 'total of buckets',
+    name    : 'total of BUCKETS',
     type    : 'section',
     subtype1: 'total of tallies',
     children: getBuckets(),
@@ -89,7 +92,7 @@ function getHouseholdNet() {
   };
 
   var cash = {
-    collapsed: true,
+    // collapsed: true,
     name     : 'household gross',
     type     : 'section',
     children : getHouseholdGross(),
@@ -103,7 +106,7 @@ function getHouseholdNet() {
 
 function getHouseholdGross() {
   var inflows = {
-    collapsed: true,
+    // collapsed: true,
     name     : 'inflows',
     type     : 'section',
     children: _getInflows(),
@@ -165,6 +168,11 @@ function _getAdjustments(){
 }
 
 function _getInflows(){
+  var paycheck = 3000;
+  if (globalParams.study === 'getMba'){
+    paycheck = 1000;
+  }
+  
   var mattPaycheck = {
     type    : 'lineItem',
     name    : 'matt paycheck',
@@ -172,7 +180,7 @@ function _getInflows(){
       seedDataType: 'periodicDates',
       initialPayment     : {
         date        : '05/01/2017',
-        amount      : 3000,
+        amount      : paycheck,
       },
       numDaysInInterval: 15,
     }

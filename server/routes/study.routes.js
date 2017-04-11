@@ -11,7 +11,6 @@ module.exports = function(router){
   function destroyStudyWithChildren(id, res) {
     return getStudyWithChildren(id)
     .then((resp)=> {
-
       if (!resp[0] || !resp[0].dataValues) {
         return;
       }

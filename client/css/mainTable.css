@@ -1,18 +1,10 @@
-.year-cell {
-	background-color: #bcc0d6;
-}
-
-.month-cell {
-	background-color: #bcc0d6;
-}
-
 .table-cashflow {
 	border-collapse: collapse;
 	border-spacing : 0;
-	border-color   : #aabcfe;
 	padding        : 0px;
 	cursor         : default;
-	margin         :auto;
+	margin         : auto;
+	margin-top     : -3.3em;
 }
 
 .table-cashflow tr td{
@@ -32,6 +24,7 @@
 
 .table-cashflow tr td.date-cell {
 	text-align: center;
+	border-top: 1px solid black;
 }
 
 .table-cashflow tr td.year0 {
@@ -112,13 +105,18 @@
 }
 
 .table-cashflow tr.date-row {
-	text-align      : center;
+	text-align: center;
 }
 
 /* Format column 1 */
 .table-cashflow tr td:nth-child(1) {	
 	text-align      : left;
 	background-color: rgba(100, 149, 237, 0);
+}
+
+/* Format date row */
+.table-cashflow tr:nth-child(2) td {	
+	border-bottom: 1px solid black !important;
 }
 
 /*do this in JS, not in css*/
@@ -154,8 +152,9 @@
 	padding-left: 8em;
 }
 
-.table-cashflow tr td span.expander {
-	cursor: default;
+.table-cashflow tr td span.expander-chevron {
+  color: rgb(105, 105, 105);
+  font-size: 0.7em;
 }
 
 .table-cashflow tr td span.expander:hover {
@@ -164,35 +163,43 @@
 	font-weight: bold;
 }
 
-.table-cashflow tr td.blank {
-	color             : rgba(0, 0, 0, 0);
-	background-color  : rgba(0, 0, 0, 0);
-	border-right-color: rgba(0, 0, 0, 0);
-	border-left-color : rgba(0, 0, 0, 0);
-}
-
 .table-cashflow tr.blank {
 	line-height     : 0px;
 	color           : rgba(0, 0, 0, 0);
 	background-color: rgba(0, 0, 0, 0);
 }
 
+.table-cashflow tr td.blank {
+	color             : rgba(0, 0, 0, 0);
+	background-color  : rgba(0, 0, 0, 0);
+	border-right-color: rgba(0, 0, 0, 0);
+	border-left-color : rgba(0, 0, 0, 0);
+	border-bottom     : 1px solid black !important;
+	border-left       : 1px solid rgba(255, 0, 0, 0) !important;
+	border-right      : 1px solid rgba(255, 0, 0, 0) !important;
+	padding           : 4px 0px;
+}
+
 .table-cashflow tr.blank-background {
 	background-color: rgba(0, 0, 0, 0);
 }
 
-.table-cashflow tr td.tally {
+.table-cashflow tr.tally {
 	background-color: #dcf5f0;
+	border-bottom   : 1px solid black !important;	
 }
 
-.table-cashflow tr td.top-left {
-  border-right: 1px solid rgba(255, 0, 0, 0);
-  border-left : 1px solid rgba(255, 0, 0, 0);
-  border-top  : 1px solid rgba(255, 0, 0, 0);
+.table-cashflow tr td.tally {
+	background-color: #dcf5f0;
+	border-bottom   : 1px solid black !important;	
 }
 
 .table-cashflow tr td.table-right {
 	border-right: solid 1px black;
+}
+
+.table-cashflow tr td.table-left {
+	border-left: solid 1px black;
 }
 
 .table-cashflow tr td.table-bottom {
@@ -205,16 +212,57 @@
 	border-bottom: 1px solid black;
 }
 
-.table-cashflow tr.hightlightRow {
-	background-color: #91d2c6;
+.table-cashflow tr td .graph-toggle-on {
+	color       : red;
+	border-color: red;
+}
+
+.table-cashflow tr td .graph-toggle-off {
+	/*color: grey;*/
+	color: black;
 }
 
 .header-buttons {
-	margin-left: 0px;
+	margin-left : 0px;
+	padding-left: 0px !important;
+	color       : #747474;
 }
 
-.table-cashflow tr:nth-child(1) td.header-buttons {	
-	background-color: rgba(255, 0, 0, 0);
-	color           : rgba(255, 0, 0, 0);
+.table-cashflow tr td.header-buttons {	
+	background-color: rgba(0, 0, 0, 0);
 	border-right    : 1px solid black;
+	cursor          : default;
+}
+
+.table-cashflow tr.highlightRow {
+	background-color: #91d2c6;
+}
+
+.table-cashflow tr td.highlightRow {
+	background-color: #91d2c6;
+}
+
+.table-cashflow tr.title-row {
+	background-color: rgba(0, 0, 0, 0);
+	border-top      : 1px solid rgba(0, 0, 0, 0);
+}
+
+.table-cashflow tr td.title-row {
+  padding-right: 0;
+	text-align   : left;
+	border-right : 1px solid rgba(0, 0, 0, 0);
+	border-left  : 1px solid rgba(0, 0, 0, 0);
+	border-top   : 1px solid rgba(0, 0, 0, 0);
+	border-bottom: 1px solid black;
+}
+
+.table-cashflow tr td.top-left {
+	border-right : 1px solid rgba(0, 0, 0, 0) !important;
+	border-left  : 1px solid rgba(0, 0, 0, 0) !important;
+	border-top   : 1px solid rgba(0, 0, 0, 0) !important;
+	border-bottom: 1px solid rgba(0, 0, 0, 0) !important;
+}
+
+.table-cashflow tr td.cell-1-1 {
+	border-right: 1px solid black;
 }

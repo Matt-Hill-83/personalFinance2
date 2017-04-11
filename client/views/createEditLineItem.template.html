@@ -1,124 +1,34 @@
-<div
-  class="flex-container-modal"
-  ng-controller="FinanceTable"
-  >
-
-  <form
-    action  =#
-    id      ="my-form"
-    class   ="add-line-item-modal"
-	  >
+  <div class="edit-create-modal">
+  <form>
     <fieldset>
-      <!-- This button is both the Creat and Modify button. -->
-      <button
-        ng-click ="createEditLineItem.button.function()"
-        type     ="button"
-        >
-        {{createEditLineItem.button.label}}
-      </button>           
+      <div class="modal-legend">Periodic Payments</div>
+      <div class="input-fields">
+        <div class="label-box">
+          <div class="span-centerer"><span class="label">Name:</span></div>
+          <div class="span-centerer"><span class="label">Start Date:</span></div>
+          <div class="span-centerer"><span class="label">Amount:</span></div>
+          <div class="span-centerer"><span class="label">Num Days in Interval:</span></div>
+          <div class="span-centerer"><span class="label">Number of Payments:</span></div>
+        </div>
+        <div class="value-box">
+          <input type="text" class="input-field" ng-model ="createEditLineItem.newLineItem.name"/>
+          <input type="date" class="input-field" ng-model ="createEditLineItem.newLineItem.seedData.initialPayment.date"/>
+          <input type="number" class="input-field" ng-model ="createEditLineItem.newLineItem.seedData.initialPayment.amount"/>
+          <input type="number" class="input-field" ng-model ="createEditLineItem.newLineItem.seedData.numDaysInInterval"/>
+          <input type="number" class="input-field" ng-model ="createEditLineItem.newLineItem.seedData.numPayments"/>
+        </div>
+    </div>
+  
 
-      <button
-        ng-click ="createEditLineItem.closeModal()"
-        type     ="button"
-	      >
-        Cancel
-      </button>           
+    <div class="button-section">
+      <!-- This button is both the Create and Modify button. -->
+      <label><span>&nbsp;</span><input ng-click ="createEditLineItem.closeModal()" type="submit" value="Cancel" /></label>
+      <div class="middle-spacer"></div>
+      <label><span>&nbsp;</span><input ng-click ="createEditLineItem.button.function()" type="submit" value="{{createEditLineItem.button.label}}" /></label>
+    </div>
 
-      <legend>Periodic Payments</legend>
-      <ul class=form-fields>
-          <li>
-              <label for=first-name>Num Days in Interval</label>
-              <input
-                ng-model ="createEditLineItem.newLineItem.seedData.numDaysInInterval"
-                type     ="number"
-                class    =text-input
-                id       =first-name
-              >
-          </li>
 
-          <li>
-              <label for=first-name>Name</label>
-              <input
-                ng-model ="createEditLineItem.newLineItem.name"
-                type     =text
-                class    =text-input
-                id       =first-name
-              >
-          </li>
-
-          <li>
-              <label for=first-name>Start Date</label>
-              <input
-                type      ="text"
-                id        ="datepicker"
-                ng-model  ="createEditLineItem.newLineItem.seedData.initialPayment.date">
-          </li>
-          
-          <li>
-              <label for=last-name>Amount</label>
-              <input
-                ng-model ="createEditLineItem.newLineItem.seedData.initialPayment.amount"
-                type     ="number"
-                class    =text-input
-                id       =last-name
-              >
-          </li>
-          
-          <li>
-              <label for=last-name>Number of Payments</label>
-              <input
-                ng-model ="createEditLineItem.newLineItem.seedData.numPayments"
-                type     ="number"
-                class    =text-input
-                id       =last-name
-              >
-          </li>
-          
-      </ul>
-
-      periodic or arbitrary
-      <br>
-      Repeats [daily, weekly, monthly, yearly]
-      <br>
-
-      Repeats every x days
-      <br>
-      
-    </fieldset>
+  </fieldset>
 
   </form>
 </div>
-
-<!-- experimental table -->
-      <!-- <div ng-if="false">
-        <table
-          class        ="table-cashflow"
-          ng-mouseover ="createEditLineItem.showOptionDetails(option)"
-        >
-          <tr
-            ng-repeat ="row in [createEditLineItem.lineItemDefinitionChart[0]] track by $index"
-            ng-class  ="{{row.classes}}"
-            >
-            <th
-              ng-repeat     ="cell in row track by $index"
-              ng-class      ="{{cell.classes}}"
-            >
-              {{cell.name}}
-            </th>
-          </tr>
-
-          <tr
-            ng-repeat ="row in createEditLineItem.lineItemDefinitionChart track by $index"
-            ng-class  ="{{row.classes}}"
-            >
-            <td
-              ng-repeat     ="cell in row track by $index"
-              ng-class      ="{{cell.classes}}"
-            >
-              {{cell.value}}
-
-            </td>
-          </tr>
-        </table>
-      </div>
- -->

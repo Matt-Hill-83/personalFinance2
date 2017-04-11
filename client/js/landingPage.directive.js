@@ -10,12 +10,13 @@ function landingPageController(Table, Constants) {
       'Chart',
       'Constants',
       'DataBase',
+      '$filter',
       '$rootScope',
       '$scope',
+      '$q',
       '$http',
       'Utilities',
       'Table',
-      'Constants',
       LandingPageController
     ],
     controllerAs: 'landingPage',
@@ -27,98 +28,86 @@ function LandingPageController(
   Chart,
   Constants,
   DataBase,
+  $filter,
   $rootScope,
   $scope,
+  $q,
   $http,
   Utilities,
-  Table,
-  Constants
+  Table
   ) { 
   
   vm = this;
   vm.studys;
   vm.scenarios;
   
-  vm.dropDb      = dropDb;
-  vm.refreshData = refreshData;
-  vm.newStudy    = newStudy;
-  vm.deleteStudy = deleteStudy;
-  vm.editStudy   = editStudy;
-  vm.editStudys  = editStudys;
-  vm.cloneStudy  = cloneStudy;
+  vm.dropDb               = dropDb;
+  vm.refreshData          = refreshData;
+  vm.newStudy             = newStudy;
+  vm.deleteStudy          = deleteStudy;
+  vm.updateStudy          = updateStudy;
+  vm.editStudy            = editStudy;
+  vm.editStudyFinsihed    = editStudyFinsihed;
+  vm.selectDifferentStudy = selectDifferentStudy;
+  vm.refreshCharts        = refreshCharts;
+  vm.refreshTables        = refreshTables;
+  vm.logStudy             = logStudy;
 
   vm.studyTemplates = [
     {
       guid: 1,
-      name: 'household',
+      name: 'Is grad school worth it?',
     },
     {
       guid: 2,
-      name: 'new car loan',
+      name: 'camry vs. prius',
+    },
+    {
+      guid: 3,
+      name: 'Pay student loan or max out 401k?',
     },
   ]
   vm.studyToCreate = vm.studyTemplates[0];
+  var myNewStudy = vm.studyTemplates[0];
 
-  var testChart1 = {
-    guid     : 1,
-    name     : 'mouse',
-    study    : 6,
-    lineItems: [1,2],
-  };
-
-  var testChart2 = {
-    guid     : 2,
-    name     : 'mouse',
-    study    : 6,
-    lineItems: [1,2],
-  };
-
-  var charts = [testChart1, testChart2];
-
-  vm.selectDifferentStudy = selectDifferentStudy;
-  vm.refreshTemplate      = refreshTemplate;
-  vm.show                 = true;
-  // vm.constantsTableHeader = ['name', 'value', 'units   .'];
-
-  // // not implemented
-  // vm.constants = [
-  //   {
-  //     name : 'car purchase date',
-  //     value: '01-01-2017',
-  //     units: '',
-  //     guid : 1,
-  //   },
-  //   {
-  //     name : 'car purchase amount',
-  //     value: 30000,
-  //     units: '$',
-  //     guid : 2,
-  //   },
-  //   {
-  //     name : 'car purchase interest rate',
-  //     value: 3.5,
-  //     units: 'pct',
-  //     guid : 2,
-  //   },
-  // ];
+  vm.showCharts   = true;
+  vm.editingStudy = false;
 
   getStudys(0);
   getScenarios();
-
-  ////////////////////////
 
   var noStudyMessage = {
     guid: 0,
     message: 'no studies available',
   };
 
+  ////////////////////////////////////////////////////// Charts /////////////////////////////////
+
+  function logStudy(study) {
+    console.log('|++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++|');
+    console.log('activeStudy: ');
+    console.log(vm.activeStudy);
+    console.log('|------------------------------------------------------------------------------------------------|')
+  }
+
+  function refreshCharts() {
+    // Hacky workaround to force data binding to work
+    vm.showCharts = true;
+  }
+
+  function refreshTables() {
+    // Hacky workaround to force data binding to work
+    vm.showTables = true;
+    vm.showCharts = false;
+  }
+
+  ////////////////////////////////////////////////////// Charts /////////////////////////////////
+
   function dropDb(study){
-    var test = Api.dropDb({data: 'zippy'})
-    .then(refreshData);    
+    return Api.dropDb({data: 'zippy'})
   }
 
   function getScenarios() {
-    // Get a list of all saved scenarios, that the user can combine into more studys.
     return Api.getScenarios()
     .then((resp) => {
       Constants.allScenarios = Api.sanitizeObjects(resp.data);
@@ -131,71 +120,112 @@ function LandingPageController(
   }
 
   function editStudy(study){
+    vm.editingStudy = true;
+    vm.logStudy(study);
   }
 
-  function editStudys(){
+  function editStudyFinsihed(study){
+    vm.editingStudy = false;
+    updateStudy(study);
   }
 
-  function cloneStudy(study){
+  function updateStudy(study){
+
+    console.log('|++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++|');
+    console.log('study: ');
+    console.log(study);
+    console.log('|------------------------------------------------------------------------------------------------|')
+    
+    
   }
 
-  function refreshTemplate() {
-    // Hacky workaround to force data binding to work
-    vm.show = true;
-  }
-
-  function selectDifferentStudy() {
-    // Hacky workaround to force data binding to work
-    vm.show = false;
+  function selectDifferentStudy(studyFromPicker) {
+    
+    
+    if (vm.activeStudy) {
+      vm.scenarios          = vm.activeStudy.scenarios;
+      vm.showTables         = false;
+      Constants.activeStudy = vm.activeStudy;
+    }
+    
   }
 
   function newStudy(study) {
-    Api.newStudy(study.guid)
-    .then(refreshData);
+    return Api.newStudy(study.guid)
+    .then(resp=> {
+      returnedStudy = resp.data;
+      var name = vm.activeStudy ? vm.activeStudy.name : study.name;
+      
+      returnedStudy.name = name + '  [copy]';
+      return Api.updateStudy(returnedStudy);
+    })
+    .then(refreshData)
+    .then(resp=> {
+      vm.activeStudy = Utilities.getLast(vm.studys);
+      Constants.activeStudy = vm.activeStudy;
+      vm.scenarios = vm.activeStudy.scenarios;
+    })
   }
 
-  function refreshData(loadedStudy=null) {
-    getStudys();
-    getScenarios()
-    .then(()=> {
-      if (loadedStudy) {
-        // vm.initialStudy = vm.studys[loadedStudy];
-      }
-      selectDifferentStudy();
+  function rebind() {
+    Constants.activeStudy = vm.activeStudy;
+    vm.scenarios = vm.activeStudy.scenarios;
+  }
 
-    });      
+  function refreshData() {
+    return getStudys()
+    .then(resp=> {
+      vm.showTables = false;
+    })
   }
 
   function formatStudies() {
     if (vm.studys && vm.studys.length > 0) {
       vm.studys.forEach(study=> {
-        var user      = study.user ? ' {' + study.user + '}' : '';
-        study.message = '[#' + study.guid + ']     ' + study.name + user
+        study.message = study.name;
       });
     } else {
       vm.studys = [noStudyMessage];
     }
-    vm.initialStudy  = vm.studys[0];
-    Constants.charts = vm.initialStudy.charts;
   }
 
   function getStudys(studyToShow){
-    Api.getStudys()
+    return Api.getStudys()
     .then((resp) => {
       if (resp.data.length > 0) {
         vm.studys = Api.sanitizeStudys(resp.data);
-
-        // replace this with real charts
-        vm.studys.forEach(study=> study.charts = charts);
-
       } else {
         vm.studys = [];
+        return newStudy(myNewStudy);
       }
-      
+    })
+    .then(()=> {
+      return getScenarios();
+    })
+    // .then(()=> {
+    //   var promises = Constants.allScenarios.map(scenario=> {
+    //     return Api.getBlocks(scenario.guid);
+    //   })
+    //   return $q.all(promises);
+    // })
+    .then(()=> {
       formatStudies(vm.studys);
+      vm.activeStudy        = vm.studys[0];
+      Constants.activeStudy = vm.activeStudy;
+      vm.scenarios          = vm.activeStudy.scenarios;
+      vm.studyDescription   = $filter('html')(vm.activeStudy.description);
+
+
+
+      console.log('|++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++|');
+      console.log('vm.studyDescription: ');
+      console.log(vm.studyDescription);
+      console.log('|------------------------------------------------------------------------------------------------|')
       
-      // vm.initialStudy = vm.studys[vm.studys.length -1];
-      vm.scenarios    = vm.initialStudy.scenarios;
+      
+
+
+      // vm.showTables         = false;
     });
   }
 

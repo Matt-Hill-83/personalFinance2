@@ -1,81 +1,114 @@
 <div class="flex-container" ng-controller="FinanceTable">
 
-	<!-- hacky workaround to fix databinding issue -->
-  <div ng-if="!landingPage.show">
-    {{landingPage.refreshTemplate()}}
-  </div>
-
-	<header ng-if="false">
-		<h1>Money Buckets!</h1>
-	</header>
-
 	<div class="flex-area">
 		
 		<section>
-			<article>
-				<!-- Landing Page options -->
-					<select
-					  class      ="drop-down"    
-					  ng-change  ="landingPage.selectDifferentStudy()"    
-					  ng-options ="study.message for study in landingPage.studys track by study.guid"
-					  ng-model   ="landingPage.initialStudy"
-					></select>    
-				<br>
+				<article>
+					<div class="study-container">
+						<div class="study-title-container">
 
-				<div>
-					<button
-						class     ="study-action-button"
-						ng-click  ="landingPage.newStudy(landingPage.studyToCreate)"
-						type      ="button"
-					>
-						New Study
-					</button>    
-					<select
-					  class      ="drop-down"    
-					  ng-options ="studyTemplate.name for studyTemplate in landingPage.studyTemplates track by studyTemplate.guid"
-					  ng-model   ="landingPage.studyToCreate"
-					></select>  					
+							<!-- non-editable version of field -->
+	            <div
+								ng-if    ="!landingPage.editingStudy"
+								class    ="crayon-font study-title"
+								ng-click="landingPage.editStudy(landingPage.activeStudy)"
+	            	>
+	            	<span>{{landingPage.activeStudy.name}}</span>
+	            </div>
+						
+							<!-- editable version of field -->
+							<div
+								ng-if   ="landingPage.editingStudy"
+								class   ="edit-study-input"
+								>
+		            <input
+									type          ="text"
+									value         ="{{landingPage.activeStudy.name}}"
+									class         ="crayon-font study-title edit-study-input"
+									ng-mouseleave ="landingPage.editStudyFinsihed(landingPage.activeStudy)"
+									>
+							</div>
+
+							<!-- edit study icon -->
+							<div class="edit-study-icon grey tooltip" ng-click="landingPage.editStudy(landingPage.activeStudy)">
+								<i class="fa fa-pencil fa-fw"></i>
+								<span class="grey tooltiptext">edit study</span>
+							</div>
+
+							<!-- delete study icon -->
+              <div class=" edit-study-icon grey tooltip" ng-click ="landingPage.deleteStudy(landingPage.activeStudy)">
+                <i class="fa fa-trash-o fa-fw"></i>
+                <span class="grey tooltiptext">delete study</span>
+              </div>
+
+							<!-- new study icon -->
+              <div class="grey tooltip" ng-click="maintable.cloneScenario()">
+                <i class="fa fa-clone fa-fw"></i>
+                <span class="grey tooltiptext">clone study</span>
+              </div>              
+
+						</div>
+
+					<!-- Landing Page options -->
+						<select
+							class      ="xxx-crayon-font xxx-study-title drop-down"
+							ng-change  ="landingPage.selectDifferentStudy(landingPage.activeStudy)"    
+							ng-options ="study.message for study in landingPage.studys track by study.guid"
+							ng-model   ="landingPage.activeStudy"
+						></select>    
+					<br>
+
+					<!-- <label for="description"> description:</label> -->
+					<!-- <textarea id="description" rows="4" cols="50" name="comment" ng-model="landingPage.activeStudy.description"> </textarea> -->
+					<!-- 
+										<label for="description">description:</label>
+									    <div
+												id           ="description"
+												ng-click     ="landingPage.updateStudy(landingPage.activeStudy)"
+												class        ="study-description"
+												ng-bind-html ="landingPage.activeStudy.description | html"
+									    	>
+								    	</div>
+
+								    	 -->
+					<div>
+						<button
+							class    ="study-action-button"
+							ng-click ="landingPage.newStudy(landingPage.studyToCreate)"
+							type     ="button"
+						>
+							New Study
+						</button>    
+						<select
+						  class      ="drop-down"    
+						  ng-options ="studyTemplate.name for studyTemplate in landingPage.studyTemplates track by studyTemplate.guid"
+						  ng-model   ="landingPage.studyToCreate"
+						></select>  					
+					</div>
+							
+					<div class="study-button-container">
+
+<!-- 						<button
+							class    ="study-action-button"
+							ng-click ="landingPage.deleteStudy(landingPage.activeStudy)"
+							type     ="button"
+						>
+						  Delete Study
+						</button>     -->
+
+						<button
+							class    ="study-action-button"
+							ng-click ="landingPage.dropDb()"
+							type     ="button"
+						>
+						  Clear Database
+						</button>    
+
+					</div>
+
 				</div>
 
-				<button
-					class    ="study-action-button"
-					ng-click ="landingPage.deleteStudy(landingPage.initialStudy)"
-					type     ="button"
-				>
-				  Delete Study
-				</button>    
 
-<!-- 				<button
-					class     ="study-action-button"
-					ng-click  ="landingPage.editStudy()"
-					type      ="button"
-				>
-				  Edit Study
-				</button>     -->
-<!-- 
-				<button
-					class     ="study-action-button"
-					ng-click  ="landingPage.cloneStudy()"
-					type      ="button"
-				>
-				  Clone Study
-				</button>     -->
-
-<!-- 				<button
-					class     ="study-action-button"
-					ng-click  ="landingPage.editStudys()"
-					type      ="button"
-				>
-				  Edit Studies
-				</button>     -->
-
-				<button
-					class     ="study-action-button"
-					ng-click  ="landingPage.dropDb()"
-					type      ="button"
-				>
-				  Clear Database
-				</button>    
 			</article>
 
 			<!-- global constants -->
@@ -98,18 +131,28 @@
 			</article>
 
 				<!-- Draw Tables -->
-				<div ng-if="landingPage.show">
-					<div ng-repeat="scenario in landingPage.initialStudy.scenarios track by $index">
+				<div ng-if="landingPage.showTables">
+					<div ng-repeat="scenario in landingPage.scenarios track by $index">
 				    <finance-view tableobject=scenario parent=landingPage> </finance-view>
 					</div>
 				</div>
 				
 				<!-- Draw Charts -->
-				<div ng-if="landingPage.show">
-					<article ng-repeat="chart in landingPage.initialStudy.charts track by $index">
+				<div ng-if="landingPage.showCharts">
+					<article ng-repeat="chart in landingPage.activeStudy.charts track by $index">
 				    <money-chart chartobject=chart parent=landingPage> </money-chart>
 					</article>
 				</div>
+				
+				<!-- hacky workaround to fix databinding issue -->
+			  <div ng-if="!landingPage.showCharts">
+			    {{landingPage.refreshCharts()}}
+			  </div>
+				
+				<!-- hacky workaround to fix databinding issue -->
+			  <div ng-if="!landingPage.showTables">
+			    {{landingPage.refreshTables()}}
+			  </div>
 				
 		</section>
 	</div>

@@ -1,5 +1,4 @@
 functions = {
-	// createRuleSeeds,
 	createLineItemDefinition,
 	createStudyFromSeedData,
 	createSection,
@@ -23,7 +22,10 @@ function getBlockIdFromRuleAlias(ruleSeedData, ruleAlias, scenario) {
 }
 
 // Creates study, scenario, and all blocks, from template file.
-function createStudyFromSeedData(db, studyId) {
+function createStudyFromSeedData(db, params) {
+	var studyId  = params.studyId;
+	var userGuid = params.userGuid;
+
 	db.ruleSeedData = [];
 
 	var studys = [
@@ -37,44 +39,31 @@ function createStudyFromSeedData(db, studyId) {
 
   return db.studys.create(
   	{
-			id  : null,
-			name: study.name,
-			user: study.user,
+			name       : study.name,
+			description: study.description,
+			user       : userGuid,
     }
   ).then((newStudy)=> {
   	studyToReturn = newStudy;
 		var studyId  = newStudy.id;
 
   	// Create chart objects.
+  	// I'm ignoring the promises for now.
   	if (study.charts && study.charts.length > 0) {
-
-  		console.log('|++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++|');
-  		console.log('study.charts: ');
-  		console.log(study.charts);
-  		console.log('|------------------------------------------------------------------------------------------------|')
-  		
-  		
-			study.charts.forEach(chart=> {
-			  var newchart = {
-			    name             : chart.name,
-			    indexWithinParent: chart.indexWithinParent,
-			    lineItemGuids    : chart.lineItemGuids,
-			    studyId          : studyId,
-			  };
-
-			  db.charts.create(newchart)
-			  .then(function(chart) {
-			    res.json(chart);
-			  });
-
-			});
+  		var indexWithinParent = 0;
+  		// return if study.charts is a string
+  		if (study.charts.forEach) {
+				study.charts.forEach(chart=> {
+					chart.indexWithinParent = indexWithinParent;
+					db.createChart(chart, studyId);
+					indexWithinParent += 1;
+				});
+  		}
     }
-
-
-
 
 		var promises = study.scenarios.map(scenarioObj=> {
 			scenarioObj.studyGuid = studyId;
+			scenarioObj.user      = userGuid;
   		return createScenario(db, scenarioObj)
   		.then(scenario=> {
 				var block        = scenarioObj.block;
@@ -133,6 +122,7 @@ function createBlock(db, block){
 		collapsed        : block.collapsed,
 		scenario         : block.scenario,
 		name             : block.name,
+		ruleAlias        : block.ruleAlias,
 		type             : block.type,
 		subtype1         : block.subtype1,
 		parentGuid       : block.parentGuid,
@@ -142,7 +132,7 @@ function createBlock(db, block){
 		block.id = newBlock.id;
 
   	// Find rule aliases that will be used to create rules from seed data.
-  	if (block.ruleAlias) {
+  	if (block.ruleAlias && db.ruleSeedData) {
   		db.ruleSeedData.push(
 				{
 					scenario : block.scenario,
@@ -280,25 +270,5 @@ function createSection(db, data) {
 
 	return createBlock(db, newSection);
 }
-
-// function createRuleSeeds(db) {
-//   var indexWithinParent = -1;  
-//   db.getRuleSeeds().forEach(rule=> {
-//     indexWithinParent += 1;
-//     // create rule
-//     return db.rules.create(
-//     	{
-// 				id                  : null,
-// 				indexWithinParent   : indexWithinParent,
-// 				function            : rule.function,
-// 				sourceGuid          : rule.source.guid,
-// 				outflowLineItemGuid : rule.source.outflowLineItemGuid,
-// 				destinationGuid     : rule.destination.guid,
-// 				inflowLineItemGuid  : rule.destination.inflowLineItemGuid,
-// 				destinationMaxAmount: rule.destination.targetAmount,
-// 	    }
-//     ).then((resp)=> {});
-//   });
-// }
 
 module.exports = functions;

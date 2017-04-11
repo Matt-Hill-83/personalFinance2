@@ -13,6 +13,9 @@ var routes = require('./routes/index.js');
 // *** express instance *** //
 var app = express();
 
+var cookieParser = require('cookie-parser');
+app.use(cookieParser())
+
 // *** view engine *** //
 var swig = new swig.Swig();
 app.engine('html', swig.renderFile);

@@ -17,8 +17,10 @@ function Main_(
   var baseNestLevel = 2;
   var nestOffsetEm  = 2;
   var collapsed = {
-    true : '[+]',
-    false: '[-]',
+    false: '▼',
+    // false: '▲',
+    // true : '▶',
+    true : '◀',
   };
 
   var service = {
@@ -38,19 +40,47 @@ function Main_(
     Constants.scenarios[scenarioGuid].tableMatrix.splice(0, Constants.scenarios[scenarioGuid].tableMatrix.length);
     var newTable = [];
     
-    newTable.push(..._createTableHeaderRows(tableConfig.numColInTable, tableConfig.startDate));
-    newTable.push(..._createSections(Constants.scenarios[scenarioGuid].topSection, tableConfig));
-    // format the top left cell in the table
-    newTable[0].cells[0].classes.push('top-left');
+    // Add a row to contain the Scenario title.
+    var titleRow     = _createBlankRow(tableConfig.numColInTable + 1);
+    titleRow.type    = 'titleRow';
+    titleRow.classes = ['title-row'];
+    titleRow.data    = {
+      numColInTable: tableConfig.numColInTable - 0,
+    };
+    titleRow.cells.forEach(cell=> cell.classes = ['title-row']);
 
+    newTable.push(titleRow);
+    newTable.push(..._createTableHeaderRows(scenarioGuid, tableConfig.numColInTable, tableConfig.startDate));
+    newTable.push(..._createSections(Constants.scenarios[scenarioGuid].topSection, tableConfig));
+
+    newTable = addFormatingToTable(newTable);
+
+    // Collapse sections if required in init data.
+    collapseSections(newTable);
+
+    // Finish altering table before you push it to the template.
+    Constants.scenarios[scenarioGuid].tableMatrix.push(...newTable);
+
+    // Send notification that table has been rebuilt.
+    $rootScope.$broadcast('tableRebuilt', {scenarioGuid: scenarioGuid});
+  }
+
+  function addFormatingToTable(newTable) {
     // add a blank column to hold settings buttons
     newTable.forEach(row=> {
       var blankCell = {
         classes: [],
       };
       blankCell.classes.push(...row.cells[0].classes); 
-      blankCell.classes.push(['header', 'header-buttons']); 
+      blankCell.classes.push(['xxx-header', 'header-buttons']); 
       row.cells.splice(1, 0, blankCell);
+    });
+
+    // Set type of cells in 2nd column to blank if cell in first column has a type of blank.
+    newTable.forEach((row, index)=> {
+      if (row.cells[0].type === 'blank') {
+        row.cells[1].type = 'blank';
+      }
     });
 
     if (Constants.tableSettings.tableInterval === 'weekly') {
@@ -67,22 +97,35 @@ function Main_(
       Utilities.addClasses(cell, ['table-right']);
     });
 
+    // format the left most table cells.
+    newTable.forEach((row, index)=> {
+      if (index > 1) {
+        var cell = row.cells[0];
+        Utilities.addClasses(cell, ['table-left']);
+      }
+    });
+
     // format the bottom most table cells.
     var lastRow = Utilities.getLast(newTable);
     lastRow.cells.forEach((cell, index)=> {
-      if (index > 0) {
+      if (index >= 0) {
+        Utilities.addClasses(cell, ['table-bottom']);
+      }
+    });
+    // format the top of the first row of table cells.
+    var firstDataRow = newTable[1];
+    firstDataRow.cells.forEach((cell, index)=> {
+      if (index > 1) {
         Utilities.addClasses(cell, ['table-bottom']);
       }
     });
 
-    // Collapse sections if required in init data.
-    collapseSections(newTable);
+    // format specific cells
+    newTable[0].cells[0].classes = ['top-left'];
+    newTable[1].cells[1].classes = ['cell-1-1'];
+    newTable[1].cells[1].type    = 'blank';
 
-    // Finish altering table before you push it to the template.
-    Constants.scenarios[scenarioGuid].tableMatrix.push(...newTable);
-
-    // Send notification that table has been rebuilt.
-    $rootScope.$broadcast('someEvent', [1,2,3]);
+    return newTable;
   }
 
   function collapseSections(table) {
@@ -90,6 +133,10 @@ function Main_(
   }
 
   function collapseSection(section) {
+    if (!section.cells) {
+      return;
+    }
+
     section.cells[0].expander = collapsed.true;
     var children = DataBase.lineItems.getChildBlocksFromSection(section);
     children.forEach(child=> {
@@ -100,8 +147,6 @@ function Main_(
         
     });
 
-    // Unhide the lineItem itself.
-    // section.rowVisible = true;
     section.collapsed  = true;
   }
 
@@ -121,10 +166,10 @@ function Main_(
 
   ////////////////////////  Sections  /////////////////////////////////////////////
 
-  function _createTableHeaderRows(numColInTable, startDate) {
+  function _createTableHeaderRows(scenarioGuid, numColInTable, startDate) {
     var isMonthly = true;
-    var isWeekly = false;
-    var isYearly = false;
+    var isWeekly  = false;
+    var isYearly  = false;                  
 
     var dateCells  = [];
     var monthCells = [];
@@ -135,12 +180,12 @@ function Main_(
     var previousMonth = '';
     var previousYear  = '';
     
-    Utilities.clearArray(Constants.monthTransitionCells);
-    Utilities.clearArray(Constants.yearTransitionCells);
+    Utilities.clearArray(Constants.tableConfig.monthTransitionCells);
+    Utilities.clearArray(Constants.tableConfig.yearTransitionCells);
     // Add blank cell for (0,0)
-    dateCells.push({classes:  ['blank']});
-    monthCells.push({classes: ['blank']});
-    yearCells.push({classes:  ['blank']});
+    dateCells.push({classes:  ['blank'], type: 'blank'});
+    monthCells.push({classes: ['blank'], type: 'blank'});
+    yearCells.push({classes:  ['blank'], type: 'blank'});
 
     // Create an object for each date and prepopulate it with properties.
     Constants.tableConfig.dates.forEach((newDate, index)=>{
@@ -150,8 +195,8 @@ function Main_(
       
       var dateString  = dayOfMonth;
       // var monthString = curMonth;
-      var year  = newDate.getFullYear();
-      var yearString = year.toString();
+      var year        = newDate.getFullYear();
+      var yearString  = year.toString();
       var monthString = curMonth + '-' + yearString.slice(2, 4);
 
       // Record the index of the cells which transition from one month to the next.
@@ -279,6 +324,7 @@ function Main_(
       var blankCell = {
         valueToDisplay: '0',
         classes       : ['blank'],
+        type          : 'blank',
       };
 
       cells.push(blankCell);
@@ -309,7 +355,7 @@ function Main_(
     }
 
     if (block.tally) {
-      firstCell.valueToDisplay = block.name + ' [bucket]';
+      firstCell.valueToDisplay = block.name + ' BUCKET';
     }
 
     payments.push(firstCell);
@@ -358,12 +404,12 @@ function Main_(
       payments.forEach(payment=> {
         payment.classes.push('tally');
       });
+      Utilities.addClasses(block, ['tally']);
     }
 
     var newParams = {
       rowVisible: true,
       cells     : payments,
-      classes   : [],
     };
 
     angular.extend(block, newParams);

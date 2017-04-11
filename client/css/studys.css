@@ -1,0 +1,61 @@
+.study-container {
+	display         : flex;
+	flex-direction  : column;		
+	border          : 1px solid black;
+	border-radius   : 12px;	
+	background-color: #c9c9ec; 
+}
+
+.study-selector {
+	font-size: 1.2em;
+	position : relative;
+	left     : 50%;
+	transform: translateX(-50%);		
+}
+
+.study-action-button {
+	text-align      : center;
+	padding         : 2px;
+	margin          : auto;
+	color           : #333;
+	background-color: white; 
+	width           : auto;
+}
+
+.study-title {
+	display   : flex;
+	color     : #4b4b86;	
+	font-size : 4.2em;	
+	align-self: center;
+	/*border          : 1px solid black;*/
+}
+
+.study-button-container {
+	display         : flex;
+	flex-direction  : row;		
+	border          : 1px solid black;
+	/*background-color: #c9c9ec; */
+}
+
+.study-description {
+	background-color: white;
+}
+
+.edit-study-input {
+	display      : flex;
+	width        : 100%;
+	border       : 1px solid black;
+	border-radius: 6px;
+}
+
+.edit-study-icon {
+	display  : flex;
+	font-size: 2em;
+}
+
+.study-title-container {
+	display: flex;
+}
+
+
+

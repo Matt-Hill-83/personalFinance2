@@ -30,6 +30,7 @@ function DataBase_(
     cloneScenario,
     deleteScenario,
     rebuildLocalDataBase,
+    removeBlocksFromDbForScenario,
     blockDb  : [],
     paymentDb: [], 
     lineItems: lineItems(),
@@ -45,16 +46,20 @@ function DataBase_(
 
   return service;
 
-  ////////////////////////////////////////////////////// Clone Scenario //////////////////////////////////
-
-  function rebuildLocalDataBase(scenarioGuid){
+  ////////////////////////////////////////////////////// Local DataBase Operations //////////////////////////////////
+  
+  function removeBlocksFromDbForScenario(scenarioGuid) {
     var scenarioExistsInBlockDb = service.blockDb.some(block=> block.scenario === scenarioGuid);
 
     if (scenarioExistsInBlockDb) {
       var cleanedDb = service.blockDb.filter(block=> block.scenario !== scenarioGuid);
       service.blockDb.splice(0, service.blockDb.length, ...cleanedDb);
     }
-    
+  }
+
+  function rebuildLocalDataBase(scenarioGuid){
+    removeBlocksFromDbForScenario(scenarioGuid);
+
     var scenarioExistsInPaymentDb = service.paymentDb.some(payment=> payment.scenario === scenarioGuid);
 
     if (scenarioExistsInPaymentDb) {
@@ -143,7 +148,6 @@ function DataBase_(
       console.table(Constants.rules);
       console.log('|------------------------------------------------------------------------------------------------|')
     }
-
   }
 
   function queryLocalDb(params, db) {
@@ -249,7 +253,10 @@ function DataBase_(
   ////////////////////////////////////////////////////// Clone Scenario //////////////////////////////////
 
   function deleteScenario(scenarioGuid) {
-    return Api.deleteScenario(scenarioGuid);
+    return Api.deleteScenario(scenarioGuid)
+    .then(resp=> {
+      removeBlocksFromDbForScenario(scenarioGuid);
+    });
   }
 
   function getNewGuidFromOldGuid(oldGuid, clonedBlockGuidMap){
@@ -680,24 +687,22 @@ function DataBase_(
 
       newPayment.valueToDisplay = newPayment.amount;
 
-      // if (newPayment.amount !== 0) {
-        // Create or update record.
-        var params = {
-          date      : date,
-          parentGuid: section.guid,
-          type      : 'total gross',
-        };
+      // Create or update record.
+      var params = {
+        date      : date,
+        parentGuid: section.guid,
+        type      : 'total gross',
+      };
 
-        // Get previously created section total payment.
-        var existingPayment = service.payments.getByParams(params)[0];
-        if (existingPayment) {
-          existingPayment.amount         = newPayment.amount;
-          existingPayment.valueToDisplay = newPayment.amount;
-        } else {
-          service.payments.create(newPayment, section);
-        }
+      // Get previously created section total payment.
+      var existingPayment = service.payments.getByParams(params)[0];
+      if (existingPayment) {
+        existingPayment.amount         = newPayment.amount;
+        existingPayment.valueToDisplay = newPayment.amount;
+      } else {
+        service.payments.create(newPayment, section);
+      }
 
-      // }
     }
 
     function createTallyPayment(section, tableDate) {

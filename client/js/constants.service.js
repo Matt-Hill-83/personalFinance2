@@ -3,8 +3,7 @@ angular.module('app').factory('Constants', [ 'Utilities', Constants_]);
 
 function Constants_(Utilities) {
   var tableConfig = {
-    numColInTable       : 30,
-    numColInTable       : 10,
+    numColInTable       : 4,
     startDate           : '01/01/2017',
     endDate             : null,
     dates               : [],
@@ -76,7 +75,9 @@ function Constants_(Utilities) {
     },
     scenarios  : {},
     charts     : [{}],
-    activeChart: null,
+    chartData: {
+      activeChart: null,
+    }
   };
 
   refreshTableConfig();

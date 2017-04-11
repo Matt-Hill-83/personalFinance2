@@ -13,29 +13,37 @@ function ApiController(
   var service = {
     createRow,
     deleteRow,
+    updateRow,
     getBlocks,
-    getStudys,
-    getRules,
-    getScenarios,
 
-    deleteScenario,
-    createScenario,
     addSection,
+
+    getStudys,
+    updateStudy,
     newStudy,
     deleteStudy,
-    
-    removeCreatedAt,
-    sanitizeBlocks,
     sanitizeStudys,
-    sanitizeObjects,
-    sanitizeRules,
-    updateRow,
 
+    getScenarios,
+    deleteScenario,
+    createScenario,
+    
     dropDb,
 
+    deleteChart,
+    addChart,
+    updateChart,
+    sanitizeChart,
+
+    getRules,
     updateRule,
     deleteRule,
     addRule,
+
+    sanitizeBlocks,
+    sanitizeObjects,
+    sanitizeRules,
+
   };
 
   return service;
@@ -44,12 +52,39 @@ function ApiController(
 
   function dropDb(data) {
     return $http.delete('/tables', data)
+    // .success((data) => {})
     .success((data) => {$window.location.reload()})
+    .error((error) => {console.log('Error: ' + error)});
+  }
+
+  /////////////////////////  charts /////////////////////////////
+
+  function deleteChart(chartGuid) {
+    return $http.delete('/chart/' + chartGuid)
+    .success((data) => {})
+    .error((error) => {console.log('Error: ' + error)});
+  }
+  
+  function addChart(data) {
+    return $http.post('/charts', {data: data})
+    .success((data) => {})
+    .error((error) => {console.log('Error: ' + error)});
+  }
+
+  function updateChart(data) {
+    return $http.put('/chart', {data: data})
+    .success((data) => {})
     .error((error) => {console.log('Error: ' + error)});
   }
 
   /////////////////////////  scenarios /////////////////////////////
   
+  function getScenarios() {
+    return $http.get('/scenarios')
+    .success((data) => {})
+    .error((error) => {console.log('Error: ' + error)});
+  }
+
   function createScenario(studyGuid) {
     return $http.post('/scenario', {data: {studyGuid: studyGuid}})
     .success((data) => {})
@@ -103,6 +138,18 @@ function ApiController(
     .error((error) => {console.log('Error: ' + error)});
   }
 
+  function getStudys() {
+    return $http.get('/studys')
+    .success((data) => {})
+    .error((error) => {console.log('Error: ' + error)});
+  }
+
+  function updateStudy(data) {
+    return $http.put('/study', data)
+    .success((data) => {})
+    .error((error) => {console.log('Error: ' + error)});
+  }
+
   /////////////////////////  blocks /////////////////////////////
 
   function deleteRow(rowId) {
@@ -123,31 +170,18 @@ function ApiController(
     .error((error) => {console.log('Error: ' + error)});
   }
   
+  function getBlocks(scenarioId) {
+    return $http.get('/blocks/' + scenarioId)
+    .success(blocks => {
+      return sanitizeBlocks(blocks);
+    })
+    .error((error) => {console.log('Error: ' + error)});
+  }
+
   ////////////////////// sections //////////////////////////////
 
   function addSection(data) {
     return $http.post('/addSection', {data: data})
-    .success((data) => {})
-    .error((error) => {console.log('Error: ' + error)});
-  }
-
-  ////////////////////// get //////////////////////////////
-
-  function getBlocks(scenarioId) {
-    return $http.get('/blocks/' + scenarioId)
-    .success((data) => {})
-    .error((error) => {console.log('Error: ' + error)});
-  }
-
-  function getScenarios() {
-    return $http.get('/scenarios')
-    .success((data) => {})
-    .error((error) => {console.log('Error: ' + error)});
-
-  }
-
-  function getStudys() {
-    return $http.get('/studys')
     .success((data) => {})
     .error((error) => {console.log('Error: ' + error)});
   }
@@ -219,7 +253,7 @@ function ApiController(
       'createdAt',
       'modifiedAt',
       'updatedAt',
-      'id',
+      // 'id',
     ];
 
     var newObject = {guid: parseInt(oldObject.id)};
@@ -228,24 +262,39 @@ function ApiController(
         newObject[property] = oldObject[property];
       }
     }
-
     return newObject;
   }
 
-  function sanitizeStudys(oldObjects) {
-    return oldObjects.map(oldObject=> {
-      var newObject       = removeCreatedAt(oldObject);
-      var oldScenarios    = oldObject.studyJoinScenarios.map(join=> join.scenario);
-      newObject.scenarios = oldScenarios.map(el=> removeCreatedAt(el));
+  function sanitizeStudys(studys) {
+    return studys.map(study=> {
+      var newStudy       = removeCreatedAt(study);
+      var oldScenarios   = study.studyJoinScenarios.map(join=> join.scenario);
+      newStudy.scenarios = oldScenarios.map(el=> removeCreatedAt(el));
 
-      return newObject;
+      newStudy.charts = newStudy.charts.map(chart=> {
+        return sanitizeChart(chart);
+      });
+      newStudy.charts = Utilities.sortSections(newStudy.charts);
+
+      return newStudy;
     });
   }  
+
+  function sanitizeChart(chart) {
+    chart.indexWithinParent = parseInt(chart.indexWithinParent);
+    chart.lineItemGuids     = JSON.parse(chart.lineItemGuids);
+    chart                   = sanitizeObject(chart);
+    return chart;
+  }
 
   function sanitizeObjects(oldObjects) {
     return oldObjects.map(oldObject=> {
       return removeCreatedAt(oldObject);
     });
+  }  
+
+  function sanitizeObject(oldObject) {
+    return removeCreatedAt(oldObject);
   }  
 
 

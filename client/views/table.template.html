@@ -11,42 +11,85 @@
   </article>
 
   <article>
+    <!--       <p>Start Date:
+            <input
+              type      ="text"
+              id        ="datepicker"
+              ng-change ="maintable.redrawTable(mainTable.scenarioGuid)"
+              ng-model  ="maintable.tableConfig.startDate"
+            >
+          </p>
 
-    <!--   <p>Start Date:
-        <input
-          type      ="text"
-          id        ="datepicker"
-          ng-change ="maintable.redrawTable(mainTable.scenarioGuid)"
-          ng-model  ="maintable.tableConfig.startDate"
-        >
-      </p>
-
-      <p>Num Days:
-          <input
-             type     ="text"
-             id       ="numdays"
-             ng-blur  ="maintable.redrawTable(mainTable.scenarioGuid)"
-             ng-model ="maintable.tableConfig.numColInTable">
-      </p>
-     -->
-
-    <!-- modal to allow user to create/edit line items, will be replaced with ngDialog -->
-    <create-edit-line-item
-      ng-if  ="maintable.showRowDefinitionModal.value"
-      params ="maintable.paramsForCreateEditModal"
-    ></create-edit-line-item>
+          <p>Num Days:
+              <input
+                 type     ="text"
+                 id       ="numdays"
+                 ng-blur  ="maintable.redrawTable(mainTable.scenarioGuid)"
+                 ng-model ="maintable.tableConfig.numColInTable">
+          </p> -->
 
     <!-- Main row for each table -->
     <div class="table-row">
-      <div class="row-holder">
-        <table
-          class        ="table-cashflow"
-          ng-mouseover ="maintable.showOptionDetails(option)"
+      <div
+        class   ="row-holder"
+        ng-init ="shower = true"
+        >
+        <div class="scenario-title-holder">
+          <span class="scenario-title-box">
+            
+            <span class="scenario-title-and-friends">
+              <span class="crayon-font scenario-title">{{maintable.selectedScenario.name}}</span>
+            </span>
+          </span>
+        </div>
+
+        <table 
+          class         ="table-cashflow"
+          ng-mouseleave ="maintable.exitedTable($event, rowIndex, cellIndex, row, cell)"
           >
+          
+          <!-- Row for table title and action buttons -->
+          <tr ng-class=maintable.tableMatrix[0].classes>
+            
+            <!-- 2 empty columns above row headers and row header icons -->
+            <td ng-class="maintable.tableMatrix[0].cells[0].classes" colspan="2"></td>
+            <td class="title-row"
+                colspan={{maintable.tableMatrix[0].data.numColInTable}}
+                >
+
+              <div class="scenario-button-container">
+                <div class="scenario-label">
+                  <span>Scenario {{maintable.selectedScenario.id}}: {{maintable.selectedScenario.name}}</span>
+                </div>
+
+                <div class="scenario-button-holder">
+                  <button
+                    ng-click ="maintable.showRules()"
+                    class    ="scenario-action-button"
+                    type     ="button"
+                    >
+                    <span>Rules</span>
+                  </button>      
+              
+                  <button
+                    ng-click ="maintable.showRules()"
+                    class    ="scenario-action-button"
+                    type     ="button"
+                    >
+                    <span>Triggers</span>
+                  </button>      
+                </div>    
+
+              </div>    
+
+            </td>
+          </tr>
+          
+          <!-- Normal data row -->
           <tr
             ng-repeat ="row in maintable.tableMatrix track by $index"
             ng-init   ="rowIndex = $index"
-            ng-if     ="row.rowVisible"
+            ng-if     ="row.rowVisible && row.type !== 'titleRow'"
             ng-class  ="{{row.classes}}"
             >
             <td
@@ -54,118 +97,87 @@
               ng-init      ="cellIndex = $index"
               ng-class     ="{{cell.classes}}"
               ng-mouseover ="maintable.enteredHeader($event, rowIndex, cellIndex, row, cell)"
-            >
+              ng-click     ="maintable.logRow()"
+              >
               {{cell.valueToDisplay === 0 ? '' : cell.valueToDisplay}}
-              <span ng-click ="maintable.changeCollapseState(row, $index)"> {{cell.expander}}</span>
-              <span 
-                ng-show  ="rowIndex === 0 && cellIndex === 0"
-                ng-class ="scenario-button-capsule"
-                ng-init   ="shower = true"
-                >
-                <select 
-                  class      ="scenario-picker"    
-                  ng-change  ="maintable.changeScenario()"    
-                  ng-options ="'[#' + scenario.guid + ']     ' + ' ' + scenario.name  for scenario in maintable.scenarios track by scenario.guid"    
-                  ng-model   ="maintable.selectedScenario"
-                  ></select>
-                  
-                <span class="scenario-button-holder"
-                    >
-                  <button
-                    ng-click ="maintable.deleteScenario()"
-                    class    ="scenario-action-button2"
-                    type     ="button"
-                  >
-                    <span>Delete Scenario</span>
-                  </button>
-                  <button
-                    ng-click ="maintable.cloneScenario()"
-                    class    ="scenario-action-button2"
-                    type     ="button"
-                  >
-                    <span>Clone Scenario</span>
-                  </button>
-
-<!--                   <button
-                    ng-click ="maintable.clearChart()"
-                    class    ="scenario-action-button2"
-                    type     ="button"
-                  >
-                    <span>Clear Chart</span>
-                  </button>       -->
-              
-                  <button
-                    ng-click ="maintable.showRules()"
-                    class    ="scenario-action-button2"
-                    type     ="button"
-                  >
-                    <span>Rules</span>
-                  </button>      
-              
-              
-                  <button
-                    ng-click ="shower = !shower"
-                    class    ="scenario-action-button2"
-                    type     ="button"
-                  >
-                    <span>[hide]</span>
-                  </button>   
-                </span>    
 
               </span>
+              <span class="expander-chevron" ng-show="cellIndex === 0">
+                <span ng-click ="maintable.changeCollapseState(row, $index)"> {{cell.expander}}</span>
+              </span>
+              
+              <span ng-show ="cellIndex === 1 && rowIndex === 1">
+                <span class="scenario-icons">
+                  <div class="grey tooltip" ng-click ="maintable.cloneScenario()">
+                    <i class="fa fa-clone fa-fw"></i>
+                    <span class="grey tooltiptext">clone scenario</span>
+                  </div>
 
-              <span ng-show ="cellIndex === 1">
-                <!-- table settings icons -->
+                  <div class="grey tooltip" ng-click ="maintable.showUpdateRowModal('update')">
+                    <i class="fa fa-pencil fa-fw"></i>
+                    <span class="grey tooltiptext">edit scenario</span>
+                  </div>
 
-                <span ng-if="!maintable.pickerIsVisible && shower">           
-                  <span
-                    ng-click ="maintable.showUpdateRowModal('create')"
-                    class    ="delete-icon"
-                  >
-                    [addRow]
-                  </span>
+                  <div class="grey tooltip" ng-click ="maintable.deleteScenario()">
+                    <i class="fa fa-trash-o fa-fw"></i>
+                    <span class="grey tooltiptext">delete scenario</span>
+                  </div>
+                </span>             
+              </span>
 
-                  <span
-                    ng-click ="maintable.addSection(row)"
-                    class    ="delete-icon"
-                  >
-                    [addSec]
-                  </span>
+              <!-- table settings icons -->
+              <span ng-show ="cellIndex === 1 && cell.type !== 'blank'">
 
-                  <span
-                    ng-click ="maintable.showUpdateRowModal('update')"
-                    class    ="delete-icon"
-                  >
-                    [edit]
-                  </span>
+                <!-- show line item icons -->
+                <span ng-if="!maintable.rulePickerIsVisible && !maintable.chartData.activeChart">           
+                  
+                  <div class="grey tooltip" ng-click ="maintable.showUpdateRowModal('create')">
+                    <i class="fa fa-plus-square-o fa-lg fa-fw"></i>
+                    <span class="grey tooltiptext">add row below</span>
+                  </div>
 
-                  <span
-                    ng-click ="maintable.deleteRow()"
-                    class    ="delete-icon"
-                  >
-                    [x]
-                  </span>
 
-                  <span
-                    ng-click ="maintable.logRow()"
-                    class    ="delete-icon"
-                  >
-                    [L]
-                  </span>
-                  <span
-                    class        ="delete-icon"
-                    ng-click     ="maintable.toggleRowOnChart(row)"
-                    xxx-ng-class ="row.showOnChart"
-                  >
-                    [g]
-                  </span>
+                  <div class="grey tooltip" ng-click ="maintable.addSection(row)">
+                    <i class="fa fa-list-alt fa-fw"></i>
+                    <!-- <i class="fa fa-list-alt fa-lg fa-fw"></i> -->
+                    <span class="grey tooltiptext">add section below</span>
+                  </div>
+
+                  <div class="grey tooltip" ng-click ="maintable.showUpdateRowModal('update')">
+                    <i class="fa fa-pencil fa-fw"></i>
+                    <!-- <i class="fa fa-pencil fa-lg fa-fw"></i> -->
+                    <span class="grey tooltiptext">edit</span>
+                  </div>
+
+                  <div class="grey tooltip" ng-click ="maintable.deleteRow()">
+                    <i class="fa fa-trash-o fa-lg fa-fw"></i>
+                    <span class="grey tooltiptext">delete</span>
+                  </div>
                 </span>
+
+                <!-- Show line item picker buttons if the chart rows are being selected -->
+                <div ng-if    ="maintable.chartData.activeChart"
+                      ng-click ="maintable.toggleRowOnChart(row)"
+                  >
+                  <button
+                    ng-if ="!row.shownOnActiveChart"
+                    class ="graph-toggle-off line-item-picker-button"
+                    >
+                    add to Chart {{maintable.chartData.activeChart.id}}
+                  </button>
+                  <button
+                    ng-if ="row.shownOnActiveChart"
+                    class ="graph-toggle-on line-item-picker-button"
+                    >
+                    Chart {{maintable.chartData.activeChart.id}}
+                  </button>
+                </div>
 
                 <!-- row selector icon -->
                 <span
-                  ng-if    ="maintable.pickerIsVisible"
+                  ng-if    ="maintable.rulePickerIsVisible"
                   ng-click ="maintable.pickThisRow(row)"
-                  class    ="delete-icon red"
+                  class    ="scenario-action-button red"
                 >
                   [pick this row!]
                 </span>
@@ -175,20 +187,7 @@
         </table>
       </div>
 
-
     </div>
   </article>
 
 </div>
-
-
-
-  <!-- header modal, convert this to a directive -->
-
-<!--   <div 
-   id            ="{{maintable.rowHeaderModalId}}"
-   class         ="header-modal"
-   ng-mouseleave ="maintable.exitedModal()"
-  > 
-  </div>
-

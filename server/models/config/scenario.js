@@ -11,6 +11,10 @@ module.exports = (sequelize, DataTypes) => {
     name: {
       type: DataTypes.TEXT,
     },
+    indexWithinParent: {
+      type     : DataTypes.BIGINT,
+      allowNull: true,
+    },
     user: {
       type: DataTypes.TEXT,
     },

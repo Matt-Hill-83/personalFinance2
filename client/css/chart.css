@@ -1,0 +1,52 @@
+.chart-container {
+	display       : flex;
+	flex-direction: column;	
+}
+
+.chart-container .chart-sizer {
+	border         : solid 1px black;
+	border-collapse: collapse;
+}
+
+.chart-container .chart-sizer.active{
+	border         : solid 1px red;
+	border-collapse: collapse;
+}
+
+.chart-container div.chart-sizer{
+	height: 250px;
+	width : 100%;
+}
+
+.chart-action-button {
+	display         : flex;
+	text-align      : center;
+	color           : #333;
+	background-color: white; 
+	border          : 1px solid black;
+	border-radius   : 3px;
+	padding         : 0.1em 0.4em;	
+	margin-left     : 0.2em;	
+}
+
+.chart-action-button-edit {
+	border: solid 1px red;
+}
+
+.line-item-picker-button {
+	text-align      : center;
+	color           : #333;
+	background-color: white; 
+	border          : 1px solid black;
+	border-radius   : 3px;
+	padding         : 0em 0.3em;	
+	margin-left     : 0.2em;	
+	width           : 100%;
+}
+
+.chart-button-holder {
+	display        : flex;
+	padding        : 0.1em 0em;
+	justify-content: flex-end;	
+	margin-right   : -0.2em;
+}

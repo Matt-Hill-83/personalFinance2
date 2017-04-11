@@ -1,0 +1,8 @@
+@font-face {
+	font-family: 'sandboxMelodrama';
+	src: url('../fonts/sandboxMelodrama.ttf'); 
+}
+.crayon-font {
+	font-family: 'sandboxMelodrama', sans-serif;
+
+}

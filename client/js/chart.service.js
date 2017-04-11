@@ -1,12 +1,30 @@
 
-angular.module('app').factory('Chart', ['DataGeneration', 'DataBase', 'Constants', 'Utilities', Main_]);
+angular.module('app').factory('Chart', [
+  'DataGeneration',
+  'DataBase',
+  'Constants',
+  'Api',
+  'Utilities',
+  Main_]);
 
-function Main_(DataGeneration, DataBase, Constants, Utilities) {
+function Main_(
+  DataGeneration,
+  DataBase,
+  Constants,
+  Api,
+  Utilities
+  ) {
   var series = [];
   var service = {
-    deleteRow,
+    deleteChart,
     drawChart,
+    updateChart,
+    toggleChartActivationStatus,
+    activateChart,
+    deactivateChart,
+    addChart,
     formatRowData,
+    toggleRowOnChart,
     series,
   };
 
@@ -14,47 +32,146 @@ function Main_(DataGeneration, DataBase, Constants, Utilities) {
 
   ////////////////////////////////////////////////////////////////////////////////////
 
-  function deleteRow(rowGuid) {
-    var indexOfRowToDelete;
-    service.series.forEach((row, index)=> {
-      if (row.guid === rowGuid) {
-        indexOfRowToDelete = index;
-        return;
-      }            
+  function deleteChart(chart) {
+    deactivateChart(chart, Constants.activeStudy);
 
+    return Api.deleteChart(chart.guid)
+    .then(()=>{
+      var index = Constants.activeStudy.charts.indexOf(chart);
+      if (index > -1) {
+        Constants.activeStudy.charts.splice(index, 1);
+      }
     });
-    service.series.splice(indexOfRowToDelete, 1);
-    drawChart();
   }
 
-  function formatRowData() {
-    var output = service.series.map(row=> {
+  function addChart(data, chart) {
+    if (chart) {
+      deactivateChart(chart, Constants.activeStudy);
+    }
+
+    return Api.addChart(data)
+    .then((resp)=>{
+      var newChart = Api.sanitizeChart(resp.data);
+      newChart.chartDivId = 'chart-div' + newChart.guid;
+      Constants.activeStudy.charts.unshift(newChart);
+    });
+  }
+
+  function toggleRowOnChart(row) {
+    row.shownOnActiveChart = !row.shownOnActiveChart;
+
+    if (row.shownOnActiveChart) {    
+      Constants.chartData.activeChart.lineItems.push(row);
+      Constants.chartData.activeChart.lineItemGuids.push(row.guid);
+      // update db object also
+    } else {
+      var index = Constants.chartData.activeChart.lineItems.indexOf(row);
+      if (index > -1) {
+        Constants.chartData.activeChart.lineItems.splice(index, 1);
+        Constants.chartData.activeChart.lineItemGuids.splice(index, 1);
+      }      
+    }
+    drawChart(Constants.chartData.activeChart);
+    return updateChart(Constants.chartData.activeChart);
+  }
+
+  function updateChart(chart) {
+    var chartParams = {
+      name             : chart.name,
+      guid             : chart.guid,
+      indexWithinParent: chart.indexWithinParent,
+      lineItemGuids    : JSON.stringify(chart.lineItemGuids),
+      subTitle         : chart.subTitle,
+    };
+    return Api.updateChart(chartParams);
+  }
+
+  function toggleChartActivationStatus(chart, study) {
+    // Hide toggles on all lineItems
+    DataBase.blockDb.forEach(lineItem=> lineItem.shownOnActiveChart = undefined);
+
+    if (chart.active) {
+      deactivateChart(chart, study)      
+    } else {
+      activateChart(chart, study);      
+    }
+  }
+
+  function activateChart(chart, study) {
+    console.log('activating')
+    study.charts.forEach(chart=> chart.active = false);
+    chart.active = true;
+    Constants.chartData.activeChart = chart;
+    chart.lineItems.forEach(lineItem=> lineItem.shownOnActiveChart = chart);
+  }
+
+  function deactivateChart(chart, study) {
+    console.log('deactivating')
+    if (!chart || !study) {
+      return;
+    }
+
+    study.charts.forEach(chart=> chart.active = false);
+    Constants.chartData.activeChart = undefined;
+    if (chart.lineItems) {
+      chart.lineItems.forEach(lineItem=> lineItem.shownOnActiveChart = undefined);
+    }
+  }
+
+  ////////////////////////////////// HighCharts //////////////////////////////////////////////////
+
+  function formatRowData(chart) {
+    var output = chart.lineItems.map(row=> {
+      // This is a somewhat common indicator that something went wrong.
+      if (!row.cells) {
+        console.log('returning from format');
+        return;
+      }
+
       var cells = row.cells.map(cell=> cell.valueToDisplay);
       // chop off first 2 cells.
-      var name  = cells.splice(0,2);
+      cells.splice(0,2);
 
-      // grab the name from the first cell.
-      return {
-        name: 'scenario: ' + row.scenario + '--' + name[0],
+      var scenario = Constants.activeStudy.scenarios.filter(scenario=> scenario.guid === row.scenario)[0];
+      if (!scenario) {
+        return;
+      }
+      
+      var newSeries = {
+        name: row.name + ' - ' + scenario.name,
         data: cells,
       };
+      return newSeries;
 
     });
     return output;
   }
 
-  function drawChart(elementId) {
+  function drawChart(chart) {
+    console.log('refreshing chart');
+    
     // _setTheme();
-    Highcharts.chart(elementId, {
+    var series = formatRowData(chart);
+    if (!series) {
+      return;
+    }
 
-        title: {
-            text: 'Cash - Base Case'
+    var title    = chart.name;
+    var subTitle = chart.subTitle;
+
+    chart.lineItems = chart.lineItemGuids.map(guid=> DataBase.lineItems.getBlockFromGuid(guid));
+    var dataIsReady    = chart.lineItems.every(lineItem=> typeof(lineItem) === 'object');
+
+    Highcharts.chart(chart.chartDivId, {
+        chart: {
+            // height: 250 // this is set by the containing div.
         },
-
-        // subtitle: {
-        //     text: 'Source: thesolarfoundation.com'
-        // },
-
+        title: {
+            text: title
+        },
+        subtitle: {
+            text: subTitle
+        },
         yAxis: {
             title: {
                 text: ''
@@ -65,16 +182,13 @@ function Main_(DataGeneration, DataBase, Constants, Utilities) {
             align        : 'right',
             verticalAlign: 'middle'
         },
-
         plotOptions: {
             series: {
                 pointStart: 2
             }
         },
-
-        series: service.formatRowData(),
+        series: series,
     });  
-
   }
 
   function _setTheme() {
@@ -177,6 +291,5 @@ function Main_(DataGeneration, DataBase, Constants, Utilities) {
     // Apply the theme
     Highcharts.setOptions(Highcharts.theme);    
   }
-
 
 }

@@ -16,6 +16,10 @@ module.exports = (sequelize, DataTypes) => {
       type     : DataTypes.BIGINT,
       allowNull: true,
     },
+    subTitle: {
+      type     : DataTypes.TEXT,
+      allowNull: true,
+    },
     name: {
       type: DataTypes.TEXT,
     },

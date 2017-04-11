@@ -22,7 +22,6 @@ if (process.env.DATABASE_URL) {
   });
 } else {
   // the application is executed on the local machine
-		console.log('sequelize not using_env_variable');
 	  var sequelize = new Sequelize(config.database, config.username, config.password, config);
 }
 

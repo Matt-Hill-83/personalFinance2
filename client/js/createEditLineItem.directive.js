@@ -14,6 +14,8 @@ function createEditLineItemController() {
 }
 
 function CreateEditCtrl($scope) {
+  var defaultDate = new Date('01-01-2017');
+  
 	var vm        = this;
 	vm.data       = $scope.params;
 	vm.closeModal = closeModal;
@@ -21,12 +23,12 @@ function CreateEditCtrl($scope) {
 	if (vm.data.mode === 'update') {
 		vm.newLineItem = vm.data.row;
 		vm.button = {
-			label   : 'update',
+			label   : 'Update',
 			function: update,
 		};
 	} else if (vm.data.mode ==='create') {
 		vm.button = {
-			label   : 'create',
+			label   : 'Create',
 			function: create,
 		};
 
@@ -34,44 +36,40 @@ function CreateEditCtrl($scope) {
 			name    : 'new row',
 			scenario: vm.data.row.scenario,
 			type    : 'lineItem',
-			name    : 'new row',
 			seedData: {
 				seedDataType  : 'periodicDates',
 				initialPayment: {
-		      date  : '01/01/2017',
+		      date  : defaultDate,
 		      amount: 999,
 		    },
         numDaysInInterval: 30,
-        numPayments      : -1,
+        numPayments      : null,
       }
     };   	
 	}
 
-	// not used
-	var myForm = document.getElementById('my-form');
-
-	vm.showRowDefinitionModal = $scope.params.showRowDefinitionModal;
-	
   //////////////////////
 
   function closeModal() {
-		vm.showRowDefinitionModal.value = false;
+  	$scope.params.ngDialog.close();
   }
 
   function update() {
-  	var payload = {update: true};
-  	vm.data.callback(payload)
+  	var payload = {
+      update  : true,
+      lineItem: vm.newLineItem,
+    };
+
+  	vm.data.callback(payload);
+  	closeModal();
   }
 
   function create() {
   	var payload = {
-  		create: true,
-  		newLineItem: vm.newLineItem,
+      create     : true,
+      newLineItem: vm.newLineItem,
   	};
-  	vm.data.callback(payload)
+  	vm.data.callback(payload);
+  	closeModal();
   }
-
-
-
-
 }
