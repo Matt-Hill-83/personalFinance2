@@ -76,6 +76,7 @@ function LandingPageController(
   var noStudyMessage = {
     guid: 0,
     message: 'no studies available',
+    name   : 'no studies available',
   };
 
   ////////////////////////////////////////////////////// Charts /////////////////////////////////
@@ -100,7 +101,7 @@ function LandingPageController(
 
   ////////////////////////////////////////////////////// Charts /////////////////////////////////
 
-    function dropDb(study){
+  function dropDb(study){
     return Api.dropDb({data: 'zippy'})
   }
 
@@ -186,12 +187,26 @@ function LandingPageController(
     .then(resp=> {
       if (resp.data.length > 0) {
         vm.studys = Api.sanitizeStudys(resp.data);
+
+        console.log('|++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++|');
+        console.log('newPageLoad: ');
+        console.log(newPageLoad);
+        console.log('|------------------------------------------------------------------------------------------------|')
+        
+      // If there are no studes and the user refreshed the page, create some studies for them.
       } else if (newPageLoad) {
         vm.studys = [];
         return addStudy(vm.studyTemplates[0])
         .then(()=>{
           return addStudy(vm.studyTemplates[1])
+          .then(()=> {
+            newPageLoad = false;
+          });
         });
+      } else {
+        // no studies were returned, 
+        vm.studys = [noStudyMessage];
+        vm.activeStudy = vm.studys[0];
       }
     })
     .then(()=> {
