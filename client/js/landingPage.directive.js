@@ -43,7 +43,7 @@ function LandingPageController(
   
   vm.dropDb               = dropDb;
   vm.refreshData          = refreshData;
-  vm.newStudy             = newStudy;
+  vm.addStudy             = addStudy;
   vm.deleteStudy          = deleteStudy;
   vm.updateStudy          = updateStudy;
   vm.editStudy            = editStudy;
@@ -72,7 +72,6 @@ function LandingPageController(
   vm.editingStudy  = false;
 
   getStudys();
-  // getScenarios();
 
   var noStudyMessage = {
     guid: 0,
@@ -142,23 +141,21 @@ function LandingPageController(
     }
   }
 
-  function newStudy(study, incrementName) {
-    return Api.newStudy(study.guid)
+  function addStudy(study, incrementName) {
+    return Api.addStudy(study.guid)
     .then(resp=> {
-      returnedStudy = resp.data;
-      var name = vm.activeStudy ? vm.activeStudy.name : study.name;
+      var returnedStudy = resp.data;
+      // var name = vm.activeStudy ? vm.activeStudy.name : study.name;
       
       if (incrementName) {
-        returnedStudy.name = name + '  [copy]';
+        returnedStudy.name = returnedStudy.name + '  [new]';
       }
       return Api.updateStudy(returnedStudy);
     })
     .then(refreshData)
     .then(resp=> {
-      vm.activeStudy        = Utilities.getLast(vm.studys);
+      vm.activeStudy = Utilities.getLast(vm.studys);
       rebind();
-      // Constants.activeStudy = vm.activeStudy;
-      // vm.scenarios          = vm.activeStudy.scenarios;
     });
   }
 
@@ -191,27 +188,19 @@ function LandingPageController(
         vm.studys = Api.sanitizeStudys(resp.data);
       } else {
         vm.studys = [];
-        return newStudy(vm.studyTemplates[0])
+        return addStudy(vm.studyTemplates[0])
         .then(()=>{
-          return newStudy(vm.studyTemplates[1])
+          return addStudy(vm.studyTemplates[1])
         });
       }
     })
     .then(()=> {
       return getScenarios();
     })
-    // .then(()=> {
-    //   var promises = Constants.allScenarios.map(scenario=> {
-    //     return Api.getBlocks(scenario.guid);
-    //   })
-    //   return $q.all(promises);
-    // })
     .then(()=> {
       formatStudies(vm.studys);
       vm.activeStudy = vm.studys[0];
       rebind();
-      // Constants.activeStudy = vm.activeStudy;
-      // vm.scenarios          = vm.activeStudy.scenarios;
 
       // Not yet implemented
       vm.studyDescription   = $filter('html')(vm.activeStudy.description);

@@ -16,15 +16,6 @@
 				<article>
 					<div class="study-container">
 						<div class="study-title-container">
-
-	<!--             <div
-								ng-if    ="!landingPage.editingStudy"
-								class    ="crayon-font study-title"
-								ng-click="landingPage.editStudy(landingPage.activeStudy)"
-	            	>
-	            	<span>{{landingPage.activeStudy.name}}</span>
-	            </div>
-	 -->					
 							<!-- non-editable version of field -->
 							<!-- study selector -->
 							<select
@@ -48,40 +39,31 @@
 									>
 							</div>
 
-							<!-- edit study icon -->
-							<div class="edit-study-icon grey tooltip" ng-click="landingPage.editStudy(landingPage.activeStudy)">
-								<i class="fa fa-pencil fa-fw"></i>
-								<span class="grey tooltiptext">edit study</span>
+							<div >
+								
+								<!-- edit study icon -->
+								<div ng-if="false" class="edit-study-icon grey tooltip" ng-click="landingPage.editStudy(landingPage.activeStudy)">
+									<i class="fa fa-pencil fa-fw"></i>
+									<span class="grey tooltiptext">edit study</span>
+								</div>
+
+								<!-- delete study icon -->
+	              <div class="edit-study-icon grey tooltip" ng-click ="landingPage.deleteStudy(landingPage.activeStudy)">
+	                <i class="fa fa-trash-o fa-fw"></i>
+	                <span class="grey tooltiptext">delete study</span>
+	              </div>
+
+								<!-- new study icon -->
+	              <div class="edit-study-icon grey tooltip" ng-click ="landingPage.addStudy(landingPage.studyToCreate, true)">
+	                <i class="fa fa-clone fa-fw"></i>
+	                <span class="grey tooltiptext">clone study</span>
+	              </div>              
 							</div>
-
-							<!-- delete study icon -->
-              <div class="edit-study-icon grey tooltip" ng-click ="landingPage.deleteStudy(landingPage.activeStudy)">
-                <i class="fa fa-trash-o fa-fw"></i>
-                <span class="grey tooltiptext">delete study</span>
-              </div>
-
-							<!-- new study icon -->
-              <div class="edit-study-icon grey tooltip" ng-click ="landingPage.newStudy(landingPage.studyToCreate, true)">
-                <i class="fa fa-clone fa-fw"></i>
-                <span class="grey tooltiptext">clone study</span>
-              </div>              
 
 						</div>
 
-					<!-- <label for="description"> description:</label> -->
-					<!-- <textarea id="description" rows="4" cols="50" name="comment" ng-model="landingPage.activeStudy.description"> </textarea> -->
-					<!-- 
-										<label for="description">description:</label>
-									    <div
-												id           ="description"
-												ng-click     ="landingPage.updateStudy(landingPage.activeStudy)"
-												class        ="study-description"
-												ng-bind-html ="landingPage.activeStudy.description | html"
-									    	>
-								    	</div>
-
-								    	 -->
-					<div class="new-study-picker">
+					<!-- selects which kind of study you want for your new study -->
+					<div ng-if="false" class="new-study-picker">
 						<select
 						  class      ="drop-down"    
 						  ng-options ="studyTemplate.name for studyTemplate in landingPage.studyTemplates track by studyTemplate.guid"
