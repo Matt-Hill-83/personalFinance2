@@ -37,69 +37,6 @@
 	text-align      : center;
 }
 
-/* month colors - start */
-.table-cashflow tr td.jan {
-	background-color: yellow;
-	text-align      : center;
-}
-
-.table-cashflow tr td.feb {
-	background-color: orange;
-	text-align      : center;
-}
-
-.table-cashflow tr td.mar {
-	background-color: yellow;
-	text-align      : center;
-}
-
-.table-cashflow tr td.apr {
-	background-color: orange;
-	text-align      : center;
-}
-
-.table-cashflow tr td.may {
-	background-color: yellow;
-	text-align      : center;
-}
-
-.table-cashflow tr td.jun {
-	background-color: orange;
-	text-align      : center;
-}
-
-.table-cashflow tr td.jul {
-	background-color: yellow;
-	text-align      : center;
-}
-
-.table-cashflow tr td.aug {
-	background-color: orange;
-	text-align      : center;
-}
-
-.table-cashflow tr td.sep {
-	background-color: yellow;
-	text-align      : center;
-}
-
-.table-cashflow tr td.oct {
-	background-color: orange;
-	text-align      : center;
-}
-
-.table-cashflow tr td.nov {
-	background-color: yellow;
-	text-align      : center;
-}
-
-.table-cashflow tr td.dec {
-	background-color: orange;
-	text-align      : center;
-}
-
-/* month colors - end */
-
 .table-cashflow tr td.right-border {
 	border-right: black solid 1px;
 }
@@ -272,15 +209,9 @@
 	align-items     : center;	
 	margin          : 4px;
 	padding         : 5px;
-
-	/*border          : 1px solid black;*/
-	/*background-color: #f2d3e1;*/
   border: 1px solid #909090;
   background-color: #e0e0e0;	
-
-
 	border-radius   : 0.7em;
-	/*box-shadow      :2px 2px 5px #800000;*/
 }
 
 .table-row {

@@ -9,12 +9,13 @@
 							<!-- non-editable version of field -->
 							<!-- study selector -->
 							<select
-							  ng-click="landingPage.updateStudy(landingPage.activeStudy)"
-								ng-if      ="!landingPage.editingStudy"
-								class      ="crayon-font study-title"
-								ng-change  ="landingPage.selectDifferentStudy(landingPage.activeStudy)"    
-								ng-options ="study.message for study in landingPage.studys track by study.guid"
-								ng-model   ="landingPage.activeStudy"
+								ng-disabled ="true"
+								ng-click    ="landingPage.updateStudy(landingPage.activeStudy)"
+								ng-if       ="!landingPage.editingStudy"
+								class       ="crayon-font study-title"
+								ng-change   ="landingPage.selectDifferentStudy(landingPage.activeStudy)"    
+								ng-options  ="study.message for study in landingPage.studys track by study.guid"
+								ng-model    ="landingPage.activeStudy"
 							></select>    
 
 							<!-- editable version of field -->
