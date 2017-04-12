@@ -6,12 +6,12 @@
   /*background-color: #e0e0e0;*/
 }
 
-.study-selector {
+/*.study-selector {
 	font-size: 1.2em;
 	position : relative;
 	left     : 50%;
 	transform: translateX(-50%);		
-}
+}*/
 
 .study-action-button {
 	text-align      : center;
@@ -84,4 +84,24 @@
 .new-study-drop-down {
 	font-size: 1.2em;
 }
+
+.study-selector option {
+	background-color: red;
+}
+
+.study-selector option[value="1"] {
+	background-color:yellow;
+} 
+
+
+
+
+
+
+
+
+
+
+
+
 

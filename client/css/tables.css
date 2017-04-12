@@ -9,7 +9,8 @@
 
 .table-cashflow tr td{
 	padding   :0.2em 0.3em;
-	border    :solid 1px #c3d0fe;
+	/*border    :solid 1px #9ba9ad;*/
+	border    :solid 1px #CAD2FF;
 	text-align:right;
 }
 
@@ -136,12 +137,13 @@
 }
 
 .table-cashflow tr.tally {
-	background-color: #dcf5f0;
+	/*background-color: #b2d3ff;*/
+	background-color: #DDF6F0;
 	border-bottom   : 1px solid black !important;	
 }
 
 .table-cashflow tr td.tally {
-	background-color: #dcf5f0;
+	/*background-color: #b2d3ff;*/
 	border-bottom   : 1px solid black !important;	
 }
 
@@ -227,11 +229,21 @@
 }
 
 .table-cashflow tr.highlightRow {
-	background-color: #91d2c6 !important;
+	background-color: #b2d3ff !important;
+	border          : 1 px solid red !important;
 }
 
-/*.table-cashflow tr td.highlightRow {
-	background-color: #91d2c6;
-}
-*/
 
+.total-of-tallies {
+	background-color: #9bd8cd !important;
+}
+
+
+
+
+
+
+
+
+
+	

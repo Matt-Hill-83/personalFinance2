@@ -354,6 +354,10 @@ function Main_(
       firstCell.expander = '';
     }
 
+    if (block.type === 'section' && block.subtype1 === 'total of tallies') {
+      Utilities.addClasses(block, ['total-of-tallies']);
+    }
+
     if (block.tally) {
       firstCell.valueToDisplay = block.name + ' BUCKET';
     }
