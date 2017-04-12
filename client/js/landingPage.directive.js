@@ -74,8 +74,8 @@ function LandingPageController(
 
   var noStudyMessage = {
     guid   : 0,
-    message: 'no studies available',
-    name   : 'no studies available',
+    message: 'no studies loaded - please clone one',
+    name   : 'no studies loaded - please clone one',
   };
 
   getStudys(newPageLoad=true);
