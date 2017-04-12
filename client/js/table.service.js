@@ -276,7 +276,7 @@ function Main_(
   }
 
   function _createSections(block, tableConfig) {
-    var table = [];
+    var table    = [];
     var children = DataBase.lineItems.getFirstChildrenOf(block);
 
     children.forEach((block) => {
@@ -296,7 +296,6 @@ function Main_(
       } else if (block.type === 'lineItem') {
         table.push(_createRowFromLineItem(tableConfig, block));
       }
-
     });
 
     return table;

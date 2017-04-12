@@ -7,7 +7,7 @@
         <span>name</span>
       </th>
       <th>
-        <span>source row</span>
+        <span>while this row has more than</span>
       </th>
 
       <th>
@@ -15,19 +15,19 @@
       </th>
 
       <th>
-        <span>destination row</span>
+        <span>and this row has less than</span>
       </th>
 
       <th>
-        <span>destination max value</span>
+        <span>this max amount</span>
       </th>
 
       <th>
-        <span>outflow row</span>
+        <span>move cash from this row</span>
       </th>
 
       <th>
-        <span>inflow row</span>
+        <span>to this row</span>
       </th>
 
       <th>
@@ -43,7 +43,6 @@
           type             ="text"
           name             ="input"
           ng-model         ="rule.name"
-          xxx-ng-pattern   ="example.word"
           required ng-trim ="false"
           ng-blur          = "ruleManager.updateRule(rule)"
           >
@@ -63,7 +62,6 @@
           type             ="number"
           name             ="input"
           ng-model         ="rule.sourceMinAmount"
-          xxx-ng-pattern   ="example.word"
           required ng-trim ="false"
           ng-blur          = "ruleManager.updateRule(rule)"
           >
@@ -82,7 +80,6 @@
           type             ="number"
           name             ="input"
           ng-model         ="rule.destinationMaxAmount"
-          xxx-ng-pattern   ="example.word"
           required ng-trim ="false"
           ng-blur          = "ruleManager.updateRule(rule)"
           >
