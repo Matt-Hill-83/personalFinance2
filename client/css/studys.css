@@ -2,9 +2,8 @@
 	display         : flex;
 	flex-direction  : column;		
 	border-radius   : 12px;	
-
-  border: 1px solid #909090;
-  background-color: #e0e0e0;
+  /*border: 1px solid #909090;*/
+  /*background-color: #e0e0e0;*/
 }
 
 .study-selector {
@@ -31,11 +30,12 @@
 
 .study-title {
 	display         : flex;
-	color           : #488ca9;
-  background-color: #e0e0e0;
-
-	font-size       : 4.2em;	
+	color           : #3e3ab3;
+	background-color: #ffffff;
+	font-size       : 2.8em;
 	align-self      : center;
+	border          : 1px black solid;  
+	height          : 1.6em;
 }
 
 .study-title-edit-mode {
