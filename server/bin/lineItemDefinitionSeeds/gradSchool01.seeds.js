@@ -160,7 +160,20 @@ function _getAdjustments(){
 function _getInflows(){
   var mattPaycheck = {
     type    : 'lineItem',
-    name    : 'paycheck',
+    name    : 'EvilCorp paycheck',
+    seedData: {
+      seedDataType: 'periodicDates',
+      initialPayment     : {
+        date        : '01/01/2017',
+        amount      : 1500,
+      },
+      numDaysInInterval: 15,
+    }
+  };
+
+  var funCoPaycheck = {
+    type    : 'lineItem',
+    name    : 'FunCo paycheck',
     seedData: {
       seedDataType: 'periodicDates',
       initialPayment     : {
@@ -180,6 +193,7 @@ function _getInflows(){
 
   return [
     mattPaycheck,
+    funCoPaycheck,
     // irregularInflows,
   ];
 }
