@@ -65,8 +65,6 @@ function getBuckets() {
     externalSeeds.getPettyCashSeeds(),
     externalSeeds.getemergencyFundSeeds(),
     externalSeeds.getHouseDownPaymentSeeds(),
-    // Four01kDb.blocks[0],
-    // StockDb.blocks[0],
   ];
 }
 

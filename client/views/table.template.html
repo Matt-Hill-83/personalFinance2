@@ -99,12 +99,11 @@
               ng-mouseover ="maintable.enteredHeader($event, rowIndex, cellIndex, row, cell)"
               ng-click     ="maintable.logRow()"
               >
-              {{cell.valueToDisplay === 0 ? '' : cell.valueToDisplay}}
 
-              </span>
               <span class="expander-chevron" ng-show="cellIndex === 0">
                 <span ng-click ="maintable.changeCollapseState(row, $index)"> {{cell.expander}}</span>
               </span>
+              {{cell.valueToDisplay === 0 ? '' : cell.valueToDisplay}}
               
               <span ng-show ="cellIndex === 1 && rowIndex === 1">
                 <span class="scenario-icons">

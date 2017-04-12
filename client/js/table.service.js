@@ -19,8 +19,8 @@ function Main_(
   var collapsed = {
     false: '▼',
     // false: '▲',
-    // true : '▶',
-    true : '◀',
+    true : '▶',
+    // true : '◀',
   };
 
   var service = {

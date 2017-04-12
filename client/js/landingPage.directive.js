@@ -198,12 +198,12 @@ function LandingPageController(
       } else if (newPageLoad) {
         vm.studys = [];
         return addStudy(vm.studyTemplates[0])
-        .then(()=>{
-          return addStudy(vm.studyTemplates[0])
+        // .then(()=>{
+        //   return addStudy(vm.studyTemplates[0])
           .then(()=> {
             newPageLoad = false;
           });
-        });
+        // });
       } else {
         // no studies were returned, 
         vm.studys = [noStudyMessage];

@@ -43,13 +43,14 @@ function getStudy() {
   };
 
   var scenario1 = {
-    name  : 'perpetuate meaningless existence at EvilCorp',
+    name  : 'continue at current job',
     block : householdBlocks(params={}),
   };
 
-  var params = {study: 'getMba'}
+  // var params = {study: 'getMba'}
+  var params = {study: ''}
   var scenario2 = {
-    name  : 'get a fancy degree in business administration like dad',
+    name  : 'get a Master\'s degree',
     block : householdBlocks(params),
   };
 
@@ -87,7 +88,7 @@ function getStudy() {
 
   var description = descriptionStrings.join();
   var study = {
-    name       : 'Dude! Is grad school even like worth it???', 
+    name       : 'What is the financial benefit of a Master\'s degree?', 
     description: description, 
     scenarios  : scenarios,
     charts     : charts,
