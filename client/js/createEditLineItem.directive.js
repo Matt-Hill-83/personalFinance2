@@ -34,6 +34,7 @@ function CreateEditCtrl($scope) {
 
     vm.newLineItem = {
 			name    : 'new row',
+      parentGuid: vm.data.row.guid,
 			scenario: vm.data.row.scenario,
 			type    : 'lineItem',
 			seedData: {
@@ -46,6 +47,23 @@ function CreateEditCtrl($scope) {
         numPayments      : null,
       }
     };   	
+
+    var parentGuid;
+    var indexWithinParent;
+    var lineItem = vm.data.row;
+
+    if (lineItem.type === 'lineItem') {
+      parentGuid        = lineItem.parentGuid;
+      indexWithinParent = lineItem.indexWithinParent + 1;
+    } else if (lineItem.type === 'section'){
+      parentGuid        = lineItem.guid;
+      indexWithinParent = 0;
+    }
+    
+    vm.newLineItem.indexWithinParent = indexWithinParent;
+    vm.newLineItem.parentGuid        = parentGuid;
+
+
 	}
 
   //////////////////////

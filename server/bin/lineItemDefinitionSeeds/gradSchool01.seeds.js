@@ -178,7 +178,7 @@ function _getInflows(){
 
   var irregularInflows = {
     collapsed: true,
-    name     : 'irregular outflows',
+    name     : 'irregular inflows',
     type     : 'section',
     children : _getIrregularInflows(),
   };

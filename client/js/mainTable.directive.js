@@ -52,10 +52,10 @@ function Ctrl(
   ///////////////////////////////////////////// Get Data /////////////////////////////////////
 
   function init() {
-    vm.initRuleManager = false;
+    vm.initRuleManager     = false;
     vm.rulePickerIsVisible = false;
-    vm.rulesAreVisible = false;
-    vm.fixTheTable     = false;
+    vm.rulesAreVisible     = false;
+    vm.fixTheTable         = false;
 
     vm.chartData = Constants.chartData; // grab the container, so immutable objects can be bound.
 
@@ -101,7 +101,6 @@ function Ctrl(
     vm.showPicker          = showPicker;
     vm.pickThisRow         = pickThisRow;
 
-    // vm.rowTypesWithModals  = ['lineItem'];
     vm.rowTypesToHighLight = ['lineItem', 'section', 'tally'];
 
     vm.$activeHeaderCell;
@@ -225,26 +224,9 @@ function Ctrl(
   ///////////////////////////////////////////// Modify Data /////////////////////////////////
 
   function addRow(lineItem) {
-    var parentGuid;
-    var indexWithinParent;
-
-    // TODO: make this not depend on vm.row, but instead pass a reference.
-    if (vm.row.type === 'lineItem') {
-      parentGuid        = vm.row.parentGuid;
-      indexWithinParent = vm.row.indexWithinParent + 1;
-    } else if (vm.row.type === 'section'){
-      parentGuid        = vm.row.guid;
-      indexWithinParent = 0;
-    }
-    
-    lineItem.indexWithinParent = indexWithinParent;
-    lineItem.parentGuid        = parentGuid;
-
     return incrementSiblings(lineItem)
     .then(resp=>Api.createRow(lineItem))
-    .then(resp=>fetchData())
-    .then(resp=>{
-    });
+    .then(resp=>fetchData());
   }
 
   function updateRows(lineItems) {
@@ -260,11 +242,11 @@ function Ctrl(
       .then(rebuildDataBaseAndRedraw);
     });
 
-    return $q.all(promises).then(resp=> {
-      // fetchData();
-    })
-    .then(()=>{
-    });
+    return $q.all(promises);
+    // .then(resp=> {
+    // })
+    // .then(()=>{
+    // });
   }    
 
   function addSection(lineItem) {
@@ -395,6 +377,13 @@ function Ctrl(
   }
 
   function createOrUpdateModalCallback(data) {
+
+    console.log('|++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++|');
+    console.log('data: ');
+    console.log(data);
+    console.log('|------------------------------------------------------------------------------------------------|')
+    
+    
     var promise;
     if (data.update) {
 
@@ -427,28 +416,8 @@ function Ctrl(
 
     // Apply hightlight class
     if (vm.rowTypesToHighLight.indexOf(row.type) !== -1) {
-      console.log('activating');
-      
       vm.rowClasses.activate();
     }
-    
-    // Show modal.
-    // if (row.type &&
-    //     vm.rowTypesWithModals.indexOf(row.type) !== -1) {
-    //   vm.showModal = true;
-
-    //   var bodyRect = document.body.getBoundingClientRect();
-    //   var elemRect = cellElement.getBoundingClientRect();
-    //   var offset   = elemRect.top - bodyRect.top;
-
-    //   // vm.headerModal.newX = 0;        
-    //   // vm.headerModal.newY = offset + 6;
-
-    //   // rowHeaderModal.style.left = vm.headerModal.newX + "px";
-    //   // rowHeaderModal.style.top  = vm.headerModal.newY + "px";
-    // } else {
-    //   vm.showModal = false;
-    // }
   }
 
   ///////////////////////////////////////////// Old Stuff /////////////////////////////////

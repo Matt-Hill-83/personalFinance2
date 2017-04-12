@@ -17,9 +17,10 @@ function Main_(
   var baseNestLevel = 2;
   var nestOffsetEm  = 2;
   var collapsed = {
-    false: '▼',
+    false        : '▼',
+    reversedFalse: '▲', // for upward folding rows
+    true         : '▶',
     // false: '▲',
-    true : '▶',
     // true : '◀',
   };
 
@@ -72,7 +73,7 @@ function Main_(
         classes: [],
       };
       blankCell.classes.push(...row.cells[0].classes); 
-      blankCell.classes.push(...['xxx-header', 'header-buttons']); 
+      blankCell.classes.push(...['header-buttons']); 
       row.cells.splice(1, 0, blankCell);
     });
 
@@ -147,7 +148,7 @@ function Main_(
         
     });
 
-    section.collapsed  = true;
+    section.collapsed = true;
   }
 
   function expandSection(section) {

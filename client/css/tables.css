@@ -227,11 +227,11 @@
 }
 
 .table-cashflow tr.highlightRow {
-	background-color: #91d2c6;
+	background-color: #91d2c6 !important;
 }
 
-.table-cashflow tr td.highlightRow {
+/*.table-cashflow tr td.highlightRow {
 	background-color: #91d2c6;
 }
-
+*/
 
