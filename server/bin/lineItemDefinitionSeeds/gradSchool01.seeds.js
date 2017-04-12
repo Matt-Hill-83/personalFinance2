@@ -178,7 +178,7 @@ function _getInflows(){
 
   var irregularInflows = {
     collapsed: true,
-    name     : 'irregular payments',
+    name     : 'irregular outflows',
     type     : 'section',
     children : _getIrregularInflows(),
   };

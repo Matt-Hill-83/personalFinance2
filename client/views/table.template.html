@@ -28,11 +28,6 @@
                  ng-model ="maintable.tableConfig.numColInTable">
           </p> -->
 
-    <!-- Main row for each table -->
-    <div
-      class   ="row-holder"
-      ng-init ="shower = true"
-      >
       <div class="scenario-title-holder">
         <span class="scenario-title-box">
           
@@ -42,6 +37,11 @@
         </span>
       </div>
 
+    <!-- Main row for each table -->
+    <div
+      class   ="row-holder"
+      ng-init ="shower = true"
+      >
       <table 
         class         ="table-cashflow"
         ng-mouseleave ="maintable.exitedTable($event, rowIndex, cellIndex, row, cell)"
