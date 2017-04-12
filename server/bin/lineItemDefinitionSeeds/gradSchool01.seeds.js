@@ -165,7 +165,7 @@ function _getInflows(){
   
   var mattPaycheck = {
     type    : 'lineItem',
-    name    : 'elliot paycheck',
+    name    : 'Mr. Smart paycheck',
     seedData: {
       seedDataType: 'periodicDates',
       initialPayment     : {

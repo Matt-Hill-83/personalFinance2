@@ -431,22 +431,22 @@ function Ctrl(
     }
     
     // Show modal.
-    if (row.type &&
-        vm.rowTypesWithModals.indexOf(row.type) !== -1) {
-      vm.showModal = true;
+    // if (row.type &&
+    //     vm.rowTypesWithModals.indexOf(row.type) !== -1) {
+    //   vm.showModal = true;
 
-      var bodyRect = document.body.getBoundingClientRect();
-      var elemRect = cellElement.getBoundingClientRect();
-      var offset   = elemRect.top - bodyRect.top;
+    //   var bodyRect = document.body.getBoundingClientRect();
+    //   var elemRect = cellElement.getBoundingClientRect();
+    //   var offset   = elemRect.top - bodyRect.top;
 
-      // vm.headerModal.newX = 0;        
-      // vm.headerModal.newY = offset + 6;
+    //   // vm.headerModal.newX = 0;        
+    //   // vm.headerModal.newY = offset + 6;
 
-      // rowHeaderModal.style.left = vm.headerModal.newX + "px";
-      // rowHeaderModal.style.top  = vm.headerModal.newY + "px";
-    } else {
-      vm.showModal = false;
-    }
+    //   // rowHeaderModal.style.left = vm.headerModal.newX + "px";
+    //   // rowHeaderModal.style.top  = vm.headerModal.newY + "px";
+    // } else {
+    //   vm.showModal = false;
+    // }
   }
 
   ///////////////////////////////////////////// Old Stuff /////////////////////////////////

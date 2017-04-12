@@ -56,6 +56,20 @@
 	border-bottom: 1px solid black !important;
 }
 
+.table-cashflow tr:nth-child(1) td {	
+	padding         : 0;
+	font-size       : 0px;
+	line-height     : 0px;
+	border-top-width: 0px;
+}
+
+.table-cashflow tr:nth-child(1) {	
+	padding         : 0;
+	font-size       : 0px;
+	line-height     : 0px;
+	border-top-width: 0px;
+}
+
 /*do this in JS, not in css*/
 .table-cashflow tr td.rowHeader0 {
 	padding-left: 1em;
@@ -170,14 +184,6 @@
 	cursor          : default;
 }
 
-.table-cashflow tr.highlightRow {
-	background-color: #91d2c6;
-}
-
-.table-cashflow tr td.highlightRow {
-	background-color: #91d2c6;
-}
-
 .table-cashflow tr.title-row {
 	background-color: rgba(0, 0, 0, 0);
 	border-top      : 1px solid rgba(0, 0, 0, 0);
@@ -207,17 +213,25 @@
 	display         : flex;
 	flex-direction  : column;
 	align-items     : center;	
-	margin          : 4px;
-	padding         : 5px;
-  border: 1px solid #909090;
-  background-color: #e0e0e0;	
-	border-radius   : 0.7em;
+	margin          : 0px;
+	padding         : 0px;
+  /*border: 0px solid black;*/
+  /*background-color: #e0e0e0;	*/
+	border-radius   : 0.5em;
 }
 
 .table-row {
-	display               : flex;
-	flex-direction        : row;
-	align-items           : flex-start;	
+	display       : flex;
+	flex-direction: row;
+	align-items   : flex-start;	
+}
+
+.table-cashflow tr.highlightRow {
+	background-color: #91d2c6;
+}
+
+.table-cashflow tr td.highlightRow {
+	background-color: #91d2c6;
 }
 
 
