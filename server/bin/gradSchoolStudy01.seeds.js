@@ -75,8 +75,8 @@ function getStudy() {
     //   lineItemGuids: '[-2]',
     // },
     {
-      name         : 'house downpayment growth',
-      subTitle     : 'base case vs. frugal living',
+      name         : 'net worth',
+      subTitle     : 'base case vs. grad school',
       lineItemGuids: '[-1]',
     },
   ];

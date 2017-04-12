@@ -150,7 +150,7 @@ function Main_(
   function drawChart(chart) {
     console.log('chart refresh - attempt');
     
-    // _setTheme();
+    _setTheme();
     var series   = formatRowData(chart);
     var title    = chart.name;
     var subTitle = chart.subTitle;
@@ -221,7 +221,7 @@ function Main_(
     // Add the background image to the container
     Highcharts.wrap(Highcharts.Chart.prototype, 'getContainer', function (proceed) {
        proceed.call(this);
-       this.container.style.background = 'url(http://www.highcharts.com/samples/graphics/sand.png)';
+       // this.container.style.background = 'url(http://www.highcharts.com/samples/graphics/sand.png)';
     });
 
     Highcharts.theme = {
@@ -236,8 +236,10 @@ function Main_(
        title: {
           style: {
              color: 'black',
-             fontSize: '16px',
-             fontWeight: 'bold'
+             color: 'red',
+             fontSize: '3em',
+             fontWeight: 'bold',
+             fontFamily: 'sandboxMelodrama'
           }
        },
        subtitle: {
