@@ -31,7 +31,7 @@
 .study-title {
 	display         : flex;
 	color           : #3e3ab3;
-	background-color: #ffffff;
+  background-color: #e8edff;	
 	font-size       : 2.8em;
 	align-self      : center;
 	border          : 1px black solid;  
