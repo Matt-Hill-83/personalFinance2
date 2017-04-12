@@ -37,25 +37,23 @@
 
 
             <div class="scenario-button-holder">
-              <!-- <span ng-show ="cellIndex === 1 && rowIndex === 1"> -->
-                <span class="scenario-icons">
-                  <div class="grey tooltip" ng-click ="maintable.cloneScenario()">
-                    <i class="fa fa-clone fa-fw"></i>
-                    <span class="grey tooltiptext">clone scenario</span>
-                  </div>
+              <span class="scenario-icons">
+                <div class="grey tooltip" ng-click ="maintable.cloneScenario()">
+                  <i class="fa fa-clone fa-fw"></i>
+                  <span class="grey tooltiptext">clone scenario</span>
+                </div>
 
-                  <div class="grey tooltip" ng-click ="maintable.showUpdateRowModal('update')">
-                    <i class="fa fa-pencil fa-fw"></i>
-                    <span class="grey tooltiptext">edit scenario</span>
-                  </div>
+                <div class="grey tooltip" ng-click ="maintable.showUpdateRowModal('update')">
+                  <i class="fa fa-pencil fa-fw"></i>
+                  <span ng-disabled="true" class="grey tooltiptext">edit scenario</span>
+                </div>
 
-                  <div class="grey tooltip" ng-click ="maintable.deleteScenario()">
-                    <i class="fa fa-trash-o fa-fw"></i>
-                    <span class="grey tooltiptext">delete scenario</span>
-                  </div>
-                </span>             
-              <!-- </span> -->
-            
+                <div class="grey tooltip" ng-click ="maintable.deleteScenario()">
+                  <i class="fa fa-trash-o fa-fw"></i>
+                  <span class="grey tooltiptext">delete scenario</span>
+                </div>
+              </span>             
+
               <button
                 ng-click ="maintable.showRules()"
                 class    ="scenario-action-button"

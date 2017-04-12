@@ -32,34 +32,19 @@ body{
 }
 
 section {
-	display          : flex;
-	flex-flow        : column;
-	background       : rgba(100, 149, 237, 0);
-	margin: 0px auto;	
-	padding          : 5px;
+	display   : flex;
+	flex-flow : column;
+	background: rgba(100, 149, 237, 0);
+	margin    : 0px auto;	
+	padding   : 5px;
 }
 
 article {
-	flex-flow        : row;
-	border-radius    : 3px;
-	margin           : 4px;
-	padding          : 5px;
-}
-
-.ngdialog,
-.ngdialog-theme-default,
-.ngdialog-content {
-	padding   : 0px !important;
-	width     : auto !important;
-	background: rgba(240, 240, 240, 0) !important;
-}
-
-.ngdialog {
-	position : absolute;
-	top      : 50%;
-	left     : 50%;
-	transform: translate(-50%, -50%);
-	padding  : 0px;
+	flex-flow    : row;
+	border-radius: 3px;
+	margin       : 4px;
+	padding      : 5px;
+	margin-bottom: 2em;
 }
 
 .hyperlink {
