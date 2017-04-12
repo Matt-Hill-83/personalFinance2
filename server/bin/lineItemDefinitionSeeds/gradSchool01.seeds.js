@@ -83,14 +83,14 @@ function getHouseholdNetBucket() {
 
 function getHouseholdNet() {
   var adjustments = {
-    // collapsed: true,
+    collapsed: true,
     name     : 'adjustments',
     type     : 'section',
     children : _getAdjustments(),
   };
 
   var cash = {
-    // collapsed: true,
+    collapsed: true,
     name     : 'household gross',
     type     : 'section',
     children : getHouseholdGross(),
