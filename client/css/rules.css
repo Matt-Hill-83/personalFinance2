@@ -32,3 +32,51 @@
 	border        : 1px solid black;
 }
 
+/*/////////////////////////////////// Rules table ////////////////////////////////////////////*/
+
+.rules-table {
+  border-collapse:collapse;
+  border-spacing :0;
+  border-color   :#aabcfe;
+}
+
+.rules-table td {
+  /*font-family     :Arial,sans-serif;*/
+  font-size       :14px;
+  padding         :10px 5px;
+  border-style    :solid;
+  border-width    :1px;
+  overflow        :hidden;
+  word-break      :normal;
+  border-color    :#aabcfe;
+  color           :#669;
+  background-color:#e8edff;
+}
+
+.rules-table th {
+  /*font-family     :Arial,sans-serif;*/
+  font-size       :14px;
+  font-weight     :normal;
+  padding         :10px 5px;
+  border-style    :solid;
+  border-width    :1px;
+  overflow        :hidden;
+  word-break      :normal;
+  border-color    :#aabcfe;
+  color           :#039;
+  background-color:#b9c9fe;
+}
+
+.rules-table .rules-table-header-col-1 {
+  text-align    :center;
+  vertical-align:top
+}
+
+.rules-table .rules-table-header {
+  vertical-align:top
+}
+
+.rules-table .rules-table-6k2t {
+  background-color:#D2E4FC;
+  vertical-align  :top
+}

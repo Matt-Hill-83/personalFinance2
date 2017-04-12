@@ -1,40 +1,42 @@
 <div class="rules-flex-container row-holder">
 
-  <span> Rules</span>      
-  <table class ="table-cashflow">
+  <span>Rules - move until full</span>      
+  <table class="rules-table">
     <tr>
-      <th>
-        <span>name</span>
-      </th>
-      <th>
-        <span>while this row has more than</span>
+      <th class="rules-table-header-col-1">
+        <span>rule name</span>
       </th>
 
-      <th>
-        <span>source min value</span>
-      </th>
-
-      <th>
-        <span>and this row has less than</span>
-      </th>
-
-      <th>
-        <span>this max amount</span>
-      </th>
-
-      <th>
+      <th class="rules-table-header">
         <span>move cash from this row</span>
       </th>
 
-      <th>
+      <th class="rules-table-header">
         <span>to this row</span>
       </th>
 
-      <th>
+      <th class="rules-table-header">
+        <span>while this row has more than</span>
+      </th>
+
+      <th class="rules-table-header">
+        <span>source min value</span>
+      </th>
+
+      <th class="rules-table-header">
+        <span>and this row has less than</span>
+      </th>
+
+      <th class="rules-table-header">
+        <span>this max amount</span>
+      </th>
+
+      <th class="rules-table-header">
         <span>options</span>
       </th>
     </tr>
 
+    <!-- //////////////////////////////////////////////////////// -->
     <tr ng-repeat="rule in ruleManager.rules">
       <td>
         <span>
@@ -51,11 +53,30 @@
       <td>
         <span
           class    ="hyperlink"
+          ng-click ="ruleManager.showPicker(rule, rule.outflowLineItemGuidCallBack)"
+          >
+          {{rule.outflowLineItemGuidName}}
+        </span>
+      </td>
+
+      <td>
+        <span
+          class    ="hyperlink"
+          ng-click ="ruleManager.showPicker(rule, rule.inflowLineItemGuidCallBack)"
+          >
+          {{rule.inflowLineItemGuidName}}
+        </span>
+      </td>
+
+      <td>
+        <span
+          class    ="hyperlink"
           ng-click ="ruleManager.showPicker(rule, rule.sourceGuidCallBack)"
           >
           {{rule.sourceGuidName}}
         </span>
       </td>
+      
       <td>
         <input
           ng-if            ="!rule.fakeRule" 
@@ -63,9 +84,10 @@
           name             ="input"
           ng-model         ="rule.sourceMinAmount"
           required ng-trim ="false"
-          ng-blur          = "ruleManager.updateRule(rule)"
+          ng-blur          ="ruleManager.updateRule(rule)"
           >
       </td>
+
       <td>
         <span
           class    ="hyperlink"
@@ -74,6 +96,7 @@
           {{rule.destinationGuidName}}
         </span>
       </td>
+      
       <td>
         <input
           ng-if            ="!rule.fakeRule" 
@@ -83,22 +106,6 @@
           required ng-trim ="false"
           ng-blur          = "ruleManager.updateRule(rule)"
           >
-      </td>
-      <td>
-        <span
-          class    ="hyperlink"
-          ng-click ="ruleManager.showPicker(rule, rule.outflowLineItemGuidCallBack)"
-          >
-          {{rule.outflowLineItemGuidName}}
-        </span>
-      </td>
-      <td>
-        <span
-          class    ="hyperlink"
-          ng-click ="ruleManager.showPicker(rule, rule.inflowLineItemGuidCallBack)"
-          >
-          {{rule.inflowLineItemGuidName}}
-        </span>
       </td>
 
       <td>
