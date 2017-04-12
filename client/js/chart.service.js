@@ -148,7 +148,7 @@ function Main_(
   }
 
   function drawChart(chart) {
-    console.log('refreshing chart');
+    console.log('chart refresh - attempt');
     
     // _setTheme();
     var series   = formatRowData(chart);
@@ -179,6 +179,7 @@ function Main_(
       console.log('|------------------------------------------------------------------------------------------------|')
       return;
     }
+    console.log('chart refresh - success');
 
     Highcharts.chart(chart.chartDivId, {
         chart: {

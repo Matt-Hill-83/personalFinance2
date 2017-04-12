@@ -1,10 +1,14 @@
 .study-container {
 	display         : flex;
 	flex-direction  : column;		
-	border          : 1px solid black;
 	border-radius   : 12px;	
-	background-color: #c9c9ec;
-	/*box-shadow      :2px 2px 5px #800000;*/
+
+  border: 1px solid #909090;
+  background-color: #e0e0e0;
+
+	/*background-color: #c9c9ec;*/
+	/*border          : 1px solid black;*/
+	box-shadow      :2px 2px 5px #909090;
 }
 
 .study-selector {
@@ -32,7 +36,9 @@
 .study-title {
 	display         : flex;
 	color           : #4b4b86;
-	background-color: #c9c9ec;	
+	/*background-color: #c9c9ec;	*/
+  background-color: #e0e0e0;
+	
 	font-size       : 4.2em;	
 	align-self      : center;
 }
