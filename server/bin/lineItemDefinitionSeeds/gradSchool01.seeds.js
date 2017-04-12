@@ -160,7 +160,7 @@ function _getAdjustments(){
 function _getInflows(){
   var mattPaycheck = {
     type    : 'lineItem',
-    name    : 'EvilCorp paycheck',
+    name    : 'MeanCorp paycheck',
     seedData: {
       seedDataType: 'periodicDates',
       initialPayment     : {
