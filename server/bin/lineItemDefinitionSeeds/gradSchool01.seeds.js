@@ -39,7 +39,7 @@ function getBuckets() {
     annualEscalationPct: 3,
     type               : 'tally',
     tallyPayment       : {
-      amount: 0,
+      amount: 20000,
       date  : new Date('01/01/2017'),
     },
   };
@@ -90,7 +90,7 @@ function getHouseholdNet() {
   };
 
   var cash = {
-    collapsed: true,
+    // collapsed: true,
     name     : 'household gross',
     type     : 'section',
     children : getHouseholdGross(),
@@ -158,19 +158,14 @@ function _getAdjustments(){
 }
 
 function _getInflows(){
-  var paycheck = 3000;
-  if (globalParams.study === 'getMba'){
-    paycheck = 1000;
-  }
-  
   var mattPaycheck = {
     type    : 'lineItem',
-    name    : 'Mr. Smart paycheck',
+    name    : 'paycheck',
     seedData: {
       seedDataType: 'periodicDates',
       initialPayment     : {
         date        : '01/01/2017',
-        amount      : paycheck,
+        amount      : 1500,
       },
       numDaysInInterval: 15,
     }
@@ -191,13 +186,13 @@ function _getInflows(){
 
 function _getIrregularInflows() {
   var taxRefund = {
-    name    : 'aunt nanna stamp collection',
+    name    : 'tax refund',
     type    : 'lineItem',
     seedData: {
       seedDataType: 'periodicDates',
       initialPayment     : {
         date        : '03/05/2017',
-        amount      : 5000,
+        amount      : 1000,
       },
       numDaysInInterval: 365,
     }
