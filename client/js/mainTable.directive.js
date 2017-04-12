@@ -101,7 +101,7 @@ function Ctrl(
     vm.showPicker          = showPicker;
     vm.pickThisRow         = pickThisRow;
 
-    vm.rowTypesWithModals  = ['lineItem'];
+    // vm.rowTypesWithModals  = ['lineItem'];
     vm.rowTypesToHighLight = ['lineItem', 'section', 'tally'];
 
     vm.$activeHeaderCell;
@@ -427,6 +427,8 @@ function Ctrl(
 
     // Apply hightlight class
     if (vm.rowTypesToHighLight.indexOf(row.type) !== -1) {
+      console.log('activating');
+      
       vm.rowClasses.activate();
     }
     

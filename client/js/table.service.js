@@ -72,7 +72,7 @@ function Main_(
         classes: [],
       };
       blankCell.classes.push(...row.cells[0].classes); 
-      blankCell.classes.push(['xxx-header', 'header-buttons']); 
+      blankCell.classes.push(...['xxx-header', 'header-buttons']); 
       row.cells.splice(1, 0, blankCell);
     });
 
