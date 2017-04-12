@@ -1,45 +1,34 @@
 .rules-flex-container {
-	background-color: rgba(100, 149, 237, 0);
+	display          : flex;
 	padding          : 0;
 	margin           : 0;
+	background-color: rgba(100, 149, 237, 0);
 	list-style       : none;
-	display          : -webkit-box;
-	display          : -moz-box;
-	display          : -ms-flexbox;
-	display          : -webkit-flex;
-	display          : flex;
-	-webkit-flex-flow: row wrap;
 	justify-content  : space-around;
 }
 
 .rules-flex-container section {
-	background   : tomato;
-	padding      : 5px;
-	width        : 200px;
-	height       : 150px;
-	margin-top   : 10px;
-	font-weight  : bold;
-	text-align   : center;
+	background : tomato;
+	padding    : 5px;
+	width      : 200px;
+	height     : 150px;
+	margin-top : 10px;
+	font-weight: bold;
+	text-align : center;
 }
 
 .rules-flex-container .my-list {
-	display               : -webkit-flex;
-	display               : flex;
-	-webkit-flex-direction: column; 
-	flex-direction        : column;
-	-webkit-align-items   : flex-start;
-	align-items           : flex-start;	
-	justify-content       : space-around;
-	border                : 1px solid black;
+	display        : flex;
+	flex-direction : column;
+	align-items    : flex-start;	
+	justify-content: space-around;
+	border         : 1px solid black;
 }
 
 .rules-flex-container .inner-group {
-	display               : -webkit-flex;
-	display               : flex;
-	-webkit-flex-direction: column; 
-	flex-direction        : column;
-	-webkit-align-items   : flex-start;
-	align-items           : flex-start;	
-	border                : 1px solid black;
+	display       : flex;
+	flex-direction: column;
+	align-items   : flex-start;	
+	border        : 1px solid black;
 }
 
