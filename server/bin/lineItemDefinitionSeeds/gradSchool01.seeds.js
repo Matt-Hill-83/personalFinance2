@@ -84,7 +84,7 @@ function getHouseholdNetBucket() {
 function getHouseholdNet() {
   var adjustments = {
     collapsed: true,
-    name     : 'adjustments',
+    name     : 'move cash between BUCKETS',
     type     : 'section',
     children : _getAdjustments(),
   };
@@ -180,7 +180,7 @@ function _getInflows(){
 
   return [
     mattPaycheck,
-    irregularInflows,
+    // irregularInflows,
   ];
 }
 
@@ -210,7 +210,7 @@ function _getIrregularOutflows() {
     seedData: {
       seedDataType: 'periodicDates',
       initialPayment     : {
-        date        : null,
+        date        : '02-01-2017',
         amount      : -15000,
       },
       numDaysInInterval: 180,

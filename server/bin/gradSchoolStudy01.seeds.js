@@ -88,7 +88,7 @@ function getStudy() {
 
   var description = descriptionStrings.join();
   var study = {
-    name       : 'What is the financial benefit of earning a Master\'s degree?', 
+    name       : 'Should I go to grad school?', 
     description: description, 
     scenarios  : scenarios,
     charts     : charts,
