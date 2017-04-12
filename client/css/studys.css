@@ -76,10 +76,11 @@
   font-family: Trebuchet MS, sans-serif;
 }
 
-/*  align-items: center;
-  justify-content: center;*/
-
 .study-icon-container {
 	display: flex;
-
 }  
+
+.new-study-drop-down {
+	font-size: 1.2em;
+}
+

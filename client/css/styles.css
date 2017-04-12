@@ -1,5 +1,3 @@
-/*//////////// Table 1 //////////////////////////*/
-
 html{
 	background-color: white;
 	height          :100%;
@@ -9,18 +7,6 @@ html{
 body{
 	height:100%;
 	width :100%;
-}
-
-/*//////////////////////////////////////*/
-
-/*landing page*/
-.new-study-drop-down {
-	font-size: 1.2em;
-}
-
-/*///////////////////////////////////////////////////////////*/
-
-body {
 	font-size: 0.95em;
 	font-family: Trebuchet MS, sans-serif;
 }
@@ -39,7 +25,6 @@ body {
 
 .flex-area {
 	flex            : 3 1 auto;
-	display         : -webkit-flex;
 	display         : flex;
 	background-color: rgba(100, 149, 237, 0);
 	border-radius   : 3px;
@@ -47,7 +32,6 @@ body {
 }
 
 section {
-	display          : -webkit-flex;
 	display          : flex;
 	flex-flow        : column;
 	background       : rgba(100, 149, 237, 0);
@@ -56,7 +40,6 @@ section {
 }
 
 article {
-	-webkit-flex-flow: row;
 	flex-flow        : row;
 	border-radius    : 3px;
 	margin           : 4px;
@@ -79,8 +62,6 @@ article {
 	padding  : 0px;
 }
 
-/*////////////////////////////*/
-
 .hyperlink {
 	color          : blue;
 	text-decoration: underline;
@@ -90,24 +71,3 @@ article {
 .red {
 	color: red;
 }
-
-.row-holder {
-	display         : flex;
-	flex-direction  : column;
-	align-items     : flex-start;	
-	margin          : 4px;
-	padding         : 5px;
-	border          : 1px solid black;
-	background-color: #f2d3e1;
-	border-radius   : 0.7em;
-	box-shadow      :2px 2px 5px #800000;
-}
-
-.table-row {
-	display               : -webkit-flex;
-	display               : flex;
-	-webkit-flex-direction: row; 
-	flex-direction        : row;
-	align-items           : flex-start;	
-}
-
