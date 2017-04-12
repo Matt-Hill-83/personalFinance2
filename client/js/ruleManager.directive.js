@@ -4,7 +4,7 @@ angular.module('app')
 function ruleManagerController() {
   return {
     scoperestrict    : 'E',
-    templateUrl : 'views/ruleManager.template.html',
+    templateUrl : 'views/rules.template.html',
     controller  : [
     	'Api',
     	'Constants',

@@ -276,7 +276,7 @@
 	border          : 1px solid black;
 	background-color: #f2d3e1;
 	border-radius   : 0.7em;
-	box-shadow      :2px 2px 5px #800000;
+	/*box-shadow      :2px 2px 5px #800000;*/
 }
 
 .table-row {
