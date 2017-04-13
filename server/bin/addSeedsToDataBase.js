@@ -181,8 +181,7 @@ function createBlock(db, block){
       return db.sequelize.Promise.resolve(newBlock);
   	}
 
-  })
-  // .then(()=> newBlock)
+  });
 }
 
 // Create a lineItem
@@ -208,16 +207,13 @@ function createLineItemDefinition(db, block) {
 	    
 	    var date;
 	    if (block.seedData.initialPayment.date) {
-	      // date = new Date(block.seedData.initialPayment.date);
 	    }
 
 	    return db.seedPayments.create({
 	      id    : null,
 	      amount: block.seedData.initialPayment.amount,
-	      // date  : date,
 	      date  : block.seedData.initialPayment.date,
-	    })
-
+	    });
 	    // create seedDataJoinPayment
 	    .then(function(newPayment) {
 	      seedPaymentId = newPayment.id;
@@ -242,7 +238,6 @@ function addStudyJoinScenariosToDb(db, studyId, scenarioId) {
 			scenarioId,
     }
   );
-
   return resp;
 }
 

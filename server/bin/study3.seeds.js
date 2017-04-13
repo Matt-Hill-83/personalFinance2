@@ -39,7 +39,6 @@ function getNetTally() {
     tallyPayment     : {
       amount: 888,
       date  : '01/01/2017',
-      // date  : new Date('01/01/2017'),
     },
   };
 
