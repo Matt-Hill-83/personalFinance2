@@ -159,8 +159,8 @@ function _getAdjustments(){
 }
 
 function _getInflows(){
-  var paycheckAmount1 = 1500;
-  var paycheckAmount2 = paycheckAmount1 * 0.6;
+  var paycheckAmount1 = 2400;
+  var paycheckAmount2 = paycheckAmount1 * 0.7;
 
   var mattPaycheck1 = {
     type    : 'lineItem',

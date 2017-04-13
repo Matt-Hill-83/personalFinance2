@@ -150,10 +150,12 @@
             ng-click     ="maintable.logRow()"
             >
 
-            <span class="expander-chevron" ng-show="cellIndex === 0">
-              <span ng-click ="maintable.changeCollapseState(row, $index)"> {{cell.expander}}</span>
+            <span class="no-wrap"> 
+              <span class="expander-chevron" ng-show="cellIndex === 0">
+                <span ng-click ="maintable.changeCollapseState(row, $index)"> {{cell.expander}}</span>
+              </span>
+              {{cell.valueToDisplay === 0 ? '' : cell.valueToDisplay}}
             </span>
-            {{cell.valueToDisplay === 0 ? '' : cell.valueToDisplay}}
             
 <!--             <span ng-show ="cellIndex === 1 && rowIndex === 1">
               <span class="scenario-icons">
@@ -178,7 +180,7 @@
             <span ng-show ="cellIndex === 1 && cell.type !== 'blank'">
 
               <!-- show line item icons -->
-              <span ng-if="!maintable.rulePickerIsVisible && !maintable.chartData.activeChart">           
+              <span class="no-wrap" ng-if="!maintable.rulePickerIsVisible && !maintable.chartData.activeChart">           
                 
                 <div class="grey tooltip" ng-click ="maintable.showUpdateRowModal('create')">
                   <i class="fa fa-plus-square-o fa-lg fa-fw"></i>
