@@ -212,11 +212,32 @@ function ApiController(
 
       if (block.tally) {
 
+        var tz = getTimezoneOffset(block.tally.tallyPayment.date);
+
+        console.log('|++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++|');
+        console.log('tz: ');
+        console.log(tz);
+        console.log('|------------------------------------------------------------------------------------------------|')
+        
+        
+
+
         console.log('|++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++|');
         console.log('block.tally.tallyPayment.date: ');
         console.log(block.tally.tallyPayment.date);
         console.log('|------------------------------------------------------------------------------------------------|')
         
+        var year  = block.tally.tallyPayment.date.getFullYear();
+        var month = block.tally.tallyPayment.date.getMonth();
+        var day   = block.tally.tallyPayment.date.getDay();
+
+
+        console.log('|++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++|');
+        console.log('year: ');
+        console.log(year);
+        console.log('|------------------------------------------------------------------------------------------------|')
+        
+        var test = new Date(year, month, day);        
         
         block.tally.tallyPayment.date = new Date(block.tally.tallyPayment.date);
 
@@ -225,6 +246,15 @@ function ApiController(
         console.log(block.tally.tallyPayment.date);
         console.log('|------------------------------------------------------------------------------------------------|')
         
+
+
+        console.log('|++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++|');
+        console.log('test: ');
+        console.log(test);
+        console.log('|------------------------------------------------------------------------------------------------|')
+        
+        
+
       }
 
     });
