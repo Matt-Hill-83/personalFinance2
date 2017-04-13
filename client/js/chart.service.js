@@ -181,6 +181,10 @@ function Main_(
     }
     console.log('chart refresh - success');
 
+    var startDate     = Constants.tableConfig.dates[0];
+    var startDate     = new Date(startDate).valueOf();
+    var pointInterval = Constants.tableConfig.timeIntervalDays;
+
     Highcharts.chart(chart.chartDivId, {
         chart: {
             // height: 250 // this is set by the containing div.
@@ -203,7 +207,9 @@ function Main_(
         },
         plotOptions: {
             series: {
-                pointStart: 2
+              pointStart: startDate,
+              // pointInterval: 24 * 3600 * 1000 // one day          
+              pointInterval: pointInterval * 24 * 3600 * 1000,
             }
         },
         series: series,
@@ -221,7 +227,6 @@ function Main_(
     // Add the background image to the container
     Highcharts.wrap(Highcharts.Chart.prototype, 'getContainer', function (proceed) {
        proceed.call(this);
-       // this.container.style.background = 'url(http://www.highcharts.com/samples/graphics/sand.png)';
     });
 
     Highcharts.theme = {
@@ -236,9 +241,9 @@ function Main_(
        },
        title: {
           style: {
-             color: 'black',
-             color: 'red',
-             fontSize: '3em',
+             color     : 'black',
+             color     : 'red',
+             fontSize  : '3em',
              fontWeight: 'bold',
              fontFamily: 'sandboxMelodrama'
           }
@@ -254,14 +259,18 @@ function Main_(
        legend: {
           itemStyle: {
              fontWeight: 'bold',
-             fontSize: '13px'
+             fontSize  : '13px'
           }
        },
        xAxis: {
           labels: {
              style: {
                 color: '#6e6e70'
-             }
+             },
+            formatter: function() {
+                return Highcharts.dateFormat('%d %b %Y', this.value);
+                // return Highcharts.dateFormat('%a %d %b', this.value);
+            },
           }
        },
        yAxis: {
@@ -292,8 +301,7 @@ function Main_(
        rangeSelector: {
           buttonTheme: {
              fill: 'white',
-             stroke: '#C0C0C8',
-             'stroke-width': 1,
+             stroke: '#C0C0C8', 'stroke-width': 1,
              states: {
                 select: {
                    fill: '#D0D0D8'
