@@ -147,7 +147,7 @@ function createBlock(db, block){
       return createLineItemDefinition(db, block);
     }
     else if (block.type === 'section' && block.tally) {
-    	var date = new Date(block.tally.tallyPayment.date);
+    	// var date = new Date(block.tally.tallyPayment.date);
 
 			// date.setHours(0);
 			// date.setMinutes(0);
@@ -158,12 +158,21 @@ function createBlock(db, block){
 			// console.log(date.getTimezoneOffset());
 			// console.log('|------------------------------------------------------------------------------------------------|')
 			
+
+			console.log('|++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++|');
+			console.log('block.tally.tallyPayment.date: ');
+			console.log(block.tally.tallyPayment.date);
+			console.log(block.tally);
+			console.log('|------------------------------------------------------------------------------------------------|')
+			
+			
 			
 			// date.setTime( date.getTime() + date.getTimezoneOffset()*60*1000 );
 
 	    return db.tallyPayments.create({
 	      amount: block.tally.tallyPayment.amount,
-	      date  : date,
+	      date  : block.tally.tallyPayment.date,
+	      // date  : date,
 	    })
 	    .then(function(createdPayment) {
 			  return db.tallys.create({

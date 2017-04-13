@@ -13,7 +13,8 @@ module.exports = (sequelize, DataTypes) => {
       required: true
     },
     date: {
-      type: DataTypes.DATE,
+      type: DataTypes.TEXT,
+      // type: DataTypes.DATE,
     },
   });
   return User;

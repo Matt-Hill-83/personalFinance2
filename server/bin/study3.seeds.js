@@ -38,7 +38,8 @@ function getNetTally() {
     classes            : ['cashTally'],
     tallyPayment     : {
       amount: 888,
-      date  : new Date('01/01/2017'),
+      date  : '01/01/2017',
+      // date  : new Date('01/01/2017'),
     },
   };
 
