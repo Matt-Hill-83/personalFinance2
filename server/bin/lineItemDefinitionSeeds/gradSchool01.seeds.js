@@ -40,7 +40,7 @@ function getBuckets() {
     type               : 'tally',
     tallyPayment       : {
       amount: 20000,
-      date  : new Date('01/01/2017'),
+      date  : '01/01/2017',
     },
   };
 

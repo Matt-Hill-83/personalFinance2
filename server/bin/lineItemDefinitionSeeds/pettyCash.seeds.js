@@ -8,7 +8,7 @@ function pettyCashBucket() {
     type               : 'tally',
     tallyPayment     : {
       amount: 0,
-      date  : new Date('01/01/2017'),
+      date  : '01/01/2017',
     },
   };
   
