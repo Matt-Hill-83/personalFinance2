@@ -69,11 +69,11 @@ function getStudy() {
   });
 
   var charts = [
-    // {
-    //   name         : 'total cash',
-    //   subTitle     : 'base case',
-    //   lineItemGuids: '[-2]',
-    // },
+    {
+      name         : 'total cash',
+      subTitle     : 'base case',
+      lineItemGuids: '[-2]',
+    },
     {
       name         : 'net worth',
       subTitle     : 'base case vs. grad school',

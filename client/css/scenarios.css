@@ -66,3 +66,12 @@
 	margin-bottom : -0.1em;
 	margin-right  : auto;	
 }
+
+.scenario-label {
+	color         : #000000;
+	display       : flex;
+	font-size     : 1em;
+	flex-direction: row;
+	align-self    : center;
+	margin-left   : 0.6em;
+}

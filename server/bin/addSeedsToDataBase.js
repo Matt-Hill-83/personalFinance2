@@ -23,15 +23,13 @@ function getBlockIdFromRuleAlias(ruleSeedData, ruleAlias, scenario) {
 
 // Creates study, scenario, and all blocks, from template file.
 function createStudyFromSeedData(db, params) {
-	var studyId  = params.studyId;
-	var userGuid = params.userGuid;
-
+	var studyId     = params.studyId;
+	var userGuid    = params.userGuid;
 	db.ruleSeedData = [];
 
 	var studys = [
 		{}, // we don't use index 0
 		db.getGradSchoolSeeds(),	
-		db.getStudySeeds3(),	
 		db.getStudySeeds2(),	
 		db.getStudySeeds3(),	
 	];
