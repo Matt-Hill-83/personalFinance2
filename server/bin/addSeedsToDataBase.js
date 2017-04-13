@@ -213,7 +213,7 @@ function createLineItemDefinition(db, block) {
 	      id    : null,
 	      amount: block.seedData.initialPayment.amount,
 	      date  : block.seedData.initialPayment.date,
-	    });
+	    })
 	    // create seedDataJoinPayment
 	    .then(function(newPayment) {
 	      seedPaymentId = newPayment.id;
