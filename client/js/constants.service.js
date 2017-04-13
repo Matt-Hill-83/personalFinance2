@@ -9,6 +9,7 @@ function Constants_(Utilities) {
     endDate             : null,
     dates               : [],
     timeIntervalDays    : 60,
+    timeIntervalDays    : 2,
     monthTransitionCells: [],
     yearTransitionCells : [],
   };
