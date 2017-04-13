@@ -104,7 +104,7 @@ function getHouseholdNet() {
 
   var cash = {
     // collapsed: true,
-    name     : 'household gross',
+    name     : 'household',
     type     : 'section',
     children : getHouseholdGross(),
   };
@@ -161,18 +161,26 @@ function _getAdjustments(){
     name     : 'outflow to savings',
   };
 
-  return [
-    // outflowToPettyCash,
-    // outflowToEmergencyFund,
-    outflowToHomeDownPayment,
-    outflowToStudentLoan,
-  ];
+  var children;
+  if (globalParams.study !== 'getMba') {
+    children = [
+      outflowToHomeDownPayment,
+    ];
+  } else {
+    children = [
+      // outflowToPettyCash,
+      // outflowToEmergencyFund,
+      outflowToStudentLoan,
+      outflowToHomeDownPayment,
+    ];
+  }
+  return children;
 }
 
 function _getInflows(){
   var oldPaycheckAmount1 = 2200;
   var paycheckAmount2    = oldPaycheckAmount1 * 0.7;
-  var newPaycheckAmount  = oldPaycheckAmount1 * 1.8;
+  var newPaycheckAmount  = oldPaycheckAmount1 * 1.9;
 
   var mattPaycheck1 = {
     type    : 'lineItem',
