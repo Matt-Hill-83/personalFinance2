@@ -70,7 +70,7 @@ function getStudy() {
 
   var charts = [
     {
-      name         : 'total cash',
+      name         : 'cash accumulation by BUCKET',
       subTitle     : 'base case',
       lineItemGuids: '[-2]',
     },

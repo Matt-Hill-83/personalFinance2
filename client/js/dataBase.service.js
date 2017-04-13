@@ -718,7 +718,6 @@ function DataBase_(
       var annualEscalationPct = section.tally.annualEscalationPct ? section.tally.annualEscalationPct : 0;
       if (annualEscalationPct !== 0) {
         dailyEscalationPct = Math.pow(
-          // (1 + annualEscalationPct*100),(1/365)
           (1 + annualEscalationPct/100),(1/365)
           ) - 1;
       } else {
