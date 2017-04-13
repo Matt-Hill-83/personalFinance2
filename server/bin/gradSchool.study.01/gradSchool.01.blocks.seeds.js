@@ -61,12 +61,24 @@ function getBuckets() {
     children : children,
   };
 
-  return [
-    householdNetBucket,
-    // externalSeeds.getPettyCash(globalParams),
-    externalSeeds.getStudentLoan(globalParams),
-    externalSeeds.houseDownPayment(globalParams),
-  ];
+  var blocks;
+  if (globalParams.study !== 'getMba') {
+    blocks = [
+      householdNetBucket,
+      // externalSeeds.getPettyCash(globalParams),
+      externalSeeds.houseDownPayment(globalParams),
+    ];
+  } else {
+    blocks = [
+      householdNetBucket,
+      // externalSeeds.getPettyCash(globalParams),
+      externalSeeds.getStudentLoan(globalParams),
+      externalSeeds.houseDownPayment(globalParams),
+    ];
+  }
+  return blocks;
+
+
 }
 
 function getHouseholdNetBucket() {
