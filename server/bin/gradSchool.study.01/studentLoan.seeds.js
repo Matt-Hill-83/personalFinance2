@@ -38,7 +38,7 @@ function getAllBlocks(params) {
 
 function _getChildren() {
   var inflowFromHousehold = {
-    ruleAlias: 'home payment inflow from student loan',
+    ruleAlias: 'student loan inflow from household',
     type     : 'lineItem',
     name     : 'inflow from household',
   };

@@ -64,7 +64,7 @@ function getBuckets() {
   return [
     householdNetBucket,
     externalSeeds.getPettyCash(globalParams),
-    externalSeeds.getEmergencyFund(globalParams),
+    // externalSeeds.getEmergencyFund(globalParams),
     externalSeeds.getStudentLoan(globalParams),
     externalSeeds.houseDownPayment(globalParams),
   ];

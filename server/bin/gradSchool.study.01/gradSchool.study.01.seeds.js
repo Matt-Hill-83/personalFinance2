@@ -76,9 +76,9 @@ function getStudy() {
   scenarios.forEach(scenario=> {
     scenario.block.parentGuid = -1;
     scenario.ruleSeeds = [
-      rule3,
       rule1,
       rule4,
+      rule3,
       // rule2,
     ];
   });

@@ -78,6 +78,13 @@ function ChartCtrl(
     if (chart.lineItemGuids[0] < 0 && DataBase.blockDb.length > 0) {
       var guids = [undefined];
 
+
+      console.log('|++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++|');
+      console.log('chart.lineItemGuids[0]: ');
+      console.log(chart.lineItemGuids[0]);
+      console.log('|------------------------------------------------------------------------------------------------|')
+      
+      
       // Total of buckets graph compares total of buckets lineItem from bothe graphs.
       if (chart.lineItemGuids[0] === -1) {
         var guid1 = getLineItemGuidFromLineItemName('total of BUCKETS', vm.study.scenarios[0].guid);
