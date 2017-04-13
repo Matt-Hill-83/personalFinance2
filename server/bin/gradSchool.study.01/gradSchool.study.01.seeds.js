@@ -47,8 +47,8 @@ function getStudy() {
     block : householdBlocks(params={}),
   };
 
-  // var params = {study: 'getMba'}
-  var params = {study: ''}
+  var params = {study: 'getMba'}
+  // var params = {study: ''}
   var scenario2 = {
     name  : 'get a Master\'s degree',
     block : householdBlocks(params),
@@ -62,8 +62,8 @@ function getStudy() {
   scenarios.forEach(scenario=> {
     scenario.block.parentGuid = -1;
     scenario.ruleSeeds = [
-      rule1,
-      rule2,
+      // rule1,
+      // rule2,
       rule3
     ];
   });

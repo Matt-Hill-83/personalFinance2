@@ -3,10 +3,10 @@
 var externalSeeds = {};
 externalSeeds.getPettyCashSeeds        = require('./pettyCash.seeds.js');
 externalSeeds.getemergencyFundSeeds    = require('./emergencyFund.seeds.js');
-externalSeeds.getHouseDownPaymentSeeds = require('./houseDownPaymentFund.seeds.js');
+externalSeeds.getHouseDownPaymentSeeds = require('./studentLoan.seeds.js');
 
-var simplify = false;
-var simplify = true;
+var simplify     = false;
+var simplify     = true;
 var globalParams = {};
 
 function getTopBlock(params) {
@@ -39,7 +39,7 @@ function getBuckets() {
     annualEscalationPct: 3,
     type               : 'tally',
     tallyPayment       : {
-      amount: 20000,
+      amount: 0,
       date  : '01/01/2017',
     },
   };
@@ -64,7 +64,7 @@ function getBuckets() {
     householdNetBucket,
     externalSeeds.getPettyCashSeeds(),
     externalSeeds.getemergencyFundSeeds(),
-    externalSeeds.getHouseDownPaymentSeeds(),
+    externalSeeds.getHouseDownPaymentSeeds(globalParams),
   ];
 }
 
