@@ -3,7 +3,7 @@
 var globalParams = {};
 
 function getAllBlocks(params) {
-  var name = 'house downpayment';
+  var name = 'student loan';
   globalParams = params;
 
   var tally = {
@@ -28,7 +28,7 @@ function getAllBlocks(params) {
     collapsed: true,
     name     : name,
     type     : 'section',
-    ruleAlias: 'house downpayment',
+    ruleAlias: 'student loan',
     children : children,
     tally    : tally,
   };
@@ -50,7 +50,7 @@ function _getChildren() {
       seedDataType: 'periodicDates',
       initialPayment     : {
         date        : '01-01-2017',
-        amount      : -15000,
+        amount      : -10000,
       },
       numDaysInInterval: 180,
       numPayments      : 4,

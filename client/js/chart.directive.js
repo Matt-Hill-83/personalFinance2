@@ -93,6 +93,14 @@ function ChartCtrl(
         var guids = [guid1, guid2, guid3];
       }
 
+      // Total of buckets graph compares total of buckets lineItem from both graphs.
+      if (chart.lineItemGuids[0] === -3) {
+        var guid1 = getLineItemGuidFromLineItemName('petty cash', vm.study.scenarios[0].guid);
+        var guid2 = getLineItemGuidFromLineItemName('emergency fund', vm.study.scenarios[0].guid);
+        var guid3 = getLineItemGuidFromLineItemName('student loan', vm.study.scenarios[0].guid);
+        var guids = [guid1, guid2, guid3];
+      }
+
       if (guids.every(guid=>guid)) {
         chart.lineItemGuids = guids;
         Chart.updateChart(chart);

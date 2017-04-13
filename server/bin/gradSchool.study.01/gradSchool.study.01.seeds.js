@@ -35,7 +35,7 @@ function getStudy() {
     "sourceGuid"          : 'cash net',
     "outflowLineItemGuid" : 'household outflow to home',
 
-    "destinationGuid"     : 'house downpayment',
+    "destinationGuid"     : 'student loan',
     "inflowLineItemGuid"  : 'home payment inflow from household',
 
     "sourceMinAmount"     : 0,
@@ -72,7 +72,7 @@ function getStudy() {
     {
       name         : 'cash accumulation by BUCKET',
       subTitle     : 'base case',
-      lineItemGuids: '[-2]',
+      lineItemGuids: '[-3]',
     },
     {
       name         : 'net worth',
