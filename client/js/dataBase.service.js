@@ -776,11 +776,9 @@ function DataBase_(
         todayTotal       = service.payments.getByParams(todayTotalParams, dbSlice)[0];
         todayTotalAmount = todayTotal ? todayTotal.amount : 0;
         interestOnTally  = (yesterdayAmount *  dailyEscalationPct);
-        interestAccumulatedSinceLastTallyRecord += interestOnTally;
-
-        // TODO: make interest its own line item.
-        // todayTallyAmount = yesterdayAmount + todayTotalAmount;
         todayTallyAmount = yesterdayAmount + interestOnTally + todayTotalAmount;
+
+        interestAccumulatedSinceLastTallyRecord += interestOnTally;
 
         var interestBlock = service.lineItems.getInterestRowForTally(section.guid);
 

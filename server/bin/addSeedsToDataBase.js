@@ -147,9 +147,15 @@ function createBlock(db, block){
       return createLineItemDefinition(db, block);
     }
     else if (block.type === 'section' && block.tally) {
+    	var date = new Date(block.tally.tallyPayment.date);
+
+			date.setHours(0);
+			date.setMinutes(0);
+			date.setSeconds(0);
+
 	    return db.tallyPayments.create({
 	      amount: block.tally.tallyPayment.amount,
-	      date  : new Date(block.tally.tallyPayment.date),
+	      date  : date,
 	    })
 	    .then(function(createdPayment) {
 			  return db.tallys.create({
