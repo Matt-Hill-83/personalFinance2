@@ -172,7 +172,7 @@ function _getAdjustments(){
 function _getInflows(){
   var oldPaycheckAmount1 = 2200;
   var paycheckAmount2    = oldPaycheckAmount1 * 0.7;
-  var newPaycheckAmount  = oldPaycheckAmount1 * 1.7;
+  var newPaycheckAmount  = oldPaycheckAmount1 * 1.8;
 
   var mattPaycheck1 = {
     type    : 'lineItem',

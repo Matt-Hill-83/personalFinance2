@@ -94,7 +94,7 @@ function getStudy() {
     },
     {
       name         : 'At what point will I pay off my student loan?',
-      subTitle     : 'base case',
+      subTitle     : 'grad school',
       lineItemGuids: '[-3]',
     },
   ];
