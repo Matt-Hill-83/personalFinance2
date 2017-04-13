@@ -747,7 +747,6 @@ function DataBase_(
           parentGuid: section.guid,
           type      : 'tally',
         };
-debugger;
         var yesterdayTally = service.payments.getByParams(params)[0];
         yesterdayAmount    = yesterdayTally.amount;
       }
