@@ -211,6 +211,7 @@ function ApiController(
       }
 
       if (block.tally) {
+        block.tally.tallyPayment.date = new Date(block.tally.tallyPayment.date);
 
         var tz = block.tally.tallyPayment.date.getTimezoneOffset();
 
@@ -218,9 +219,6 @@ function ApiController(
         console.log('tz: ');
         console.log(tz);
         console.log('|------------------------------------------------------------------------------------------------|')
-        
-        
-
 
         console.log('|++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++|');
         console.log('block.tally.tallyPayment.date: ');
@@ -239,7 +237,6 @@ function ApiController(
         
         var test = new Date(year, month, day);        
         
-        block.tally.tallyPayment.date = new Date(block.tally.tallyPayment.date);
 
         console.log('|++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++|');
         console.log('block.tally.tallyPayment.date: ');
