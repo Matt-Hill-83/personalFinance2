@@ -212,7 +212,7 @@ function ApiController(
 
       if (block.tally) {
 
-        var tz = getTimezoneOffset(block.tally.tallyPayment.date);
+        var tz = block.tally.tallyPayment.date.getTimezoneOffset();
 
         console.log('|++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++|');
         console.log('tz: ');
