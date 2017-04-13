@@ -213,7 +213,11 @@ function ApiController(
       if (block.tally) {
         block.tally.tallyPayment.date = new Date(block.tally.tallyPayment.date);
 
-        var tz = block.tally.tallyPayment.date.getTimezoneOffset();
+        var tz = date.getTimezoneOffset();
+
+
+        date.setTime( date.getTime() + date.getTimezoneOffset()*60*1000 );
+
 
         console.log('|++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++|');
         console.log('tz: ');
@@ -221,13 +225,13 @@ function ApiController(
         console.log('|------------------------------------------------------------------------------------------------|')
 
         console.log('|++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++|');
-        console.log('block.tally.tallyPayment.date: ');
-        console.log(block.tally.tallyPayment.date);
+        console.log('date: ');
+        console.log(date);
         console.log('|------------------------------------------------------------------------------------------------|')
         
-        var year  = block.tally.tallyPayment.date.getFullYear();
-        var month = block.tally.tallyPayment.date.getMonth();
-        var day   = block.tally.tallyPayment.date.getDay();
+        var year  = date.getFullYear();
+        var month = date.getMonth();
+        var day   = date.getDay();
 
 
         console.log('|++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++|');
@@ -253,8 +257,8 @@ function ApiController(
         
 
         console.log('|++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++|');
-        console.log('block.tally.tallyPayment.date: ');
-        console.log(block.tally.tallyPayment.date);
+        console.log('date: ');
+        console.log(date);
         console.log('|------------------------------------------------------------------------------------------------|')
         
 
