@@ -67,7 +67,9 @@ db.studyJoinScenarios = require('../models/config/studyJoinScenario.js')(sequeli
 // Files with seeds to create initial blocks in database:
 db.getRuleSeeds       = require('../bin/templateStudy01.seeds.js');
 
-db.getGradSchoolSeeds = require('../bin/gradSchoolStudy01.seeds.js');
+// Load pre configured studys
+db.getGradSchoolSeeds = require('../bin/gradSchool.study.01/gradSchool.study.01.seeds.js');
+
 db.getStudySeeds2     = require('../bin/householdStudy01.seeds.js');
 db.getStudySeeds3     = require('../bin/study3.seeds.js');
 

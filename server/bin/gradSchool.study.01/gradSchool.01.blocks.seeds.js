@@ -1,9 +1,9 @@
 'use strict'
 
 var externalSeeds = {};
-externalSeeds.getPettyCashSeeds        = require('../../bin/lineItemDefinitionSeeds/pettyCash.seeds.js');
-externalSeeds.getemergencyFundSeeds    = require('../../bin/lineItemDefinitionSeeds/emergencyFund.seeds.js');
-externalSeeds.getHouseDownPaymentSeeds = require('../../bin/lineItemDefinitionSeeds/houseDownPaymentFund.seeds.js');
+externalSeeds.getPettyCashSeeds        = require('./pettyCash.seeds.js');
+externalSeeds.getemergencyFundSeeds    = require('./emergencyFund.seeds.js');
+externalSeeds.getHouseDownPaymentSeeds = require('./houseDownPaymentFund.seeds.js');
 
 var simplify = false;
 var simplify = true;
@@ -273,7 +273,7 @@ function _getOutflows(){
     return [
       rent,
       groceries,
-      irregularOutflows,
+      // irregularOutflows,
     ];
     
 }

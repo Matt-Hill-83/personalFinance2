@@ -1,5 +1,5 @@
 function getStudy() {
-  var householdBlocks = require('./lineItemDefinitionSeeds/gradSchool01.seeds.js');
+  var householdBlocks = require('./gradSchool.01.blocks.seeds.js');
   
   var rule1 = {
     "name"                : "household to petty cash",
