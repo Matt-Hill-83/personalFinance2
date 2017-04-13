@@ -1,7 +1,7 @@
 'use strict'
 
 function getAllBlocks() {
-  var name = 'house downpayment';
+  var name = 'savings';
 
   var tally = {
     annualEscalationPct: 4,

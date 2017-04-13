@@ -152,13 +152,13 @@ function _getAdjustments(){
   var outflowToStudentLoan = {
     ruleAlias: 'household outflow to student loan',
     type     : 'lineItem',
-    name     : 'outflowToStudentLoan',
+    name     : 'outflow to student loan',
   };
 
   var outflowToHomeDownPayment = {
     ruleAlias: 'household outflow to home',
     type     : 'lineItem',
-    name     : 'outflowToHomeDownPayment',
+    name     : 'outflow to savings',
   };
 
   return [

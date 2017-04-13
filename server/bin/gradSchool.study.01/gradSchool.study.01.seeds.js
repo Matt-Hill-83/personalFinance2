@@ -29,7 +29,7 @@ function getStudy() {
   };
   
   var rule3 = {
-    "name"                : "household to home payment",
+    "name"                : "household to savings",
     "function"            : "moveUntilFull",
 
     "sourceGuid"          : 'cash net',
@@ -61,8 +61,7 @@ function getStudy() {
     block : householdBlocks(params={}),
   };
 
-  var params = {study: 'getMba'}
-  // var params = {study: ''}
+  var params = {study: 'getMba'};
   var scenario2 = {
     name  : 'get a Master\'s degree',
     block : householdBlocks(params),
@@ -75,22 +74,26 @@ function getStudy() {
 
   scenarios.forEach(scenario=> {
     scenario.block.parentGuid = -1;
-    scenario.ruleSeeds = [
-      // rule1,
-      rule4,
-      rule3,
-      // rule2,
-    ];
   });
+
+  scenarios[0].ruleSeeds = [
+    // rule4,
+    rule3,
+  ];
+
+  scenarios[1].ruleSeeds = [
+    rule4,
+    rule3,
+  ];
 
   var charts = [
     {
-      name         : 'net worth',
+      name         : 'At what point will I have more money in the bank?',
       subTitle     : 'base case vs. grad school',
       lineItemGuids: '[-1]',
     },
     {
-      name         : 'cash accumulation by BUCKET',
+      name         : 'At what point will I pay off my student loan?',
       subTitle     : 'base case',
       lineItemGuids: '[-3]',
     },

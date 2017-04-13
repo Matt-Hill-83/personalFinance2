@@ -98,6 +98,12 @@ function ChartCtrl(
         // var guid1 = getLineItemGuidFromLineItemName('petty cash', vm.study.scenarios[0].guid);
         // var guid2 = getLineItemGuidFromLineItemName('emergency fund', vm.study.scenarios[0].guid);
         var guid3 = getLineItemGuidFromLineItemName('student loan', vm.study.scenarios[1].guid);
+        
+        //  Scenarios are not ordered, so try both:
+        if(!guid3) {
+          var guid3 = getLineItemGuidFromLineItemName('student loan', vm.study.scenarios[0].guid);
+        }
+
         var guids = [guid3];
       }
 
