@@ -728,8 +728,6 @@ function DataBase_(
       // For the first calculation, if tally has a non-zero start amount,
       // start tally from tally initial payment date.
       if (Utilities.areDatesEqual(tableDate, Constants.tableConfig.dates[0])) {
-        console.log('dates are equal');
-        
         if (section.tally.tallyPayment && section.tally.tallyPayment.amount > 0) {
             paymentDate     = section.tally.tallyPayment.date;
             yesterdayAmount = section.tally.tallyPayment.amount;

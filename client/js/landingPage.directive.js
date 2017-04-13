@@ -147,8 +147,6 @@ function LandingPageController(
     return Api.newStudy(study.guid)
     .then(resp=> {
       var returnedStudy = resp.data;
-      // var name = vm.activeStudy ? vm.activeStudy.name : study.name;
-      
       if (incrementName) {
         returnedStudy.name = returnedStudy.name + '  [new]';
       }
@@ -188,23 +186,14 @@ function LandingPageController(
     .then(resp=> {
       if (resp.data.length > 0) {
         vm.studys = Api.sanitizeStudys(resp.data);
-
-        console.log('|++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++|');
-        console.log('newPageLoad: ');
-        console.log(newPageLoad);
-        console.log('|------------------------------------------------------------------------------------------------|')
-        
       // If there are no studes and the user refreshed the page, create some studies for them.
       } else if (newPageLoad) {
         vm.studys = [];
         // return addStudy(vm.studyTemplates[0])
         return addStudy(vm.studyTemplates[2])
-        // .then(()=>{
-        //   return addStudy(vm.studyTemplates[0])
-          .then(()=> {
-            newPageLoad = false;
-          });
-        // });
+        .then(()=> {
+          newPageLoad = false;
+        });
       } else {
         // no studies were returned, 
         vm.studys = [noStudyMessage];
