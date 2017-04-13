@@ -39,7 +39,7 @@ function getStudy() {
     "inflowLineItemGuid"  : 'home payment inflow from household',
 
     "sourceMinAmount"     : 0,
-    "destinationMaxAmount": 200000,
+    "destinationMaxAmount": 1000000,
   };
 
   var rule4 = {
@@ -53,7 +53,7 @@ function getStudy() {
     "inflowLineItemGuid"  : 'student loan inflow from household',
 
     "sourceMinAmount"     : 0,
-    "destinationMaxAmount": 5,
+    "destinationMaxAmount": 0,
   };
 
   var scenario1 = {

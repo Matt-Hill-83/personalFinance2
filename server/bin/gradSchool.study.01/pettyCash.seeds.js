@@ -7,7 +7,7 @@ function pettyCashBucket() {
     annualEscalationPct: 3.0,
     type               : 'tally',
     tallyPayment     : {
-      amount: 0,
+      amount: 10000,
       date  : '01/01/2017',
     },
   };

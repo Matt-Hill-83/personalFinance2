@@ -159,8 +159,9 @@ function _getAdjustments(){
 }
 
 function _getInflows(){
-  var paycheckAmount1 = 2400;
-  var paycheckAmount2 = paycheckAmount1 * 0.7;
+  var oldPaycheckAmount1 = 2400;
+  var paycheckAmount2    = oldPaycheckAmount1 * 0.7;
+  var newPaycheckAmount  = oldPaycheckAmount1 * 1.4;
 
   var mattPaycheck1 = {
     type    : 'lineItem',
@@ -169,7 +170,7 @@ function _getInflows(){
       seedDataType: 'periodicDates',
       initialPayment     : {
         date  : '01/01/2017',
-        amount: paycheckAmount1,
+        amount: oldPaycheckAmount1,
       },
       numDaysInInterval: 15,
     }
@@ -185,7 +186,7 @@ function _getInflows(){
         amount: paycheckAmount2,
       },
       numDaysInInterval: 15,
-      numPayments      : 24,
+      numPayments      : 48,
     }
   };
 
