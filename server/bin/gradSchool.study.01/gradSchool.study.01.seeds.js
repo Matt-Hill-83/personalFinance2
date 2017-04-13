@@ -35,11 +35,25 @@ function getStudy() {
     "sourceGuid"          : 'cash net',
     "outflowLineItemGuid" : 'household outflow to home',
 
-    "destinationGuid"     : 'student loan',
+    "destinationGuid"     : 'house downpayment',
     "inflowLineItemGuid"  : 'home payment inflow from household',
 
     "sourceMinAmount"     : 0,
     "destinationMaxAmount": 200000,
+  };
+
+  var rule4 = {
+    "name"                : "household to student loan",
+    "function"            : "moveUntilFull",
+
+    "sourceGuid"          : 'cash net',
+    "outflowLineItemGuid" : 'household outflow to student loan',
+
+    "destinationGuid"     : 'student loan',
+    "inflowLineItemGuid"  : 'student loan inflow from household',
+
+    "sourceMinAmount"     : 0,
+    "destinationMaxAmount": 5,
   };
 
   var scenario1 = {
@@ -62,9 +76,10 @@ function getStudy() {
   scenarios.forEach(scenario=> {
     scenario.block.parentGuid = -1;
     scenario.ruleSeeds = [
-      // rule1,
+      rule3,
+      rule1,
+      rule4,
       // rule2,
-      rule3
     ];
   });
 

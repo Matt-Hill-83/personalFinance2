@@ -1,9 +1,10 @@
 'use strict'
 
 var externalSeeds = {};
-externalSeeds.getPettyCashSeeds        = require('./pettyCash.seeds.js');
-externalSeeds.getemergencyFundSeeds    = require('./emergencyFund.seeds.js');
-externalSeeds.getHouseDownPaymentSeeds = require('./studentLoan.seeds.js');
+externalSeeds.getPettyCash     = require('./pettyCash.seeds.js');
+externalSeeds.getEmergencyFund = require('./emergencyFund.seeds.js');
+externalSeeds.getStudentLoan   = require('./studentLoan.seeds.js');
+externalSeeds.houseDownPayment = require('./houseDownPayment.seeds.js');
 
 var simplify     = false;
 var simplify     = true;
@@ -62,9 +63,10 @@ function getBuckets() {
 
   return [
     householdNetBucket,
-    externalSeeds.getPettyCashSeeds(),
-    externalSeeds.getemergencyFundSeeds(),
-    externalSeeds.getHouseDownPaymentSeeds(globalParams),
+    externalSeeds.getPettyCash(globalParams),
+    externalSeeds.getEmergencyFund(globalParams),
+    externalSeeds.getStudentLoan(globalParams),
+    externalSeeds.houseDownPayment(globalParams),
   ];
 }
 
@@ -90,7 +92,7 @@ function getHouseholdNet() {
   };
 
   var cash = {
-    collapsed: true,
+    // collapsed: true,
     name     : 'household gross',
     type     : 'section',
     children : getHouseholdGross(),
@@ -121,7 +123,6 @@ function getHouseholdGross() {
     inflows,
     outflows,
   ];
-
 }
 
 function _getAdjustments(){
@@ -151,23 +152,40 @@ function _getAdjustments(){
 
   return [
     outflowToPettyCash,
-    outflowToEmergencyFund,
+    // outflowToEmergencyFund,
     outflowToHomeDownPayment,
-    // outflowToStudentLoan,
+    outflowToStudentLoan,
   ];
 }
 
 function _getInflows(){
-  var mattPaycheck = {
+  var paycheckAmount1 = 1500;
+  var paycheckAmount2 = paycheckAmount1 * 0.6;
+
+  var mattPaycheck1 = {
     type    : 'lineItem',
     name    : 'MeanCorp paycheck',
     seedData: {
       seedDataType: 'periodicDates',
       initialPayment     : {
-        date        : '01/01/2017',
-        amount      : 1500,
+        date  : '01/01/2017',
+        amount: paycheckAmount1,
       },
       numDaysInInterval: 15,
+    }
+  };
+
+  var mattPaycheck2 = {
+    type    : 'lineItem',
+    name    : 'MeanCorp paycheck',
+    seedData: {
+      seedDataType: 'periodicDates',
+      initialPayment     : {
+        date  : '01/01/2017',
+        amount: paycheckAmount2,
+      },
+      numDaysInInterval: 15,
+      numPayments      : 24,
     }
   };
 
@@ -177,25 +195,20 @@ function _getInflows(){
     seedData: {
       seedDataType: 'periodicDates',
       initialPayment     : {
-        date        : '01/01/2017',
-        amount      : 1500,
+        date        : '01/01/2019',
+        amount      : 2000,
       },
       numDaysInInterval: 15,
     }
   };
 
-  var irregularInflows = {
-    collapsed: true,
-    name     : 'irregular inflows',
-    type     : 'section',
-    children : _getIrregularInflows(),
-  };
-
-  return [
-    mattPaycheck,
-    funCoPaycheck,
-    // irregularInflows,
-  ];
+  var children;
+  if (globalParams.study !== 'getMba') {
+    children = [mattPaycheck1]
+  } else {
+    children = [mattPaycheck2, funCoPaycheck]
+  }
+  return children;
 }
 
 function _getIrregularInflows() {
@@ -275,7 +288,6 @@ function _getOutflows(){
       groceries,
       // irregularOutflows,
     ];
-    
 }
 
 module.exports = getTopBlock;

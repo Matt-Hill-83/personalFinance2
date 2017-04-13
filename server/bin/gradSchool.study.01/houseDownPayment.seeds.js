@@ -1,10 +1,7 @@
 'use strict'
 
-var globalParams = {};
-
-function getAllBlocks(params) {
-  var name = 'student loan';
-  globalParams = params;
+function getAllBlocks() {
+  var name = 'house downpayment';
 
   var tally = {
     annualEscalationPct: 4,
@@ -28,7 +25,7 @@ function getAllBlocks(params) {
     collapsed: true,
     name     : name,
     type     : 'section',
-    ruleAlias: 'student loan',
+    ruleAlias: 'house downpayment',
     children : children,
     tally    : tally,
   };
@@ -38,37 +35,20 @@ function getAllBlocks(params) {
 
 function _getChildren() {
   var inflowFromHousehold = {
-    ruleAlias: 'home payment inflow from student loan',
+    ruleAlias: 'home payment inflow from household',
     type     : 'lineItem',
     name     : 'inflow from household',
   };
 
-  var tuition = {
+  var outflowToHousehold = {
     type    : 'lineItem',
-    name    : 'tuition',
-    seedData: {
-      seedDataType: 'periodicDates',
-      initialPayment     : {
-        date        : '01-01-2017',
-        amount      : -10000,
-      },
-      numDaysInInterval: 180,
-      numPayments      : 4,
-    }
+    name    : 'outflow to household',
   };
 
-  var children;
-  if (globalParams.study === 'getMba') {
-    children = [
-        inflowFromHousehold,
-        tuition,
-    ];
-  } else {
-    children = [
-      inflowFromHousehold,
-    ];
-  }
-  return children;
+  return [
+    inflowFromHousehold,
+    // outflowToHousehold,
+  ];
 }
 
 module.exports = getAllBlocks;
