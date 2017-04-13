@@ -211,7 +211,20 @@ function ApiController(
       }
 
       if (block.tally) {
+
+        console.log('|++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++|');
+        console.log('block.tally.tallyPayment.date: ');
+        console.log(block.tally.tallyPayment.date);
+        console.log('|------------------------------------------------------------------------------------------------|')
+        
+        
         block.tally.tallyPayment.date = new Date(block.tally.tallyPayment.date);
+
+        console.log('|++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++|');
+        console.log('block.tally.tallyPayment.date: ');
+        console.log(block.tally.tallyPayment.date);
+        console.log('|------------------------------------------------------------------------------------------------|')
+        
       }
 
     });
