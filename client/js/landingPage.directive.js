@@ -198,7 +198,7 @@ function LandingPageController(
       } else if (newPageLoad) {
         vm.studys = [];
         // return addStudy(vm.studyTemplates[0])
-        return addStudy(vm.studyTemplates[1])
+        return addStudy(vm.studyTemplates[2])
         // .then(()=>{
         //   return addStudy(vm.studyTemplates[0])
           .then(()=> {
