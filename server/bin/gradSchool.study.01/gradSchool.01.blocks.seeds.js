@@ -63,8 +63,7 @@ function getBuckets() {
 
   return [
     householdNetBucket,
-    externalSeeds.getPettyCash(globalParams),
-    // externalSeeds.getEmergencyFund(globalParams),
+    // externalSeeds.getPettyCash(globalParams),
     externalSeeds.getStudentLoan(globalParams),
     externalSeeds.houseDownPayment(globalParams),
   ];
@@ -86,7 +85,7 @@ function getHouseholdNetBucket() {
 function getHouseholdNet() {
   var adjustments = {
     collapsed: true,
-    name     : 'move cash between BUCKETS',
+    name     : 'move cash into BUCKETS',
     type     : 'section',
     children : _getAdjustments(),
   };
@@ -138,20 +137,20 @@ function _getAdjustments(){
     name     : 'outflowToEmergencyFund',
   };
 
-  var outflowToHomeDownPayment = {
-    ruleAlias: 'household outflow to home',
-    type     : 'lineItem',
-    name     : 'outflowToHomeDownPayment',
-  };
-
   var outflowToStudentLoan = {
     ruleAlias: 'household outflow to student loan',
     type     : 'lineItem',
     name     : 'outflowToStudentLoan',
   };
 
+  var outflowToHomeDownPayment = {
+    ruleAlias: 'household outflow to home',
+    type     : 'lineItem',
+    name     : 'outflowToHomeDownPayment',
+  };
+
   return [
-    outflowToPettyCash,
+    // outflowToPettyCash,
     // outflowToEmergencyFund,
     outflowToHomeDownPayment,
     outflowToStudentLoan,
@@ -159,9 +158,9 @@ function _getAdjustments(){
 }
 
 function _getInflows(){
-  var oldPaycheckAmount1 = 2400;
+  var oldPaycheckAmount1 = 2200;
   var paycheckAmount2    = oldPaycheckAmount1 * 0.7;
-  var newPaycheckAmount  = oldPaycheckAmount1 * 1.4;
+  var newPaycheckAmount  = oldPaycheckAmount1 * 1.7;
 
   var mattPaycheck1 = {
     type    : 'lineItem',
@@ -197,7 +196,7 @@ function _getInflows(){
       seedDataType: 'periodicDates',
       initialPayment     : {
         date        : '01/01/2019',
-        amount      : 2000,
+        amount      : newPaycheckAmount,
       },
       numDaysInInterval: 15,
     }

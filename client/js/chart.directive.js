@@ -77,13 +77,6 @@ function ChartCtrl(
     // The chart definitions are updated and pushed to the db.
     if (chart.lineItemGuids[0] < 0 && DataBase.blockDb.length > 0) {
       var guids = [undefined];
-
-
-      console.log('|++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++|');
-      console.log('chart.lineItemGuids[0]: ');
-      console.log(chart.lineItemGuids[0]);
-      console.log('|------------------------------------------------------------------------------------------------|')
-      
       
       // Total of buckets graph compares total of buckets lineItem from bothe graphs.
       if (chart.lineItemGuids[0] === -1) {
@@ -102,10 +95,10 @@ function ChartCtrl(
 
       // Total of buckets graph compares total of buckets lineItem from both graphs.
       if (chart.lineItemGuids[0] === -3) {
-        var guid1 = getLineItemGuidFromLineItemName('petty cash', vm.study.scenarios[0].guid);
+        // var guid1 = getLineItemGuidFromLineItemName('petty cash', vm.study.scenarios[0].guid);
         // var guid2 = getLineItemGuidFromLineItemName('emergency fund', vm.study.scenarios[0].guid);
-        var guid3 = getLineItemGuidFromLineItemName('student loan', vm.study.scenarios[0].guid);
-        var guids = [guid1, guid3];
+        var guid3 = getLineItemGuidFromLineItemName('student loan', vm.study.scenarios[1].guid);
+        var guids = [guid3];
       }
 
       if (guids.every(guid=>guid)) {

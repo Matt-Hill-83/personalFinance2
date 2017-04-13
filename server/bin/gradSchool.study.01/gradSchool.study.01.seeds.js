@@ -53,7 +53,7 @@ function getStudy() {
     "inflowLineItemGuid"  : 'student loan inflow from household',
 
     "sourceMinAmount"     : 0,
-    "destinationMaxAmount": 0,
+    "destinationMaxAmount": 5,
   };
 
   var scenario1 = {
@@ -76,7 +76,7 @@ function getStudy() {
   scenarios.forEach(scenario=> {
     scenario.block.parentGuid = -1;
     scenario.ruleSeeds = [
-      rule1,
+      // rule1,
       rule4,
       rule3,
       // rule2,
@@ -85,14 +85,14 @@ function getStudy() {
 
   var charts = [
     {
-      name         : 'cash accumulation by BUCKET',
-      subTitle     : 'base case',
-      lineItemGuids: '[-3]',
-    },
-    {
       name         : 'net worth',
       subTitle     : 'base case vs. grad school',
       lineItemGuids: '[-1]',
+    },
+    {
+      name         : 'cash accumulation by BUCKET',
+      subTitle     : 'base case',
+      lineItemGuids: '[-3]',
     },
   ];
 
