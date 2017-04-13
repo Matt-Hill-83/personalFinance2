@@ -147,32 +147,9 @@ function createBlock(db, block){
       return createLineItemDefinition(db, block);
     }
     else if (block.type === 'section' && block.tally) {
-    	// var date = new Date(block.tally.tallyPayment.date);
-
-			// date.setHours(0);
-			// date.setMinutes(0);
-			// date.setSeconds(0);
-
-			// console.log('|++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++|');
-			// console.log('date.getTimezoneOffset(): ');
-			// console.log(date.getTimezoneOffset());
-			// console.log('|------------------------------------------------------------------------------------------------|')
-			
-
-			console.log('|++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++|');
-			console.log('block.tally.tallyPayment.date: ');
-			console.log(block.tally.tallyPayment.date);
-			console.log(block.tally);
-			console.log('|------------------------------------------------------------------------------------------------|')
-			
-			
-			
-			// date.setTime( date.getTime() + date.getTimezoneOffset()*60*1000 );
-
 	    return db.tallyPayments.create({
 	      amount: block.tally.tallyPayment.amount,
 	      date  : block.tally.tallyPayment.date,
-	      // date  : date,
 	    })
 	    .then(function(createdPayment) {
 			  return db.tallys.create({
@@ -231,13 +208,14 @@ function createLineItemDefinition(db, block) {
 	    
 	    var date;
 	    if (block.seedData.initialPayment.date) {
-	      date = new Date(block.seedData.initialPayment.date);
+	      // date = new Date(block.seedData.initialPayment.date);
 	    }
 
 	    return db.seedPayments.create({
 	      id    : null,
 	      amount: block.seedData.initialPayment.amount,
-	      date  : date,
+	      // date  : date,
+	      date  : block.seedData.initialPayment.date,
 	    })
 
 	    // create seedDataJoinPayment
