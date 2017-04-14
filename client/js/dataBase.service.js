@@ -344,13 +344,13 @@ function DataBase_(
     )[0];
 
     if (
-      outflowLineItem &&
-      inflowLineItem &&
-      destinationMaxAmount &&
-      sourcePayment &&
-      destinationPayment &&
-      sourcePayment.amount > rule.sourceMinAmount &&
-      destinationPayment.amount < destinationMaxAmount
+      !!outflowLineItem &&
+      !!inflowLineItem &&
+      destinationMaxAmount !== undefined &&
+      !!sourcePayment &&
+      !!destinationPayment &&
+      (sourcePayment.amount > rule.sourceMinAmount) &&
+      (destinationPayment.amount < destinationMaxAmount)
       ) {
       var destinationShortfall = destinationMaxAmount - destinationPayment.amount;
 

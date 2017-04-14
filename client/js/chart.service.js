@@ -210,7 +210,6 @@ function Main_(
             },
             formatter: function() {return Highcharts.dateFormat('%d %b %Y', this.value); },
           },
-          // zeroCrossing: true,
         },
         yAxis: {
           title: {
