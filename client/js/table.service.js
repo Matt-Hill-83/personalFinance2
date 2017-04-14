@@ -138,26 +138,16 @@ function Main_(
       return;
     }
 
-    // section.cells[0].expander = collapsed.true;
     var children = DataBase.lineItems.getChildBlocksFromSection(section);
     children.forEach(child=> {
       child.rowVisible = false;
-      // if (child.type === 'section') {
-      //   child.cells[0].expander = collapsed.true;
-      // }
-        
     });
 
     section.collapsed = true;
   }
 
   function expandSection(section) {
-    // section.cells[0].expander = collapsed.false;
     DataBase.lineItems.getChildBlocksFromSection(section).forEach(block=> {
-      // if (block.type === 'section') {
-      //   block.cells[0].expander = collapsed.false;
-      // }
-        
       block.rowVisible = true;
       block.collapsed  = false;
     });
@@ -345,14 +335,9 @@ function Main_(
     // Add line item name to first column.
     var firstCell = {
       valueToDisplay: block.name,
-      // expander      : block.collapsed ? collapsed.true : collapsed.false,
       classes       : ['rowHeader' + (block.nestLevel - nestOffsetEm)],
       type          : block.type,
     };
-
-    // if (block.type === 'lineItem') {
-    //   firstCell.expander = '';
-    // }
 
     if (block.type === 'section' && block.subtype1 === 'total of tallies') {
       Utilities.addClasses(block, ['total-of-tallies']);
@@ -381,7 +366,6 @@ function Main_(
     if (block.tally) {
       params.type = 'tally';
     }
-
     var dbSlice = DataBase.payments.getByParams(dbSliceParams);
     
     tableConfig.dates.forEach(date=>{
@@ -426,7 +410,6 @@ function Main_(
   function _applyRightBorderToTransitionCells(table) {
     table.forEach(row=> {
       row.cells.forEach((cell, index)=> {
-        // if (Constants.tableConfig.monthTransitionCells.indexOf(index) !== -1){
         if (Constants.tableConfig.yearTransitionCells.indexOf(index) !== -1){
           if (cell.classes) {
             cell.classes.push('right-border');
