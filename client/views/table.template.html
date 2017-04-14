@@ -77,7 +77,6 @@
         </span>
       </div>
 
-
     <!-- Main row for each table -->
     <div
       class   ="row-holder"
@@ -87,53 +86,6 @@
         class         ="table-cashflow"
         ng-mouseleave ="maintable.exitedTable($event, rowIndex, cellIndex, row, cell)"
         >
-        
-        <!-- Row for table title and action buttons -->
-        <tr ng-class=maintable.tableMatrix[0].classes>
-          
-          <!-- 2 empty columns above row headers and row header icons -->
-          <td ng-class="maintable.tableMatrix[0].cells[0].classes" colspan="2"></td>
-          <td class="title-row"
-              colspan={{maintable.tableMatrix[0].data.numColInTable}}
-              >
-
-
-            <div class="scenario-button-container">
-
-    <!--           <div class="scenario-title-holder">
-                <span class="scenario-title-box">
-                  <span class="scenario-title-and-friends">
-                    <span class="crayon-font scenario-title">{{maintable.selectedScenario.name}}</span>
-                  </span>
-                </span>
-              </div>     -->        
-
-            <!--   <div class="scenario-label">
-                <span>Scenario {{maintable.selectedScenario.id}}</span>
-              </div> -->
-
-<!--               <div class="scenario-button-holder">
-                <button
-                  ng-click ="maintable.showRules()"
-                  class    ="scenario-action-button"
-                  type     ="button"
-                  >
-                  <span>Rules</span>
-                </button>      
-            
-                <button
-                  ng-click ="maintable.showRules()"
-                  class    ="scenario-action-button"
-                  type     ="button"
-                  >
-                  <span>Triggers</span>
-                </button>      
-              </div>    
- -->
-            </div>    
-
-          </td>
-        </tr>
         
         <!-- Normal data row -->
         <tr
@@ -162,25 +114,6 @@
               {{cell.valueToDisplay === 0 ? '' : cell.valueToDisplay}}
             </span>
             
-<!--             <span ng-show ="cellIndex === 1 && rowIndex === 1">
-              <span class="scenario-icons">
-                <div class="grey tooltip" ng-click ="maintable.cloneScenario()">
-                  <i class="fa fa-clone fa-fw"></i>
-                  <span class="grey tooltiptext">clone scenario</span>
-                </div>
-
-                <div class="grey tooltip" ng-click ="maintable.showUpdateRowModal('update')">
-                  <i class="fa fa-pencil fa-fw"></i>
-                  <span class="grey tooltiptext">edit scenario</span>
-                </div>
-
-                <div class="grey tooltip" ng-click ="maintable.deleteScenario()">
-                  <i class="fa fa-trash-o fa-fw"></i>
-                  <span class="grey tooltiptext">delete scenario</span>
-                </div>
-              </span>             
-            </span> -->
-
             <!-- table settings icons -->
             <span ng-show ="cellIndex === 1 && cell.type !== 'blank'">
 

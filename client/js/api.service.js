@@ -226,8 +226,6 @@ function ApiController(
         } else {
           block.tally.tallyPayment.date = new Date(block.tally.tallyPayment.date);
         }
-
-        // block.tally.tallyPayment.date = new Date(block.tally.tallyPayment.date);
       }
 
     });

@@ -4,11 +4,11 @@ angular.module('app').factory('Constants', [ 'Utilities', Constants_]);
 function Constants_(Utilities) {
   var tableConfig = {
     // numColInTable       : 4,
-    numColInTable       : 16,
+    numColInTable       : 8,
     startDate           : '01/01/2017',
     endDate             : null,
     dates               : [],
-    timeIntervalDays    : 90,
+    timeIntervalDays    : 91,
     // timeIntervalDays    : 2,
     monthTransitionCells: [],
     yearTransitionCells : [],

@@ -42,13 +42,13 @@ function Main_(
     var newTable = [];
     
     // Add a row to contain the Scenario title.
-    var titleRow     = _createBlankRow(tableConfig.numColInTable + 1);
-    titleRow.type    = 'titleRow';
-    titleRow.classes = ['title-row'];
-    titleRow.data    = {
-      numColInTable: tableConfig.numColInTable - 0,
-    };
-    titleRow.cells.forEach(cell=> cell.classes = ['title-row']);
+    // var titleRow     = _createBlankRow(tableConfig.numColInTable + 1);
+    // titleRow.type    = 'titleRow';
+    // titleRow.classes = ['title-row'];
+    // titleRow.data    = {
+    //   numColInTable: tableConfig.numColInTable - 0,
+    // };
+    // titleRow.cells.forEach(cell=> cell.classes = ['title-row']);
 
     // newTable.push(titleRow);
     newTable.push(..._createTableHeaderRows(scenarioGuid, tableConfig.numColInTable, tableConfig.startDate));
@@ -84,13 +84,7 @@ function Main_(
       }
     });
 
-    if (Constants.tableSettings.tableInterval === 'weekly') {
-      _applyRightBorderToTransitionCells(newTable);
-    }
-
-    if (Constants.tableSettings.tableInterval === 'monthly') {
-      _applyRightBorderToTransitionCells(newTable);
-    }
+    _applyRightBorderToTransitionCells(newTable);
 
     // format the right most table cells.
     newTable.forEach(row=> {
@@ -113,8 +107,9 @@ function Main_(
         Utilities.addClasses(cell, ['table-bottom']);
       }
     });
+
     // format the top of the first row of table cells.
-    var firstDataRow = newTable[1];
+    var firstDataRow = newTable[0];
     firstDataRow.cells.forEach((cell, index)=> {
       if (index > 1) {
         Utilities.addClasses(cell, ['table-bottom']);
@@ -124,8 +119,8 @@ function Main_(
     // format specific cells
     newTable[0].cells[0].classes = ['top-left'];
     newTable[1].cells[1].classes = ['cell-1-1'];
-    newTable[2].cells[1].classes = ['cell-1-1'];
-    newTable[2].cells[1].type    = 'blank';
+    // newTable[2].cells[1].classes = ['cell-1-1'];
+    newTable[1].cells[1].type    = 'blank';
 
     return newTable;
   }
@@ -226,6 +221,7 @@ function Main_(
 
       if (Constants.tableSettings.tableInterval === 'monthly') {
         month.classes.push('year' + newDate.getFullYear()%2); // Color even and odd years differently.
+        year.classes.push('year' + newDate.getFullYear()%2); // Color even and odd years differently.
       }
 
       dateCells.push(date);

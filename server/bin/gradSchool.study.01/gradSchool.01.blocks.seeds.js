@@ -231,24 +231,24 @@ function _getInflows(){
   return children;
 }
 
-function _getIrregularInflows() {
-  var taxRefund = {
-    name    : 'tax refund',
-    type    : 'lineItem',
-    seedData: {
-      seedDataType: 'periodicDates',
-      initialPayment     : {
-        date        : '03/05/2017',
-        amount      : 1000,
-      },
-      numDaysInInterval: 365,
-    }
-  };
+// function _getIrregularInflows() {
+//   var taxRefund = {
+//     name    : 'tax refund',
+//     type    : 'lineItem',
+//     seedData: {
+//       seedDataType: 'periodicDates',
+//       initialPayment     : {
+//         date        : '03/05/2017',
+//         amount      : 1000,
+//       },
+//       numDaysInInterval: 365,
+//     }
+//   };
 
-  return [
-    taxRefund,
-  ];
-}
+//   return [
+//     taxRefund,
+//   ];
+// }
 
 function _getIrregularOutflows() {
   var tuition = {
