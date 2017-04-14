@@ -313,7 +313,7 @@ function Ctrl(
   }
 
   function redrawTable() {
-    Constants.refreshTableConfig();
+    // Constants.refreshTableConfig();
     Table.redrawTable(vm.scenarioGuid);
   }
 

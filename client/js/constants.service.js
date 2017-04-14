@@ -14,6 +14,8 @@ function Constants_(Utilities) {
     yearTransitionCells : [],
   };
 
+  tableConfig.startDate = new Date(tableConfig.startDate);
+
   // var comparators = [
   //   {
   //     index: 0,
