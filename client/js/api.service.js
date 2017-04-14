@@ -2,12 +2,14 @@
 angular.module('app').factory('Api', [
   '$http',
   '$window',
+  'Constants',
   'Utilities',
   ApiController]);
 
 function ApiController(
   $http,
   $window,
+  Constants,
   Utilities
   ){
   var service = {
@@ -200,9 +202,15 @@ function ApiController(
         block.seedData &&
         block.seedData.seedDataJoinPayment
         ) {
-        block.seedData.numPayments         = parseInt(block.seedData.numPayments);
-        block.seedData.initialPayment      = block.seedData.seedDataJoinPayment.seedPayment;
-        block.seedData.initialPayment.date = new Date(block.seedData.initialPayment.date);
+        block.seedData.numPayments    = parseInt(block.seedData.numPayments);
+        block.seedData.initialPayment = block.seedData.seedDataJoinPayment.seedPayment;
+
+        if (!block.seedData.initialPayment.date) {
+          block.seedData.initialPayment.date = new Date(Constants.tableConfig.startDate);
+        } else {
+          block.seedData.initialPayment.date = new Date(block.seedData.initialPayment.date);
+        }
+
         block.seedData.seedDataJoinPayment = 'removed from object to avoid confusion';
       
         if (block.seedData.numDaysInInterval) {
@@ -253,7 +261,6 @@ function ApiController(
       'createdAt',
       'modifiedAt',
       'updatedAt',
-      // 'id',
     ];
 
     var newObject = {guid: parseInt(oldObject.id)};

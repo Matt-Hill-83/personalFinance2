@@ -8,12 +8,12 @@ function createEditLineItemController() {
     scope: {
       params: '='
     },    
-    controller  : ['$scope', CreateEditCtrl],
+    controller  : ['$scope', 'Constants', CreateEditCtrl],
     controllerAs: 'createEditLineItem',
   };
 }
 
-function CreateEditCtrl($scope) {
+function CreateEditCtrl($scope, Constants) {
   var defaultDate = new Date('01-01-2017');
   
 	var vm        = this;
@@ -22,15 +22,13 @@ function CreateEditCtrl($scope) {
   vm.isLineItem = false;
 
   if (vm.data.mode === 'update') {
-    vm.newBlock   = vm.data.row;
-    
+    vm.newBlock = vm.data.row;
+
     vm.button = {
       label   : 'Update',
       function: update,
     };
   } else if (vm.data.mode ==='create') {
-    // vm.isLineItem = true;
-    
     vm.button = {
       label   : 'Create',
       function: create,
@@ -67,7 +65,7 @@ function CreateEditCtrl($scope) {
     vm.newBlock.indexWithinParent = indexWithinParent;
     vm.newBlock.parentGuid        = parentGuid;
   }
-  vm.isLineItem = (vm.newBlock.type === 'lineItem') && (subtype1 !== 'interest');
+  vm.isLineItem = (vm.newBlock.type === 'lineItem') && (vm.newBlock.subtype1 !== 'interest');
 
   //////////////////////
 
