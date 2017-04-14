@@ -150,7 +150,7 @@ function Main_(
   function drawChart(chart) {
     console.log('chart refresh - attempt');
     
-    _setTheme();
+    // _setTheme();
     var series   = formatRowData(chart);
     var title    = chart.name;
     var subTitle = chart.subTitle;
@@ -186,9 +186,37 @@ function Main_(
     var pointInterval = Constants.tableConfig.timeIntervalDays;
 
     Highcharts.chart(chart.chartDivId, {
+
         chart: {
-            // height: 250 // this is set by the containing div.
+            // type: 'arearange',
+            // zoomType: 'x'
         },
+
+        xAxis: {
+            type: 'datetime'
+        },
+
+        yAxis: {
+            title: {
+                text: null
+            }
+        },
+
+        tooltip: {
+            crosshairs: true,
+            shared: true,
+            valueSuffix: '°C'
+        },
+
+        legend: {
+            enabled: false
+        },
+
+
+
+
+// ///////////////////
+
         title: {
             text: title
         },
@@ -200,19 +228,52 @@ function Main_(
                 text: ''
             }
         },
-        legend: {
-            layout       : 'vertical',
-            // align        : 'right',
-            align        : 'left',
-            verticalAlign: 'middle'
-        },
-        plotOptions: {
-            series: {
-              pointStart: startDate,
-              // pointInterval: 24 * 3600 * 1000 // one day          
-              pointInterval: pointInterval * 24 * 3600 * 1000,
-            }
-        },
+
+       xAxis: {
+          labels: {
+            style: {
+              color: '#6e6e70',
+            },
+            // formatter: function() {return Highcharts.dateFormat('%d %b %Y', this.value); },
+          },
+          // zeroCrossing: true,
+       },
+
+       yAxis: {
+        lineColor: "#ccd6eb",
+        lineWidth: 20,
+        max      : 100000,
+          // labels: {
+          //   lineColor: "#ccd6eb"
+          //   style: { "color": "#666666", "cursor": "default", "fontSize": "11px" },
+          //   y: 3,
+
+          //    // style: {
+          //    //    color: '#6e6e70',
+          //    //    // color    : 'black',
+          //    //    lineWidth: 3,
+          //    //    max      : 100000,
+          //    //    min      : -100000,
+          //    // }
+          // }
+       },
+
+
+
+
+        // legend: {
+        //     layout       : 'vertical',
+        //     align        : 'right',
+        //     // align        : 'left',
+        //     verticalAlign: 'middle'
+        // },
+        // plotOptions: {
+        //     series: {
+        //       pointStart: startDate,
+        //       // pointInterval: 24 * 3600 * 1000 // one day          
+        //       pointInterval: pointInterval * 24 * 3600 * 1000,
+        //     }
+        // },
         series: series,
     });  
   }
@@ -230,95 +291,180 @@ function Main_(
        proceed.call(this);
     });
 
-    Highcharts.theme = {
-       colors: ['#f45b5b', '#8085e9', '#8d4654', '#7798BF', '#aaeeee', '#ff0066', '#eeaaee',
-          '#55BF3B', '#DF5353', '#7798BF', '#aaeeee'],
-       chart: {
-          backgroundColor: '#e8edff',
-          // backgroundColor: null,
-          style: {
-             fontFamily: 'Signika, serif'
-          }
-       },
-       title: {
-          style: {
-             color     : 'black',
-             color     : 'red',
-             fontSize  : '3em',
-             fontWeight: 'bold',
-             fontFamily: 'sandboxMelodrama'
-          }
-       },
-       subtitle: {
-          style: {
-             color: 'black'
-          }
-       },
-       tooltip: {
-          borderWidth: 0
-       },
-       legend: {
-          itemStyle: {
-             fontWeight: 'bold',
-             fontSize  : '13px'
-          }
-       },
-       xAxis: {
-          labels: {
-             style: {
-                color: '#6e6e70'
-             },
-            formatter: function() {
-                return Highcharts.dateFormat('%d %b %Y', this.value);
-                // return Highcharts.dateFormat('%a %d %b', this.value);
-            },
-          },
-          zeroCrossing: true,
-       },
-       yAxis: {
-          labels: {
-             style: {
-                color: '#6e6e70'
-             }
-          }
-       },
-       plotOptions: {
-          series: {
-             shadow: true
-          },
-          candlestick: {
-             lineColor: '#404048'
-          },
-          map: {
-             shadow: false
-          }
-       },
+Highcharts.theme = {
+   colors: ['#f45b5b', '#8085e9', '#8d4654', '#7798BF', '#aaeeee', '#ff0066', '#eeaaee',
+      '#55BF3B', '#DF5353', '#7798BF', '#aaeeee'],
+   chart: {
+      backgroundColor: null,
+      style: {
+         fontFamily: 'Signika, serif'
+      }
+   },
+   title: {
+      style: {
+         color: 'black',
+         fontSize: '16px',
+         fontWeight: 'bold'
+      }
+   },
+   subtitle: {
+      style: {
+         color: 'black'
+      }
+   },
+   tooltip: {
+      borderWidth: 0
+   },
+   legend: {
+      itemStyle: {
+         fontWeight: 'bold',
+         fontSize: '13px'
+      }
+   },
+   xAxis: {
+      labels: {
+         style: {
+            color: '#6e6e70'
+         }
+      }
+   },
+   yAxis: {
+      labels: {
+         style: {
+            color: '#6e6e70'
+         }
+      }
+   },
+   plotOptions: {
+      series: {
+         shadow: true
+      },
+      candlestick: {
+         lineColor: '#404048'
+      },
+      map: {
+         shadow: false
+      }
+   },
 
-       // Highstock specific
-       navigator: {
-          xAxis: {
-             gridLineColor: '#D0D0D8'
-          }
-       },
-       rangeSelector: {
-          buttonTheme: {
-             fill: 'white',
-             stroke: '#C0C0C8', 'stroke-width': 1,
-             states: {
-                select: {
-                   fill: '#D0D0D8'
-                }
-             }
-          }
-       },
-       scrollbar: {
-          trackBorderColor: '#C0C0C8'
-       },
+   // Highstock specific
+   navigator: {
+      xAxis: {
+         gridLineColor: '#D0D0D8'
+      }
+   },
+   rangeSelector: {
+      buttonTheme: {
+         fill: 'white',
+         stroke: '#C0C0C8',
+         'stroke-width': 1,
+         states: {
+            select: {
+               fill: '#D0D0D8'
+            }
+         }
+      }
+   },
+   scrollbar: {
+      trackBorderColor: '#C0C0C8'
+   },
 
-       // General
-       background2: '#E0E0E8'
+   // General
+   background2: '#E0E0E8'
 
-    };
+};
+
+
+    // Highcharts.theme = {
+    //    colors: ['#f45b5b', '#8085e9', '#8d4654', '#7798BF', '#aaeeee', '#ff0066', '#eeaaee',
+    //       '#55BF3B', '#DF5353', '#7798BF', '#aaeeee'],
+    //    chart: {
+    //       backgroundColor: '#e8edff',
+    //       // backgroundColor: null,
+    //       style: {
+    //          fontFamily: 'Signika, serif'
+    //       }
+    //    },
+    //    title: {
+    //       style: {
+    //          color     : 'black',
+    //          color     : 'red',
+    //          fontSize  : '3em',
+    //          fontWeight: 'bold',
+    //          fontFamily: 'sandboxMelodrama'
+    //       }
+    //    },
+    //    subtitle: {
+    //       style: {
+    //          color: 'black'
+    //       }
+    //    },
+    //    tooltip: {
+    //       borderWidth: 0
+    //    },
+    //    legend: {
+    //       itemStyle: {
+    //          fontWeight: 'bold',
+    //          fontSize  : '13px'
+    //       }
+    //    },
+    //    // xAxis: {
+    //    //    labels: {
+    //    //      style: {
+    //    //        color: '#6e6e70'
+    //    //      },
+    //    //      formatter: function() {return Highcharts.dateFormat('%d %b %Y', this.value); },
+    //    //    },
+    //    //    zeroCrossing: true,
+    //    // },
+    //    // yAxis: {
+    //    //    labels: {
+    //    //       style: {
+    //    //          // color: '#6e6e70'
+    //    //          color    : 'black',
+    //    //          lineWidth: 3,
+    //    //          max      : 100000,
+    //    //          min      : -100000,
+    //    //       }
+    //    //    }
+    //    // },
+    //    plotOptions: {
+    //       series: {
+    //          shadow: true
+    //       },
+    //       candlestick: {
+    //          lineColor: '#404048'
+    //       },
+    //       map: {
+    //          shadow: false
+    //       }
+    //    },
+
+    //    // Highstock specific
+    //    navigator: {
+    //       xAxis: {
+    //          gridLineColor: '#D0D0D8'
+    //       }
+    //    },
+    //    rangeSelector: {
+    //       buttonTheme: {
+    //          fill: 'white',
+    //          stroke: '#C0C0C8', 'stroke-width': 1,
+    //          states: {
+    //             select: {
+    //                fill: '#D0D0D8'
+    //             }
+    //          }
+    //       }
+    //    },
+    //    scrollbar: {
+    //       trackBorderColor: '#C0C0C8'
+    //    },
+
+    //    // General
+    //    background2: '#E0E0E8'
+
+    // };
 
     // Apply the theme
     Highcharts.setOptions(Highcharts.theme);    
