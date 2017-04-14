@@ -42,9 +42,9 @@ section {
 article {
 	flex-flow    : row;
 	border-radius: 3px;
-	margin       : 4px;
-	padding      : 5px;
-	margin-bottom: 2em;
+	/*margin       : 4px;*/
+	/*padding      : 5px;*/
+	margin-bottom: 0.2em;
 }
 
 .hyperlink {

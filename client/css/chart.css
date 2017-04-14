@@ -1,6 +1,7 @@
 .chart-container {
 	display       : flex;
 	flex-direction: column;	
+	margin-top    : 1em;	
 }
 
 .chart-container .chart-sizer {

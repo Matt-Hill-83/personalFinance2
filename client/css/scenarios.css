@@ -3,6 +3,7 @@
 	flex-direction: row;
 	align-self    : flex-start;
 	margin-left   : 1.2em;  
+	margin-top    : 1em;	
 }
 
 .scenario-title-box {
