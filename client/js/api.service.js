@@ -205,6 +205,7 @@ function ApiController(
         block.seedData.numPayments    = parseInt(block.seedData.numPayments);
         block.seedData.initialPayment = block.seedData.seedDataJoinPayment.seedPayment;
 
+        // If no date is provided for the payment, use the table start date.
         if (!block.seedData.initialPayment.date) {
           block.seedData.initialPayment.date = new Date(Constants.tableConfig.startDate);
         } else {
@@ -218,8 +219,15 @@ function ApiController(
         }
       }
 
+      // If no date is provided for the payment, use the table start date.
       if (block.tally) {
-        block.tally.tallyPayment.date = new Date(block.tally.tallyPayment.date);
+        if (!block.tally.tallyPayment.date) {
+          block.tally.tallyPayment.date = new Date(Constants.tableConfig.startDate);
+        } else {
+          block.tally.tallyPayment.date = new Date(block.tally.tallyPayment.date);
+        }
+
+        // block.tally.tallyPayment.date = new Date(block.tally.tallyPayment.date);
       }
 
     });

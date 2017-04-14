@@ -88,7 +88,7 @@ function getStudy() {
 
   var charts = [
     {
-      name         : 'At what point will I have more money in the bank?',
+      name         : 'After what point will I have more cash if I go to grad school?',
       subTitle     : 'base case vs. grad school',
       lineItemGuids: '[-1]', // arbitrary code to be used when creating charts for seed data
     },

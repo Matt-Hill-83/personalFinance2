@@ -50,7 +50,7 @@ function Main_(
     };
     titleRow.cells.forEach(cell=> cell.classes = ['title-row']);
 
-    newTable.push(titleRow);
+    // newTable.push(titleRow);
     newTable.push(..._createTableHeaderRows(scenarioGuid, tableConfig.numColInTable, tableConfig.startDate));
     newTable.push(..._createSections(Constants.scenarios[scenarioGuid].topSection, tableConfig));
 
@@ -124,7 +124,8 @@ function Main_(
     // format specific cells
     newTable[0].cells[0].classes = ['top-left'];
     newTable[1].cells[1].classes = ['cell-1-1'];
-    newTable[1].cells[1].type    = 'blank';
+    newTable[2].cells[1].classes = ['cell-1-1'];
+    newTable[2].cells[1].type    = 'blank';
 
     return newTable;
   }
@@ -215,7 +216,7 @@ function Main_(
 
       var year = {
         valueToDisplay : year,
-        classes        : ['year-cell'],
+        classes        : ['month-cell'],
       };
 
       if (Constants.tableSettings.tableInterval === 'weekly') {

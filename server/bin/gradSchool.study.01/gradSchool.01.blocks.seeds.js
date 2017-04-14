@@ -41,7 +41,7 @@ function getBuckets() {
     type               : 'tally',
     tallyPayment       : {
       amount: 0,
-      date  : '01/01/2017',
+      date  : null,
     },
   };
 
@@ -188,7 +188,7 @@ function _getInflows(){
     seedData: {
       seedDataType: 'periodicDates',
       initialPayment     : {
-        date  : '01/01/2017',
+        date  : null,
         amount: oldPaycheckAmount1,
       },
       numDaysInInterval: 15,
@@ -201,7 +201,7 @@ function _getInflows(){
     seedData: {
       seedDataType: 'periodicDates',
       initialPayment     : {
-        date  : '01/01/2017',
+        date  : null,
         amount: paycheckAmount2,
       },
       numDaysInInterval: 15,

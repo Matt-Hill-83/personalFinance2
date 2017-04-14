@@ -9,7 +9,6 @@
 
 .table-cashflow tr td{
 	padding   :0.2em 0.3em;
-	/*border    :solid 1px #9ba9ad;*/
 	border    :solid 1px #CAD2FF;
 	text-align:right;
 }
@@ -57,7 +56,7 @@
 	border-bottom: 1px solid black !important;
 }
 
-.table-cashflow tr:nth-child(1) td {	
+/*.table-cashflow tr:nth-child(1) td {	
 	padding         : 0;
 	font-size       : 0px;
 	line-height     : 0px;
@@ -69,7 +68,7 @@
 	font-size       : 0px;
 	line-height     : 0px;
 	border-top-width: 0px;
-}
+}*/
 
 /*do this in JS, not in css*/
 .table-cashflow tr td.rowHeader0 {
@@ -109,11 +108,11 @@
   font-size: 0.7em;
 }
 
-.table-cashflow tr td span.expander:hover {
+/*.table-cashflow tr td span.expander:hover {
 	color      : blue;
 	cursor     : default;
 	font-weight: bold;
-}
+}*/
 
 .table-cashflow tr.blank {
 	line-height     : 0px;
@@ -137,7 +136,6 @@
 }
 
 .table-cashflow tr.tally {
-	/*background-color: #b2d3ff;*/
 	background-color: #DDF6F0;
 	border-bottom   : 1px solid black !important;	
 }
@@ -187,7 +185,8 @@
 }
 
 .table-cashflow tr.title-row {
-	background-color: rgba(0, 0, 0, 0);
+	background-color: blue;
+	/*background-color: rgba(0, 0, 0, 0);*/
 	border-top      : 1px solid rgba(0, 0, 0, 0);
 }
 
