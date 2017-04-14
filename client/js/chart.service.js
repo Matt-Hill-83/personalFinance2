@@ -272,7 +272,8 @@ function Main_(
                 return Highcharts.dateFormat('%d %b %Y', this.value);
                 // return Highcharts.dateFormat('%a %d %b', this.value);
             },
-          }
+          },
+          zeroCrossing: true,
        },
        yAxis: {
           labels: {

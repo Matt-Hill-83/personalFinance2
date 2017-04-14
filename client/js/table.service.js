@@ -138,13 +138,13 @@ function Main_(
       return;
     }
 
-    section.cells[0].expander = collapsed.true;
+    // section.cells[0].expander = collapsed.true;
     var children = DataBase.lineItems.getChildBlocksFromSection(section);
     children.forEach(child=> {
       child.rowVisible = false;
-      if (child.type === 'section') {
-        child.cells[0].expander = collapsed.true;
-      }
+      // if (child.type === 'section') {
+      //   child.cells[0].expander = collapsed.true;
+      // }
         
     });
 
@@ -152,11 +152,11 @@ function Main_(
   }
 
   function expandSection(section) {
-    section.cells[0].expander = collapsed.false;
+    // section.cells[0].expander = collapsed.false;
     DataBase.lineItems.getChildBlocksFromSection(section).forEach(block=> {
-      if (block.type === 'section') {
-        block.cells[0].expander = collapsed.false;
-      }
+      // if (block.type === 'section') {
+      //   block.cells[0].expander = collapsed.false;
+      // }
         
       block.rowVisible = true;
       block.collapsed  = false;
@@ -345,14 +345,14 @@ function Main_(
     // Add line item name to first column.
     var firstCell = {
       valueToDisplay: block.name,
-      expander      : block.collapsed ? collapsed.true : collapsed.false,
+      // expander      : block.collapsed ? collapsed.true : collapsed.false,
       classes       : ['rowHeader' + (block.nestLevel - nestOffsetEm)],
       type          : block.type,
     };
 
-    if (block.type === 'lineItem') {
-      firstCell.expander = '';
-    }
+    // if (block.type === 'lineItem') {
+    //   firstCell.expander = '';
+    // }
 
     if (block.type === 'section' && block.subtype1 === 'total of tallies') {
       Utilities.addClasses(block, ['total-of-tallies']);
