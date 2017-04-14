@@ -85,7 +85,11 @@
 	background-color:yellow;
 } 
 
-
+.clear-db {
+	background-color: rgba(0, 0, 0, 0);	
+	border-color: rgba(0, 0, 0, 0);	
+	color: rgba(0, 0, 0, 0);	
+}
 
 
 
