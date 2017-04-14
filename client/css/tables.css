@@ -178,7 +178,7 @@
 	border-bottom: 1px solid black;
 }
 
-.table-cashflow tr td.top-left {
+.table-cashflow tr td.cell-0-0 {
 	border-right : 1px solid rgba(0, 0, 0, 0) !important;
 	border-left  : 1px solid rgba(0, 0, 0, 0) !important;
 	border-top   : 1px solid rgba(0, 0, 0, 0) !important;
@@ -187,6 +187,12 @@
 
 .table-cashflow tr td.cell-1-1 {
 	border-right: 1px solid black;
+}
+
+.table-cashflow tr td.cell-0-1 {
+	border-right       : 1px solid black;
+	border-top-color   : rgba(0, 0, 0, 0);
+	border-bottom-color: rgba(0, 0, 0, 0);	
 }
 
 .table-cashflow tr td *.no-wrap {

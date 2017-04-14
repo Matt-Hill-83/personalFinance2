@@ -117,10 +117,9 @@ function Main_(
     });
 
     // format specific cells
-    newTable[0].cells[0].classes = ['top-left'];
+    newTable[0].cells[0].classes = ['cell-0-0'];
+    newTable[0].cells[1].classes = ['cell-0-1'];
     newTable[1].cells[1].classes = ['cell-1-1'];
-    // newTable[2].cells[1].classes = ['cell-1-1'];
-    newTable[1].cells[1].type    = 'blank';
 
     return newTable;
   }
