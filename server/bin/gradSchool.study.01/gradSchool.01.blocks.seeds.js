@@ -205,7 +205,7 @@ function _getInflows(){
         amount: paycheckAmount2,
       },
       numDaysInInterval: 15,
-      numPayments      : 48,
+      numPayments      : 50,
     }
   };
 
@@ -230,25 +230,6 @@ function _getInflows(){
   }
   return children;
 }
-
-// function _getIrregularInflows() {
-//   var taxRefund = {
-//     name    : 'tax refund',
-//     type    : 'lineItem',
-//     seedData: {
-//       seedDataType: 'periodicDates',
-//       initialPayment     : {
-//         date        : '03/05/2017',
-//         amount      : 1000,
-//       },
-//       numDaysInInterval: 365,
-//     }
-//   };
-
-//   return [
-//     taxRefund,
-//   ];
-// }
 
 function _getIrregularOutflows() {
   var tuition = {
