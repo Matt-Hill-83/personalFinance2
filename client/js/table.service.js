@@ -185,10 +185,10 @@ function Main_(
       var dayString  = weekdays[newDate.getDay()].slice(0,3);
       
       var dateString  = dayOfMonth;
-      // var monthString = curMonth;
       var year        = newDate.getFullYear();
       var yearString  = year.toString();
-      var monthString = curMonth + '-' + yearString.slice(2, 4);
+      var monthString = curMonth + ' ' + dateString;
+      // var monthString = curMonth + '-' + yearString.slice(2, 4);
 
       // Record the index of the cells which transition from one month to the next.
       if (monthString !== previousMonth) {
@@ -257,7 +257,7 @@ function Main_(
     };
 
     var rows = [
-      // yearRow,
+      yearRow,
       monthRow,
       // dateRow,
     ];
