@@ -192,14 +192,7 @@ function Main_(
             // zoomType: 'x'
         },
 
-        xAxis: {
-            type: 'datetime'
-        },
-
         yAxis: {
-            title: {
-                text: null
-            }
         },
 
         tooltip: {
@@ -223,26 +216,25 @@ function Main_(
         subtitle: {
             text: subTitle
         },
-        yAxis: {
-            title: {
-                text: ''
-            }
-        },
 
-       xAxis: {
+        xAxis: {
+          type: 'datetime',
           labels: {
             style: {
               color: '#6e6e70',
             },
-            // formatter: function() {return Highcharts.dateFormat('%d %b %Y', this.value); },
+            formatter: function() {return Highcharts.dateFormat('%d %b %Y', this.value); },
           },
           // zeroCrossing: true,
-       },
+        },
 
-       yAxis: {
-        lineColor: "#ccd6eb",
-        lineWidth: 20,
-        max      : 100000,
+        yAxis: {
+          title: {
+              text: null
+          },
+          // lineColor: "#131315",
+          // lineWidth: 20,
+          // max      : 100000,
           // labels: {
           //   lineColor: "#ccd6eb"
           //   style: { "color": "#666666", "cursor": "default", "fontSize": "11px" },
@@ -261,19 +253,19 @@ function Main_(
 
 
 
-        // legend: {
-        //     layout       : 'vertical',
-        //     align        : 'right',
-        //     // align        : 'left',
-        //     verticalAlign: 'middle'
-        // },
-        // plotOptions: {
-        //     series: {
-        //       pointStart: startDate,
-        //       // pointInterval: 24 * 3600 * 1000 // one day          
-        //       pointInterval: pointInterval * 24 * 3600 * 1000,
-        //     }
-        // },
+        legend: {
+            layout       : 'vertical',
+            align        : 'right',
+            // align        : 'left',
+            verticalAlign: 'middle'
+        },
+        plotOptions: {
+            series: {
+              pointStart: startDate,
+              // pointInterval: 24 * 3600 * 1000 // one day          
+              pointInterval: pointInterval * 24 * 3600 * 1000,
+            }
+        },
         series: series,
     });  
   }

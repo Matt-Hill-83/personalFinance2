@@ -13,11 +13,11 @@
             xAxis, yAxis, extremes, crossing;
 
         if (typeof this.options.zeroCrossing === 'boolean') {
-            xAxis = chart['xAxis'][0];
-            yAxis = chart['yAxis'][0];
-            extremes = yAxis.getExtremes();
-            crossing = Math.abs(extremes.min) + Math.abs(extremes.max);
-            this.offset = yAxis.toPixels(crossing, true);
+            xAxis                       = chart['xAxis'][0];
+            yAxis                       = chart['yAxis'][0];
+            extremes                    = yAxis.getExtremes();
+            crossing                    = Math.abs(extremes.min) + Math.abs(extremes.max);
+            this.offset                 = yAxis.toPixels(crossing, true);
             chart.axisOffset[this.side] = 10;
 
             // set the labels offset
