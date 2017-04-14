@@ -196,7 +196,6 @@ function Main_(
           style: {
             color     : '#fb4646',
             fontSize  : '3em',
-            // fontWeight: 'bold',
             fontFamily: 'sandboxMelodrama'
           }            
         },
