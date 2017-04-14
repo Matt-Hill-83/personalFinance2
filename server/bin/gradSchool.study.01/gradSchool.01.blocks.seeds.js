@@ -205,7 +205,7 @@ function _getInflows(){
         amount: paycheckAmount2,
       },
       numDaysInInterval: 15,
-      numPayments      : 52,
+      numPayments      : 54,
     }
   };
 
