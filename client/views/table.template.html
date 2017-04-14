@@ -32,7 +32,7 @@
         <span class="scenario-title-box">
           <span class="scenario-title-and-friends">
             <span class="crayon-font scenario-title">{{maintable.selectedScenario.name}}</span>
-            
+
             <!--               <div class="scenario-label">
                             <span>[Scenario {{maintable.selectedScenario.id}}]</span>
                           </div> -->
@@ -152,7 +152,12 @@
 
             <span class="no-wrap"> 
               <span class="expander-chevron" ng-show="cellIndex === 0">
-                <span ng-click ="maintable.changeCollapseState(row, $index)"> {{cell.expander}}</span>
+                <span ng-click ="maintable.changeCollapseState(row, $index)">
+                  <!-- Move this logic into service -->
+                  <span ng-if="row.type === 'section' && !row.collapsed && !row.tally && !(row.subtype1 === 'total of tallies')">▼</span>
+                  <span ng-if="row.type === 'section' && !row.collapsed && (row.tally || row.subtype1 === 'total of tallies') ">▲</span>
+                  <span ng-if="row.type === 'section' && row.collapsed">▶</span>
+                </span>
               </span>
               {{cell.valueToDisplay === 0 ? '' : cell.valueToDisplay}}
             </span>
