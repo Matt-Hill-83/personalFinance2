@@ -330,9 +330,9 @@ function DataBase_(
   ////////////////////////////////////////////////////// Rules //////////////////////////////////
 
   function moveUntilFull(rule, date) {
-    var pettyCashTarget = rule.destinationMaxAmount;
-    var outflowLineItem = service.lineItems.getByParams({guid: rule.outflowLineItemGuid})[0];
-    var inflowLineItem  = service.lineItems.getByParams({guid: rule.inflowLineItemGuid})[0];
+    var destinationMaxAmount = rule.destinationMaxAmount;
+    var outflowLineItem      = service.lineItems.getByParams({guid: rule.outflowLineItemGuid})[0];
+    var inflowLineItem       = service.lineItems.getByParams({guid: rule.inflowLineItemGuid})[0];
 
     var sourcePayment      = service.payments.getTotalGrossPaymentByDateAndGuid(date, rule.sourceGuid);
     var destinationPayment = service.payments.getByParams(
@@ -346,17 +346,17 @@ function DataBase_(
     if (
       outflowLineItem &&
       inflowLineItem &&
-      pettyCashTarget &&
+      destinationMaxAmount &&
       sourcePayment &&
       destinationPayment &&
       sourcePayment.amount > rule.sourceMinAmount &&
-      destinationPayment.amount < pettyCashTarget
+      destinationPayment.amount < destinationMaxAmount
       ) {
-      var pettyCashShortfall = pettyCashTarget - destinationPayment.amount;
+      var destinationShortfall = destinationMaxAmount - destinationPayment.amount;
 
       // Don't transfer more than you have.
       var sourceAmountAvailable = sourcePayment.amount - rule.sourceMinAmount;
-      var amountToTransfer      = pettyCashShortfall > sourceAmountAvailable ? sourceAmountAvailable : pettyCashShortfall;
+      var amountToTransfer      = destinationShortfall > sourceAmountAvailable ? sourceAmountAvailable : destinationShortfall;
 
       var paymentToSend = {
         date  : date,

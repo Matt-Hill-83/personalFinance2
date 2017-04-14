@@ -243,10 +243,6 @@ function Ctrl(
     });
 
     return $q.all(promises);
-    // .then(resp=> {
-    // })
-    // .then(()=>{
-    // });
   }    
 
   function addSection(lineItem) {

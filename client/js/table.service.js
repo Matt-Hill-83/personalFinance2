@@ -224,7 +224,6 @@ function Main_(
       }
 
       if (Constants.tableSettings.tableInterval === 'monthly') {
-        // year.classes.push('year' + newDate.getFullYear()%2); // Color even and odd years differently.
         month.classes.push('year' + newDate.getFullYear()%2); // Color even and odd years differently.
       }
 

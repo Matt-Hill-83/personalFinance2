@@ -83,7 +83,7 @@ function getBuckets() {
 
 function getHouseholdNetBucket() {
   var householdNetSection = {
-    name     : 'household net',
+    name     : 'household after transfers',
     type     : 'section',
     ruleAlias: 'cash net',
     children : getHouseholdNet(),
@@ -97,14 +97,14 @@ function getHouseholdNetBucket() {
 function getHouseholdNet() {
   var adjustments = {
     collapsed: true,
-    name     : 'move cash into BUCKETS',
+    name     : 'transfer cash into BUCKETS',
     type     : 'section',
     children : _getAdjustments(),
   };
 
   var cash = {
     // collapsed: true,
-    name     : 'household',
+    name     : 'household before transfers',
     type     : 'section',
     children : getHouseholdGross(),
   };
@@ -117,7 +117,7 @@ function getHouseholdNet() {
 
 function getHouseholdGross() {
   var inflows = {
-    // collapsed: true,
+    collapsed: true,
     name     : 'inflows',
     type     : 'section',
     children: _getInflows(),
