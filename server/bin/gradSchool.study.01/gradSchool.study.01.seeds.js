@@ -90,12 +90,12 @@ function getStudy() {
     {
       name         : 'At what point will I have more money in the bank?',
       subTitle     : 'base case vs. grad school',
-      lineItemGuids: '[-1]',
+      lineItemGuids: '[-1]', // arbitrary code to be used when creating charts for seed data
     },
     {
       name         : 'At what point will I pay off my student loan?',
       subTitle     : 'grad school',
-      lineItemGuids: '[-3]',
+      lineItemGuids: '[-3]', // arbitrary code to be used when creating charts for seed data
     },
   ];
 
