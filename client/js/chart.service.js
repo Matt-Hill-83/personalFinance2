@@ -202,7 +202,8 @@ function Main_(
         },
         legend: {
             layout       : 'vertical',
-            align        : 'right',
+            // align        : 'right',
+            align        : 'left',
             verticalAlign: 'middle'
         },
         plotOptions: {
