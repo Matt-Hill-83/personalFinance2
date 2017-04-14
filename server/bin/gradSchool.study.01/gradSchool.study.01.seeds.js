@@ -53,7 +53,7 @@ function getStudy() {
     "inflowLineItemGuid"  : 'student loan inflow from household',
 
     "sourceMinAmount"     : 0,
-    "destinationMaxAmount": 5,
+    "destinationMaxAmount": 0,
   };
 
   var scenario1 = {

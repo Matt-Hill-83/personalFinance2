@@ -19,34 +19,38 @@ function CreateEditCtrl($scope) {
 	var vm        = this;
 	vm.data       = $scope.params;
 	vm.closeModal = closeModal;
+  vm.isLineItem = false;
 
-	if (vm.data.mode === 'update') {
-		vm.newLineItem = vm.data.row;
-		vm.button = {
-			label   : 'Update',
-			function: update,
-		};
-	} else if (vm.data.mode ==='create') {
-		vm.button = {
-			label   : 'Create',
-			function: create,
-		};
+  if (vm.data.mode === 'update') {
+    vm.newBlock   = vm.data.row;
+    
+    vm.button = {
+      label   : 'Update',
+      function: update,
+    };
+  } else if (vm.data.mode ==='create') {
+    // vm.isLineItem = true;
+    
+    vm.button = {
+      label   : 'Create',
+      function: create,
+    };
 
-    vm.newLineItem = {
-			name    : 'new row',
+    vm.newBlock = {
+      name      : 'new row',
       parentGuid: vm.data.row.guid,
-			scenario: vm.data.row.scenario,
-			type    : 'lineItem',
-			seedData: {
-				seedDataType  : 'periodicDates',
-				initialPayment: {
-		      date  : defaultDate,
-		      amount: 999,
-		    },
+      scenario  : vm.data.row.scenario,
+      type      : 'lineItem',
+      seedData: {
+        seedDataType  : 'periodicDates',
+        initialPayment: {
+          date  : defaultDate,
+          amount: 999,
+        },
         numDaysInInterval: 30,
         numPayments      : null,
       }
-    };   	
+    };    
 
     var parentGuid;
     var indexWithinParent;
@@ -60,11 +64,10 @@ function CreateEditCtrl($scope) {
       indexWithinParent = 0;
     }
     
-    vm.newLineItem.indexWithinParent = indexWithinParent;
-    vm.newLineItem.parentGuid        = parentGuid;
-
-
-	}
+    vm.newBlock.indexWithinParent = indexWithinParent;
+    vm.newBlock.parentGuid        = parentGuid;
+  }
+  vm.isLineItem = (vm.newBlock.type === 'lineItem') && (subtype1 !== 'interest');
 
   //////////////////////
 
@@ -75,7 +78,7 @@ function CreateEditCtrl($scope) {
   function update() {
   	var payload = {
       update  : true,
-      lineItem: vm.newLineItem,
+      lineItem: vm.newBlock,
     };
 
   	vm.data.callback(payload);
@@ -85,7 +88,7 @@ function CreateEditCtrl($scope) {
   function create() {
   	var payload = {
       create     : true,
-      newLineItem: vm.newLineItem,
+      newLineItem: vm.newBlock,
   	};
   	vm.data.callback(payload);
   	closeModal();

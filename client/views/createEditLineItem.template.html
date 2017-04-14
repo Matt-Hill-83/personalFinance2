@@ -4,29 +4,27 @@
       <div class="modal-legend">Periodic Payments</div>
       <div class="input-fields">
         <div class="label-box">
-          <div class="span-centerer"><span class="label">Name:</span></div>
-          <div class="span-centerer"><span class="label">Start Date:</span></div>
-          <div class="span-centerer"><span class="label">Amount:</span></div>
-          <div class="span-centerer"><span class="label">Num Days in Interval:</span></div>
-          <div class="span-centerer"><span class="label">Number of Payments:</span></div>
+          <div ng-if="true" class="span-centerer"><span class="label">Name:</span></div>
+          <div ng-if="createEditLineItem.isLineItem" class="span-centerer"><span class="label">Start Date:</span></div>
+          <div ng-if="createEditLineItem.isLineItem" class="span-centerer"><span class="label">Amount:</span></div>
+          <div ng-if="createEditLineItem.isLineItem" class="span-centerer"><span class="label">Num Days in Interval:</span></div>
+          <div ng-if="createEditLineItem.isLineItem" class="span-centerer"><span class="label">Number of Payments:</span></div>
         </div>
         <div class="value-box">
-          <input type="text" class="input-field" ng-model ="createEditLineItem.newLineItem.name"/>
-          <input type="date" class="input-field" ng-model ="createEditLineItem.newLineItem.seedData.initialPayment.date"/>
-          <input type="number" class="input-field" ng-model ="createEditLineItem.newLineItem.seedData.initialPayment.amount"/>
-          <input type="number" class="input-field" ng-model ="createEditLineItem.newLineItem.seedData.numDaysInInterval"/>
-          <input type="number" class="input-field" ng-model ="createEditLineItem.newLineItem.seedData.numPayments"/>
+          <input ng-if="true" type="text"   class="input-field" ng-model ="createEditLineItem.newBlock.name"/>
+          <input ng-if="createEditLineItem.isLineItem" type="date"   class="input-field" ng-model ="createEditLineItem.newBlock.seedData.initialPayment.date"/>
+          <input ng-if="createEditLineItem.isLineItem" type="number" class="input-field" ng-model ="createEditLineItem.newBlock.seedData.initialPayment.amount"/>
+          <input ng-if="createEditLineItem.isLineItem" type="number" class="input-field" ng-model ="createEditLineItem.newBlock.seedData.numDaysInInterval"/>
+          <input ng-if="createEditLineItem.isLineItem" type="number" class="input-field" ng-model ="createEditLineItem.newBlock.seedData.numPayments"/>
         </div>
     </div>
-  
 
     <div class="button-section">
       <!-- This button is both the Create and Modify button. -->
-      <label><span>&nbsp;</span><input ng-click ="createEditLineItem.closeModal()" type="submit" value="Cancel" /></label>
+      <label><span>&nbsp;</span><input class="create-edit-button" ng-click ="createEditLineItem.button.function()" type="submit" value="{{createEditLineItem.button.label}}" /></label>
       <div class="middle-spacer"></div>
-      <label><span>&nbsp;</span><input ng-click ="createEditLineItem.button.function()" type="submit" value="{{createEditLineItem.button.label}}" /></label>
+      <label><span>&nbsp;</span><input ng-click ="createEditLineItem.closeModal()" type="submit" value="Cancel" /></label>
     </div>
-
 
   </fieldset>
 
