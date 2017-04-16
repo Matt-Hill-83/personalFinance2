@@ -223,6 +223,10 @@
 	background-color: #9bd8cd !important;
 }
 
+.year-block {
+	border-left : 1px black solid !important;
+	border-right: 1px black solid !important;
+}
 
 
 

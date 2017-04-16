@@ -40,6 +40,14 @@ function Main_(
     var newTable = [];
     
     newTable.push(..._createTableHeaderRows(scenarioGuid, tableConfig.numColInTable, tableConfig.startDate));
+
+
+    console.log('|++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++|');
+    console.log('Constants.tableConfig.yearHeaderBlocks: ');
+    console.log(Constants.tableConfig.yearHeaderBlocks);
+    console.log('|------------------------------------------------------------------------------------------------|')
+    
+    
     newTable.push(..._createSections(Constants.scenarios[scenarioGuid].topSection, tableConfig));
 
     newTable = addFormatingToTable(newTable);
@@ -112,6 +120,8 @@ function Main_(
     return newTable;
   }
 
+  ////////////////////////  Sections  /////////////////////////////////////////////
+
   function collapseSections(table) {
     DataBase.lineItems.getSections().filter(section=> section.collapsed).forEach(section=> collapseSection(section));
   }
@@ -138,7 +148,33 @@ function Main_(
     section.collapsed = false;
   }
 
-  ////////////////////////  Sections  /////////////////////////////////////////////
+  function _createSections(block, tableConfig) {
+    var table    = [];
+    var children = DataBase.lineItems.getFirstChildrenOf(block);
+
+    children.forEach((block) => {
+      if (block.type === 'section') {
+        var tableSection = _createSections(block, tableConfig);
+        if (block.tally) {
+          tableSection.push(_createRowFromLineItem(tableConfig, block));
+        } else {
+          tableSection = _addTotalsRowsToSection(tableSection, block, tableConfig);
+        }
+        table.push(...tableSection);
+
+        // Create blank row after tally sections only.
+        if (block.tally) {
+          table.push(_createBlankRow(table[0].cells.length));
+        }
+      } else if (block.type === 'lineItem') {
+        table.push(_createRowFromLineItem(tableConfig, block));
+      }
+    });
+
+    return table;
+  }
+
+  ////////////////////////  Rows  /////////////////////////////////////////////
 
   function _createTableHeaderRows(scenarioGuid, numColInTable, startDate) {
     var isMonthly = true;
@@ -156,6 +192,7 @@ function Main_(
     
     Utilities.clearArray(Constants.tableConfig.monthTransitionCells);
     Utilities.clearArray(Constants.tableConfig.yearTransitionCells);
+    Constants.tableConfig.yearHeaderBlocks = [];
     // Add blank cell for (0,0)
     dateCells.push({classes:  ['blank'], type: 'blank'});
     monthCells.push({classes: ['blank'], type: 'blank'});
@@ -182,6 +219,17 @@ function Main_(
       // Record the index of the cells which transition from one month to the next.
       if (year !== previousYear) {
         Constants.tableConfig.yearTransitionCells.push(index);
+      }
+      
+      // Record how many columns are shown for each year.
+      if (year !== previousYear) {
+        var newBlock = {
+          year     : year,
+          numBlocks: 1,
+        };
+        Constants.tableConfig.yearHeaderBlocks.push(newBlock);
+      } else {
+        Utilities.getLast(Constants.tableConfig.yearHeaderBlocks).numBlocks += 1;
       }
       
       previousYear = year;
@@ -219,6 +267,18 @@ function Main_(
     // Account for the blank column we will insert.
     Constants.tableConfig.yearTransitionCells = Constants.tableConfig.yearTransitionCells.map(value=> value += 1);
 
+
+    // Constants.tableConfig.yearHeaderBlocks.map(yearBlock=> {
+    //   for (var j = 0; j < yearBlock.numBlocks; j++) {
+    //     var newYearCell = {
+    //       valueToDisplay : yearBlock.year,
+    //       classes        : ['month-cell'],
+    //     };
+    //     yearCells.push(newYearCell)
+    //   }
+        
+    // });
+
     var dateRow = {
       classes   : ['blank-background'],
       cells     : dateCells,
@@ -249,32 +309,6 @@ function Main_(
     return rows;
   }
 
-  function _createSections(block, tableConfig) {
-    var table    = [];
-    var children = DataBase.lineItems.getFirstChildrenOf(block);
-
-    children.forEach((block) => {
-      if (block.type === 'section') {
-        var tableSection = _createSections(block, tableConfig);
-        if (block.tally) {
-          tableSection.push(_createRowFromLineItem(tableConfig, block));
-        } else {
-          tableSection = _addTotalsRowsToSection(tableSection, block, tableConfig);
-        }
-        table.push(...tableSection);
-
-        // Create blank row after tally sections only.
-        if (block.tally) {
-          table.push(_createBlankRow(table[0].cells.length));
-        }
-      } else if (block.type === 'lineItem') {
-        table.push(_createRowFromLineItem(tableConfig, block));
-      }
-    });
-
-    return table;
-  }
-
   function _addTotalsRowsToSection(tableRows, section, tableConfig) {
     var sectionRows = [];
     if (section.nestLevel <= baseNestLevel) {
@@ -287,8 +321,6 @@ function Main_(
 
     return sectionRows;
   }
-
-  ////////////////////////  Rows  /////////////////////////////////////////////
 
   function _createBlankRow(rowLength) {
     var cells = [];

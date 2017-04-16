@@ -82,14 +82,37 @@
         ng-mouseleave ="maintable.exitedTable($event, rowIndex, cellIndex, row, cell)"
         >
         
+        <!-- Column header 1 - year -->
+        <tr ng-class  ="{{maintable.tableMatrix[0].classes}}">
+          
+          <!-- insert 2 blank cells -->
+          <td><span class="cell-0-0"> </span></td>
+          <td><span class="cell-0-1"> </span></td>
+
+          <!-- insert the yearblock header cells -->
+          <td
+            ng-repeat ="block in maintable.tableConfig.yearHeaderBlocks track by $index"
+            ng-class  ="maintable.tableMatrix[0].cells[3].classes"
+            class     ="year-block"
+            colspan   ="{{block.numBlocks}}"
+            >
+            <span class="no-wrap"> 
+              {{block.year}}
+            </span>
+            
+          </td>
+        </tr>
+
         <!-- Normal data row -->
         <tr
           ng-repeat ="row in maintable.tableMatrix track by $index"
           ng-init   ="rowIndex = $index"
-          ng-if     ="row.rowVisible && row.type !== 'titleRow'"
+          xxx-ng-if     ="row.rowVisible"
+          ng-if     ="$index > 0 && row.rowVisible"
           ng-class  ="{{row.classes}}"
           >
           <td
+            xxx-ng-if     ="rowIndex > 0"
             ng-repeat    ="cell in row.cells track by $index"
             ng-init      ="cellIndex = $index"
             ng-class     ="{{cell.classes}}"
