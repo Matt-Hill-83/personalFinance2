@@ -117,7 +117,7 @@ function getHouseholdNet() {
 
 function getHouseholdGross() {
   var inflows = {
-    collapsed: true,
+    collapsed: globalParams.study === 'getMba',
     name     : 'inflows',
     type     : 'section',
     children: _getInflows(),
@@ -180,7 +180,7 @@ function _getAdjustments(){
 function _getInflows(){
   var oldPaycheckAmount1 = 2200;
   var paycheckAmount2    = oldPaycheckAmount1 * 0.8;
-  var newPaycheckAmount  = oldPaycheckAmount1 * 2;
+  var newPaycheckAmount  = oldPaycheckAmount1 * 1.8;
 
   var mattPaycheck1 = {
     type    : 'lineItem',
@@ -205,7 +205,7 @@ function _getInflows(){
         amount: paycheckAmount2,
       },
       numDaysInInterval: 15,
-      numPayments      : 54,
+      numPayments      : 46,
     }
   };
 

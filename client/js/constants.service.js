@@ -64,7 +64,7 @@ function Constants_(Utilities) {
 
     // Back up the start date so that the first day on the charts and tables is the start date.
     // TODO: hacky, fix this!
-    tableConfig.startDate = Utilities.addDays(tableConfig.startDate, -(tableConfig.timeIntervalDays -1));
+    // tableConfig.startDate = Utilities.addDays(tableConfig.startDate, -(tableConfig.timeIntervalDays -1));
 
     tableConfig.dates = [];
     for (var i = 0; i < tableConfig.numColInTable; i++) {
