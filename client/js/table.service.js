@@ -20,8 +20,6 @@ function Main_(
     false        : '▼',
     reversedFalse: '▲', // for upward folding rows
     true         : '▶',
-    // false: '▲',
-    // true : '◀',
   };
 
   var service = {
@@ -41,16 +39,6 @@ function Main_(
     Constants.scenarios[scenarioGuid].tableMatrix.splice(0, Constants.scenarios[scenarioGuid].tableMatrix.length);
     var newTable = [];
     
-    // Add a row to contain the Scenario title.
-    // var titleRow     = _createBlankRow(tableConfig.numColInTable + 1);
-    // titleRow.type    = 'titleRow';
-    // titleRow.classes = ['title-row'];
-    // titleRow.data    = {
-    //   numColInTable: tableConfig.numColInTable - 0,
-    // };
-    // titleRow.cells.forEach(cell=> cell.classes = ['title-row']);
-
-    // newTable.push(titleRow);
     newTable.push(..._createTableHeaderRows(scenarioGuid, tableConfig.numColInTable, tableConfig.startDate));
     newTable.push(..._createSections(Constants.scenarios[scenarioGuid].topSection, tableConfig));
 

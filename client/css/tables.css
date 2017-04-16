@@ -14,8 +14,8 @@
 }
 
 .table-cashflow tr td.cell {
-	width :3.5em;
-  font-family: Trebuchet MS, sans-serif;
+	width      : 3.5em;
+	font-family: Trebuchet MS, sans-serif;
 }
 
 .table-cashflow tr  {
