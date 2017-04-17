@@ -12,18 +12,8 @@ body{
 }
 
 .flex-container {
-
-  position: relative;
-  /*z-index: 2;*/
-  background-color: #b4bcbf;
-  background-image: -moz-linear-gradient(270deg, #d2d8da 100px, #f1f6f6 300px, #b4bcbf 868px);
-  background-image: -webkit-linear-gradient(270deg, #d2d8da 100px, #f1f6f6 300px, #b4bcbf 868px);
-  background-image: -o-linear-gradient(270deg, #d2d8da 100px, #f1f6f6 300px, #b4bcbf 868px);
-  background-image: -ms-linear-gradient(270deg, #d2d8da 100px, #f1f6f6 300px, #b4bcbf 868px);
-  padding: 0 0 25px;
-
 	/*background         : url('../images/field_002.jpg') no-repeat 0 0 scroll;		*/
-/*	background-size    : cover;
+	background-size    : cover;
 	background-position: 50% 50%;
 	background-size    : 100% 100%;
 	
@@ -31,7 +21,6 @@ body{
 	height             : 100%;
 	margin             : auto;
 	width              : 100%;
-*/
 }
 
 .flex-area {
