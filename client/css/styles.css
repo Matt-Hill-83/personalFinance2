@@ -14,7 +14,7 @@ body{
 .flex-container {
 
   position: relative;
-  z-index: 2;
+  /*z-index: 2;*/
   background-color: #b4bcbf;
   background-image: -moz-linear-gradient(270deg, #d2d8da 100px, #f1f6f6 300px, #b4bcbf 868px);
   background-image: -webkit-linear-gradient(270deg, #d2d8da 100px, #f1f6f6 300px, #b4bcbf 868px);
