@@ -6,21 +6,24 @@
 				<article>
 					<div class="study-container">
 						<div class="study-title-container">
-							<!-- non-editable version of field -->
-							<!-- study selector -->
-							<select
-								xxx-ng-disabled ="true"
-								ng-click    ="landingPage.updateStudy(landingPage.activeStudy)"
-								ng-if       ="!landingPage.editingStudy"
-								class       ="crayon-font study-title study-selector"
-								ng-change   ="landingPage.selectDifferentStudy(landingPage.activeStudy)"    
-								ng-options  ="study.message for study in landingPage.studys track by study.guid"
-								ng-model    ="landingPage.activeStudy"
-							></select>    
+						
+							<div class="selectdiv">
+							  <label>
+										<select
+											ng-if       ="!landingPage.editingStudy"
+											ng-click    ="landingPage.updateStudy(landingPage.activeStudy)"
+											class       ="crayon-font study-title study-selector"
+											ng-change   ="landingPage.selectDifferentStudy(landingPage.activeStudy)"    
+											ng-options  ="study.message for study in landingPage.studys track by study.guid"
+											ng-model    ="landingPage.activeStudy"
+										></select>    
+
+							  </label>
+							</div>
 
 							<!-- editable version of field -->
 							<div
-								ng-if ="landingPage.editingStudy"
+								ng-if =" false && landingPage.editingStudy"
 								class ="edit-study-input"
 								>
 		            <input

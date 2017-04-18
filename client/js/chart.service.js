@@ -187,6 +187,7 @@ function Main_(
 
     Highcharts.chart(chart.chartDivId, {
         chart: {
+          backgroundColor: '#f7fafc',
         },
         tooltip: {
           crosshairs: true,
@@ -218,14 +219,12 @@ function Main_(
         },
         legend: {
             layout       : 'vertical',
-            // align        : 'right',
             align        : 'left',
             verticalAlign: 'middle'
         },
         plotOptions: {
             series: {
               pointStart: startDate,
-              // pointInterval: 24 * 3600 * 1000 // one day          
               pointInterval: pointInterval * 24 * 3600 * 1000,
             }
         },
@@ -250,7 +249,7 @@ function Main_(
        colors: ['#f45b5b', '#8085e9', '#8d4654', '#7798BF', '#aaeeee', '#ff0066', '#eeaaee',
           '#55BF3B', '#DF5353', '#7798BF', '#aaeeee'],
        chart: {
-          backgroundColor: '#e0f2ff',
+          // backgroundColor: '#e0f2ff',
           style: {
              fontFamily: 'Signika, serif'
           }
