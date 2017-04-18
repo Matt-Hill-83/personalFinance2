@@ -3,10 +3,17 @@
 /**
  * Module dependencies.
  */
+var app      = require('../app');
+var debug    = require('debug')('_example:server');
+var http     = require('http');
+var newRelic = require('newrelic');
 
-var app = require('../app');
-var debug = require('debug')('_example:server');
-var http = require('http');
+// keep app from shutting down on heroku
+setInterval(function() {
+    http.get("http://www.money-buckets.com/");
+}, 300000); // every 5 minutes (300000)
+
+
 
 /**
  * Get port from environment and store in Express.

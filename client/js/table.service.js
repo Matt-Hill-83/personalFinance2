@@ -40,16 +40,7 @@ function Main_(
     var newTable = [];
     
     newTable.push(..._createTableHeaderRows(scenarioGuid, tableConfig.numColInTable, tableConfig.startDate));
-
-
-    console.log('|++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++|');
-    console.log('Constants.tableConfig.yearHeaderBlocks: ');
-    console.log(Constants.tableConfig.yearHeaderBlocks);
-    console.log('|------------------------------------------------------------------------------------------------|')
-    
-    
     newTable.push(..._createSections(Constants.scenarios[scenarioGuid].topSection, tableConfig));
-
     newTable = addFormatingToTable(newTable);
 
     // Collapse sections if required in init data.
