@@ -5,7 +5,7 @@
  */
 
 // needs to be first line
-var newRelic = require('newrelic');
+var newRelic = require('./newrelic');
 
 var app      = require('../app');
 var debug    = require('debug')('_example:server');
