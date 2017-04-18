@@ -3,10 +3,13 @@
 /**
  * Module dependencies.
  */
+
+// needs to be first line
+var newRelic = require('newrelic');
+
 var app      = require('../app');
 var debug    = require('debug')('_example:server');
 var http     = require('http');
-var newRelic = require('newrelic');
 
 // keep app from shutting down on heroku
 setInterval(function() {
