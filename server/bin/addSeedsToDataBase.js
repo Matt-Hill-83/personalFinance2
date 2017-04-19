@@ -30,6 +30,8 @@ function createStudyFromSeedData(db, params) {
 	var studys = [
 		{}, // we don't use index 0
 		db.getGradSchoolSeeds(),	
+		db.getPrepayCarLoan(),	
+
 		db.getStudySeeds2(),	
 		db.getStudySeeds3(),	
 	];

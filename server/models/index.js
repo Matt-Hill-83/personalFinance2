@@ -64,16 +64,14 @@ db.scenarios          = require('../models/config/scenario.js')(sequelize, Seque
 db.studys             = require('../models/config/study.js')(sequelize, Sequelize);
 db.studyJoinScenarios = require('../models/config/studyJoinScenario.js')(sequelize, Sequelize);
 
-// Files with seeds to create initial blocks in database:
-db.getRuleSeeds       = require('../bin/templateStudy01.seeds.js');
-
 // Load pre configured studys
 db.getGradSchoolSeeds = require('../bin/gradSchool.study.01/gradSchool.study.01.seeds.js');
+db.getPrepayCarLoan   = require('../bin/prepayCarLoan.study.01/study.seeds.js');
+
 
 db.getStudySeeds2     = require('../bin/householdStudy01.seeds.js');
 db.getStudySeeds3     = require('../bin/study3.seeds.js');
 
-db.getRuleSeeds       = require('../bin/ruleSeeds/rule.seeds.js');
 db.getBasicSection    = require('../bin/basicSection.seeds.js');
 
 // Seed adding functions.
