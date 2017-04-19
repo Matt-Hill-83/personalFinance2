@@ -1,14 +1,17 @@
 'use strict'
 
-function getAllBlocks() {
+var globalParams = {};
+
+function getAllBlocks(params) {
+  globalParams = params;
   var name = 'savings';
 
   var tally = {
     annualEscalationPct: 4,
     type        : 'tally',
     tallyPayment: {
-      amount: 0,
-      date  : '01/01/2017',
+      amount: 10000,
+      date  : null,
     },
   };
 
@@ -18,7 +21,7 @@ function getAllBlocks() {
     name    : name + ' interest',
   };
   
-  var children =  _getChildren();
+  var children = _getChildren();
   children.push(tallyInterest);
 
   var section = {
@@ -39,16 +42,25 @@ function _getChildren() {
     type     : 'lineItem',
     name     : 'inflow from household',
   };
+  var children = [inflowFromHousehold];
 
-  var outflowToHousehold = {
+  var loanPrepayOut = {
+    name    : 'loanPrepayOut',
     type    : 'lineItem',
-    name    : 'outflow to household',
+    seedData: {
+      seedDataType: 'periodicDates',
+      initialPayment     : {
+        date        : '06-01-2017',
+        amount      : -10000,
+      },
+      numPayments: 1,
+    }
   };
 
-  return [
-    inflowFromHousehold,
-    // outflowToHousehold,
-  ];
+  if (globalParams.study === 'getMba') {
+    children.push(loanPrepayOut);
+  }
+  return children;
 }
 
 module.exports = getAllBlocks;

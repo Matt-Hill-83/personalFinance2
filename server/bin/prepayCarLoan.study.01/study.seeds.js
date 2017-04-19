@@ -77,7 +77,7 @@ function getStudy() {
   });
 
   scenarios[0].ruleSeeds = [
-    // rule4,
+    rule4,
     rule3,
   ];
 

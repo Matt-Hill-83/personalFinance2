@@ -1,10 +1,9 @@
 'use strict'
 
 var externalSeeds = {};
-externalSeeds.getPettyCash     = require('./pettyCash.seeds.js');
-externalSeeds.getEmergencyFund = require('./emergencyFund.seeds.js');
-externalSeeds.getStudentLoan   = require('./studentLoan.seeds.js');
-externalSeeds.houseDownPayment = require('./houseDownPayment.seeds.js');
+externalSeeds.getPettyCash = require('./pettyCash.seeds.js');
+externalSeeds.getCarLoan   = require('./carLoan.seeds.js');
+externalSeeds.savings      = require('./savings.seeds.js');
 
 var simplify     = false;
 var simplify     = true;
@@ -61,24 +60,13 @@ function getBuckets() {
     children : children,
   };
 
-  var blocks;
-  if (globalParams.study !== 'getMba') {
-    blocks = [
-      householdNetBucket,
-      // externalSeeds.getPettyCash(globalParams),
-      externalSeeds.houseDownPayment(globalParams),
-    ];
-  } else {
-    blocks = [
-      householdNetBucket,
-      // externalSeeds.getPettyCash(globalParams),
-      externalSeeds.getStudentLoan(globalParams),
-      externalSeeds.houseDownPayment(globalParams),
-    ];
-  }
+  var blocks = [
+    householdNetBucket,
+    // externalSeeds.getPettyCash(globalParams),
+    externalSeeds.getCarLoan(globalParams),
+    externalSeeds.savings(globalParams),
+  ];
   return blocks;
-
-
 }
 
 function getHouseholdNetBucket() {
@@ -161,30 +149,21 @@ function _getAdjustments(){
     name     : 'outflow to savings',
   };
 
-  var children;
-  if (globalParams.study !== 'getMba') {
-    children = [
-      outflowToHomeDownPayment,
-    ];
-  } else {
-    children = [
-      // outflowToPettyCash,
-      // outflowToEmergencyFund,
-      outflowToStudentLoan,
-      outflowToHomeDownPayment,
-    ];
-  }
+  var children = [
+    // outflowToPettyCash,
+    // outflowToEmergencyFund,
+    outflowToStudentLoan,
+    outflowToHomeDownPayment,
+  ];
   return children;
 }
 
 function _getInflows(){
   var oldPaycheckAmount1 = 2200;
-  var paycheckAmount2    = oldPaycheckAmount1 * 0.8;
-  var newPaycheckAmount  = oldPaycheckAmount1 * 1.8;
 
   var mattPaycheck1 = {
     type    : 'lineItem',
-    name    : 'MeanCorp paycheck',
+    name    : 'paycheck',
     seedData: {
       seedDataType: 'periodicDates',
       initialPayment     : {
@@ -195,59 +174,8 @@ function _getInflows(){
     }
   };
 
-  var mattPaycheck2 = {
-    type    : 'lineItem',
-    name    : 'MeanCorp paycheck',
-    seedData: {
-      seedDataType: 'periodicDates',
-      initialPayment     : {
-        date  : null,
-        amount: paycheckAmount2,
-      },
-      numDaysInInterval: 15,
-      numPayments      : 48,
-    }
-  };
-
-  var funCoPaycheck = {
-    type    : 'lineItem',
-    name    : 'FunCo paycheck',
-    seedData: {
-      seedDataType: 'periodicDates',
-      initialPayment     : {
-        date        : '01/01/2019',
-        amount      : newPaycheckAmount,
-      },
-      numDaysInInterval: 15,
-    }
-  };
-
-  var children;
-  if (globalParams.study !== 'getMba') {
-    children = [mattPaycheck1]
-  } else {
-    children = [mattPaycheck2, funCoPaycheck]
-  }
+  var children = [mattPaycheck1]
   return children;
-}
-
-function _getIrregularOutflows() {
-  var tuition = {
-    type    : 'lineItem',
-    name    : 'tuition',
-    seedData: {
-      seedDataType: 'periodicDates',
-      initialPayment     : {
-        date        : '02-01-2017',
-        amount      : -15000,
-      },
-      numDaysInInterval: 180,
-    }
-  };
-
-  return [
-    tuition,
-  ];
 }
 
 function _getOutflows(){
@@ -277,17 +205,10 @@ function _getOutflows(){
     }
   };
   
-  var irregularOutflows = {
-    collapsed: true,
-    name     : 'irregular outflows',
-    type     : 'section',
-    children : _getIrregularOutflows(),
-  };
 
     return [
       rent,
       groceries,
-      // irregularOutflows,
     ];
 }
 

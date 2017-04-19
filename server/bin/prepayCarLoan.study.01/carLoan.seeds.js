@@ -3,11 +3,11 @@
 var globalParams = {};
 
 function getAllBlocks(params) {
-  var name = 'student loan';
+  var name = 'car loan';
   globalParams = params;
 
   var tally = {
-    annualEscalationPct: 4,
+    annualEscalationPct: 20,
     type        : 'tally',
     tallyPayment: {
       amount: 0,
@@ -43,30 +43,40 @@ function _getChildren() {
     name     : 'inflow from household',
   };
 
-  var tuition = {
+  var loan = {
     type    : 'lineItem',
-    name    : 'tuition',
+    name    : 'car loan',
     seedData: {
       seedDataType: 'periodicDates',
       initialPayment     : {
         date        : '01-01-2017',
-        amount      : -10000,
+        amount      : -60000,
       },
       numDaysInInterval: 180,
-      numPayments      : 4,
+      numPayments      : 1,
     }
   };
 
-  var children;
-  if (globalParams.study === 'getMba') {
-    children = [
-        inflowFromHousehold,
-        tuition,
-    ];
-  } else {
-    children = [
+  var children = [
       inflowFromHousehold,
-    ];
+      loan,
+  ];
+
+  var loanPrepayIn = {
+    name    : 'loanPrepayIn',
+    type    : 'lineItem',
+    seedData: {
+      seedDataType: 'periodicDates',
+      initialPayment     : {
+        date        : '06-01-2017',
+        amount      : 10000,
+      },
+      numPayments: 1,
+    }
+  };
+
+  if (globalParams.study === 'getMba') {
+    children.push(loanPrepayIn);
   }
   return children;
 }
