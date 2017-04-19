@@ -57,13 +57,13 @@ function getStudy() {
   };
 
   var scenario1 = {
-    name  : 'continue at current job',
+    name  : 'follow loan schedule',
     block : householdBlocks(params={}),
   };
 
   var params = {study: 'getMba'};
   var scenario2 = {
-    name  : 'get a Master\'s degree',
+    name  : 'pay an extra $10k in year 2',
     block : householdBlocks(params),
   };
 
@@ -88,15 +88,15 @@ function getStudy() {
 
   var charts = [
     {
-      name         : 'After what point will I have more cash if I go to grad school?',
-      subTitle     : 'base case vs. grad school',
+      name         : 'Net Worth',
+      subTitle     : 'base case vs. $10k prePayment',
       lineItemGuids: '[-1]', // arbitrary code to be used when creating charts for seed data
     },
-    {
-      name         : 'At what point will I pay off my student loan?',
-      subTitle     : 'grad school',
-      lineItemGuids: '[-3]', // arbitrary code to be used when creating charts for seed data
-    },
+    // {
+    //   name         : 'At what point will I pay off my student loan?',
+    //   subTitle     : 'grad school',
+    //   lineItemGuids: '[-3]', // arbitrary code to be used when creating charts for seed data
+    // },
   ];
 
   var descriptionStrings = [
@@ -106,8 +106,8 @@ function getStudy() {
 
   var description = descriptionStrings.join();
   var study = {
-    name       : 'Is grad school worth it?', 
-    description: description, 
+    name       : 'Should I prePay on my Car Loan?', 
+    // description: description, 
     scenarios  : scenarios,
     charts     : charts,
   };

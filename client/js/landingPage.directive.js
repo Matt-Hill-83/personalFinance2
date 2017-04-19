@@ -60,7 +60,7 @@ function LandingPageController(
     },
     {
       guid: 2,
-      name: 'camry vs. prius',
+      name: 'Prepay Car Loan',
     },
     {
       guid: 3,
@@ -68,7 +68,7 @@ function LandingPageController(
     },
   ];
 
-  vm.studyToCreate = vm.studyTemplates[0];
+  // vm.studyToCreate = vm.studyTemplates[0];
   vm.showCharts    = true;
   vm.editingStudy  = false;
 
@@ -190,7 +190,11 @@ function LandingPageController(
       } else if (newPageLoad) {
         vm.studys = [];
         return addStudy(vm.studyTemplates[0])
-        // return addStudy(vm.studyTemplates[2])
+        // return addStudy(vm.studyTemplates[1])
+
+        // .then(()=> { 
+        //   return addStudy(vm.studyTemplates[1])
+        // })
         .then(()=> {
           newPageLoad = false;
         });

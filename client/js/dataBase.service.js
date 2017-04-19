@@ -47,15 +47,6 @@ function DataBase_(
   return service;
 
   ////////////////////////////////////////////////////// Local DataBase Operations //////////////////////////////////
-  
-  function removeBlocksFromDbForScenario(scenarioGuid) {
-    var scenarioExistsInBlockDb = service.blockDb.some(block=> block.scenario === scenarioGuid);
-
-    if (scenarioExistsInBlockDb) {
-      var cleanedDb = service.blockDb.filter(block=> block.scenario !== scenarioGuid);
-      service.blockDb.splice(0, service.blockDb.length, ...cleanedDb);
-    }
-  }
 
   function rebuildLocalDataBase(scenarioGuid){
     removeBlocksFromDbForScenario(scenarioGuid);
@@ -82,6 +73,11 @@ function DataBase_(
       addTotalsToDb(topSection, date);
       addTalliesToDb(topSection, date);
     
+      // Throw in a final total and tally in case the outermost section is a sum of tallys.
+      // A better way to do this would be to step upward from the bottom recursively after each rule and total and tally
+      // according to what the blocks require.  Brain pretzel. TODO
+      addTotalsToDb(topSection, date);
+
       var rules = Constants.rules.filter(rule=>rule.scenario === scenarioGuid);
       
       rules.forEach(rule=> {
@@ -248,6 +244,16 @@ function DataBase_(
   function extendBaseParams(baseParams, customizedParams) {
     var baseParamsCopy = angular.copy(baseParams);
     return angular.extend(baseParamsCopy, customizedParams);
+  }
+
+  
+  function removeBlocksFromDbForScenario(scenarioGuid) {
+    var scenarioExistsInBlockDb = service.blockDb.some(block=> block.scenario === scenarioGuid);
+
+    if (scenarioExistsInBlockDb) {
+      var cleanedDb = service.blockDb.filter(block=> block.scenario !== scenarioGuid);
+      service.blockDb.splice(0, service.blockDb.length, ...cleanedDb);
+    }
   }
 
   ////////////////////////////////////////////////////// Clone Scenario //////////////////////////////////
