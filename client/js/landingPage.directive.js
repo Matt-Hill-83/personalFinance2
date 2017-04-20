@@ -191,8 +191,8 @@ function LandingPageController(
       // If there are no studes and the user refreshed the page, create some studies for them.
       } else if (newPageLoad) {
         vm.studys = [];
-        return addStudy(vm.studyTemplates[0])
-        // return addStudy(vm.studyTemplates[1])
+        // return addStudy(vm.studyTemplates[0])
+        return addStudy(vm.studyTemplates[1])
 
         // .then(()=> { 
         //   return addStudy(vm.studyTemplates[1])
