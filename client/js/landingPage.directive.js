@@ -153,7 +153,7 @@ function LandingPageController(
       return Api.updateStudy(returnedStudy);
     })
     .then(refreshData)
-    .then(resp=> {
+    .then(function() {
       vm.activeStudy = Utilities.getLast(vm.studys);
       rebind();
     });
