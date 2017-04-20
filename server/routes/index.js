@@ -163,9 +163,15 @@ router.get('/studys', function(req, res) {
   cookieParser.JSONCookie(req.headers.cookie);
   var userGuid = req.cookies.userGuid;
   
+  console.log('|++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++|');
+  console.log('userGuid: ');
+  console.log(userGuid);
+  console.log('|------------------------------------------------------------------------------------------------|')
+  
+  
   models.studys.findAll({
     where: {
-      user: userGuid
+      // user: userGuid
     },
     include: [
       {
