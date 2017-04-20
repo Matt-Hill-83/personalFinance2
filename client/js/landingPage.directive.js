@@ -144,7 +144,9 @@ function LandingPageController(
   }
 
   function addStudy(study, incrementName) {
-    return Api.newStudy(study.guid)
+    var guid = study ? study.guid : 1;
+
+    return Api.newStudy(guid)
     .then(resp=> {
       var returnedStudy = resp.data;
       if (incrementName) {
