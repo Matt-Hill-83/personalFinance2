@@ -167,25 +167,49 @@ router.get('/studys', function(req, res) {
   console.log('userGuid: ');
   console.log(userGuid);
   console.log('|------------------------------------------------------------------------------------------------|')
-  
-  
-  models.studys.findAll({
-    where: {
-      // user: userGuid
-    },
-    include: [
-      {
-        model  : models.studyJoinScenarios,
-        include: {model: models.scenarios},
+
+
+  if (userGuid) {
+    // If there is a userGuid (which is just the cookie), only get studys that were created using that userGuid.
+    models.studys.findAll({
+      where: {
+        user: userGuid
       },
-      {
-        model: models.charts,
+      include: [
+        {
+          model  : models.studyJoinScenarios,
+          include: {model: models.scenarios},
+        },
+        {
+          model: models.charts,
+        },
+      ]
+    })
+    .then(blocks => {
+      res.json(blocks)
+    });
+
+  } else {
+    // Safari doesn't have a cookie, so do not require the userGuid.
+    models.studys.findAll({
+      where: {
+        // user: userGuid
       },
-    ]
-  })
-  .then(blocks => {
-    res.json(blocks)
-  });
+      include: [
+        {
+          model  : models.studyJoinScenarios,
+          include: {model: models.scenarios},
+        },
+        {
+          model: models.charts,
+        },
+      ]
+    })
+    .then(blocks => {
+      res.json(blocks)
+    });
+  }
+  
 });
 
 router.get('/newStudy/:guid', function(req, res) {
