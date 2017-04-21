@@ -94,7 +94,7 @@
 
 /*custome select box*/
 
-.selectdiv:after {
+.xxx-selectdiv:after {
 	content          : '<>';
 	font             : 17px "Consolas", monospace;
 	color            : #333;
